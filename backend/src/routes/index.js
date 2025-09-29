@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import userRoutes from './userRoutes.js';
 import authRoutes from './authRoutes.js';
 
 const router = Router();
@@ -7,7 +6,8 @@ const router = Router();
 // Rutas de autenticación
 router.use('/auth', authRoutes);
 
-// Rutas de usuarios (protegidas)
-router.use('/users', userRoutes);
+// TODO: Agregar más rutas, despues si
+// router.use('/users', userRoutes);
+// router.use('/vehicles', vehicleRoutes);
 
 export default router;
