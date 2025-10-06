@@ -1,0 +1,79 @@
+<app-header></app-header>
+
+<!-- Hero Section -->
+<section class="hero-section text-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-4">
+          Gestiona tu Bitácora de Vehículos
+        </h1>
+        <p class="lead mb-4 text-muted">
+          Lleva un registro completo de tus vehículos, mantenimientos, costos y estadísticas.<br>
+          Todo en un solo lugar.
+        </p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+          <button class="btn btn-primary btn-lg px-4" (click)="goToRegister()">
+            Comenzar Gratis
+          </button>
+          <button class="btn btn-outline-primary btn-lg px-4">
+            Ya tengo cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5 bg-light">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <app-feature-card
+          icon="fa-car"
+          title="Gestión de Vehículos"
+          description="Registra todos tus vehículos con información detallada: marca, modelo, año, motor y más.">
+        </app-feature-card>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <app-feature-card
+          icon="fa-wrench"
+          title="Seguimiento de Mantenimiento"
+          description="Registra cambios de aceite, reparaciones, repuestos y todos los servicios realizados.">
+        </app-feature-card>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <app-feature-card
+          icon="fa-dollar-sign"
+          title="Control de Costos"
+          description="Monitorea todos los gastos relacionados con tus vehículos y optimiza tu presupuesto.">
+        </app-feature-card>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <app-feature-card
+          icon="fa-chart-bar"
+          title="Análisis y Reportes"
+          description="Visualiza estadísticas de kilometraje, consumo de combustible y tendencias de gastos.">
+        </app-feature-card>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 class="mb-3">¿Listo para comenzar?</h2>
+        <p class="lead mb-4">
+          Únete a miles de usuarios que ya gestionan sus vehículos de manera inteligente.
+        </p>
+        <button class="btn btn-light btn-lg text-primary fw-bold px-5" (click)="goToRegister()">
+          Crear Cuenta Gratis
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+.hero-section {
+  background: linear-gradient(135deg, var(--light-blue) 0%, white 100%);
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.features-section {
+  background-color: var(--background-light);
+}
+
+.cta-section {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 50vh;
+    padding: 3rem 0;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+}
