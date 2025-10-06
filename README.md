@@ -4,12 +4,17 @@
 
 ## 🚀 Instalación y Configuración
 
+## Backend
+
 ```bash
 # Clonar el repositorio
 git clone https://github.com/salvadorbravo09/CarTrack.git
 
 # Navegar al directorio del proyecto
 cd CarTrack
+
+# Navegar al backend
+cd backend
 
 # Instalar dependencias
 npm install
@@ -21,8 +26,23 @@ cp .env.example .env
 npm run dev
 ```
 
+## Frontend
+
+```bash
+# Navegar al frontend
+cd frontend
+
+# Instalar dependencias
+npm install
+
+# Ejecutar aplicación
+ng serve -o
+```
+
 ## 👨‍💻 Autor
 
 **Salvador Bravo** - [GitHub](https://github.com/salvadorbravo09)
-**Diego de la Sota** - [GitHub](https://github.com/)
-**Sebastian Mena** - [GitHub](https://github.com/)
+
+**Sebastian Mena**
+
+**Diego de la Sotta**
