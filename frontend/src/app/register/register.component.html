@@ -1,0 +1,213 @@
+<div class="register-container">
+  <div class="register-card">
+    <!-- Logo -->
+    <div class="text-center mb-4">
+      <div class="logo">
+        <i class="fas fa-car text-primary me-2"></i>
+        <span class="logo-text">CarTrack</span>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <div class="form-header text-center mb-4">
+        <h2 class="form-title">Crear Cuenta</h2>
+        <p class="form-subtitle text-muted">
+          Regístrate para comenzar a gestionar tus vehículos
+        </p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Nombre -->
+        <div class="form-group mb-3">
+          <label for="firstName" class="form-label">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            formControlName="firstName"
+            placeholder="Tu nombre"
+            [class.is-invalid]="isFieldInvalid('firstName')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('firstName')">
+            El nombre es requerido
+          </div>
+        </div>
+
+        <!-- Apellido -->
+        <div class="form-group mb-3">
+          <label for="lastName" class="form-label">Apellido</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Tu apellido"
+            [class.is-invalid]="isFieldInvalid('lastName')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('lastName')">
+            El apellido es requerido
+          </div>
+        </div>
+
+        <!-- Nombre de Usuario (Opcional) -->
+        <div class="form-group mb-3">
+          <label for="username" class="form-label"
+            >Nombre de Usuario <span class="text-muted">(Opcional)</span></label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            formControlName="username"
+            placeholder="nombre_usuario"
+            [class.is-invalid]="isFieldInvalid('username')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
+            El nombre de usuario debe tener al menos 3 caracteres
+          </div>
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="form-group mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+            placeholder="ejemplo@correo.com"
+            [class.is-invalid]="isFieldInvalid('email')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']"
+              >El correo electrónico es requerido</span
+            >
+            <span *ngIf="registerForm.get('email')?.errors?.['email']"
+              >Ingresa un correo electrónico válido</span
+            >
+          </div>
+        </div>
+
+        <!-- Teléfono (Opcional) -->
+        <div class="form-group mb-3">
+          <label for="phone" class="form-label"
+            >Teléfono <span class="text-muted">(Opcional)</span></label
+          >
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            formControlName="phone"
+            placeholder="+56 9 1234 5678"
+          />
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <div class="password-input-container">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              id="password"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.is-invalid]="isFieldInvalid('password')"
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              (click)="togglePasswordVisibility()"
+            >
+              <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+            La contraseña debe tener al menos 6 caracteres
+          </div>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="form-group mb-4">
+          <label for="confirmPassword" class="form-label"
+            >Confirmar Contraseña</label
+          >
+          <div class="password-input-container">
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              class="form-control"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              [class.is-invalid]="
+                isFieldInvalid('confirmPassword') || passwordMismatch()
+              "
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              (click)="toggleConfirmPasswordVisibility()"
+            >
+              <i
+                [class]="
+                  showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                "
+              ></i>
+            </button>
+          </div>
+          <div
+            class="invalid-feedback"
+            *ngIf="isFieldInvalid('confirmPassword')"
+          >
+            Confirma tu contraseña
+          </div>
+          <div
+            class="invalid-feedback"
+            *ngIf="passwordMismatch() && !isFieldInvalid('confirmPassword')"
+          >
+            Las contraseñas no coinciden
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg w-100 mb-3"
+          [disabled]="registerForm.invalid || isLoading"
+        >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+          ></span>
+          {{ isLoading ? "Creando cuenta..." : "Crear Cuenta" }}
+        </button>
+
+        <!-- Login Link -->
+        <div class="text-center">
+          <span class="text-muted">¿Ya tienes una cuenta? </span>
+          <a
+            href="#"
+            class="text-primary text-decoration-none fw-medium"
+            (click)="goToLogin($event)"
+          >
+            Inicia sesión aquí
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Back to Home -->
+    <div class="text-center mt-4">
+      <a
+        href="#"
+        class="text-muted text-decoration-none"
+        (click)="goBack($event)"
+      >
+        <i class="fas fa-arrow-left me-2"></i>
+        Volver al inicio
+      </a>
+    </div>
+  </div>
+</div>
