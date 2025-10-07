@@ -136,8 +136,7 @@ export class RegisterComponent {
   // Navegar al login
   goToLogin(event: Event): void {
     event.preventDefault();
-    // Por ahora solo navegamos al inicio, luego se puede crear un componente de login
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   // Volver al inicio
