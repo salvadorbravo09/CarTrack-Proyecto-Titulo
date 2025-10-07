@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService, LoginData } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -46,26 +48,28 @@ export class LoginComponent implements OnInit {
       this.isLoading = true;
       this.errorMessage = '';
 
-      const loginData = {
+      const loginData: LoginData = {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
       };
 
-      console.log('Datos de login:', loginData);
-
-      // Simular llamada a API
-      setTimeout(() => {
-        this.isLoading = false;
-        // Aquí iría la lógica real de autenticación
-        // Por ahora, simularemos un login exitoso
-        
-        // Ejemplo de manejo de error:
-        // this.errorMessage = 'Credenciales inválidas. Por favor, verifica tu email y contraseña.';
-        
-        // Si el login es exitoso, redirigir al dashboard
-        console.log('Login exitoso');
-        // this.router.navigate(['/dashboard']);
-      }, 2000);
+      this.authService.login(loginData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          if (response.success) {
+            console.log('Login exitoso:', response);
+            // Redirigir al dashboard o página principal después del login
+            this.router.navigate(['/dashboard']); // Cambiar por la ruta que tengas
+          } else {
+            this.errorMessage = response.message || 'Error al iniciar sesión';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error || 'Error al conectar con el servidor';
+          console.error('Error en login:', error);
+        }
+      });
     } else {
       // Marcar todos los campos como touched para mostrar errores
       Object.keys(this.loginForm.controls).forEach(key => {
