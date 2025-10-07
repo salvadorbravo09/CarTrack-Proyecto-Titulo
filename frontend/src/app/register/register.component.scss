@@ -1,6 +1,6 @@
 .register-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--light-blue) 0%, white 100%);
+  background: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,8 +26,8 @@
   background: white;
   border-radius: 12px;
   padding: 2.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(7, 59, 76, 0.15);
+  border: 1px solid rgba(7, 59, 76, 0.1);
 }
 
 .form-header {
@@ -66,7 +66,7 @@
   
   &:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(44, 154, 160, 0.15);
+    box-shadow: 0 0 0 0.2rem rgba(17, 138, 178, 0.15);
   }
   
   &::placeholder {
@@ -74,11 +74,11 @@
   }
   
   &.is-invalid {
-    border-color: #dc3545;
+    border-color: var(--destructive-color);
     
     &:focus {
-      border-color: #dc3545;
-      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+      border-color: var(--destructive-color);
+      box-shadow: 0 0 0 0.2rem rgba(239, 71, 111, 0.15);
     }
   }
 }
@@ -116,23 +116,47 @@
 .invalid-feedback {
   display: block;
   font-size: 0.85rem;
-  color: #dc3545;
+  color: var(--destructive-color);
   margin-top: 0.25rem;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+.btn-warning-custom {
+  background-color: var(--warning-color);
   border: none;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
   font-weight: 500;
   font-size: 1rem;
+  color: var(--secondary-color);
   transition: all 0.3s ease;
   
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    background-color: #e6bc5c;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(44, 154, 160, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 209, 102, 0.4);
+    color: var(--secondary-color);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: #0f7a9a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 138, 178, 0.3);
   }
   
   &:disabled {
@@ -150,7 +174,15 @@
   color: var(--primary-color) !important;
   
   &:hover {
-    color: var(--secondary-color) !important;
+    color: #0f7a9a !important;
+  }
+}
+
+.text-secondary-custom {
+  color: var(--secondary-color) !important;
+  
+  &:hover {
+    color: var(--primary-color) !important;
   }
 }
 
