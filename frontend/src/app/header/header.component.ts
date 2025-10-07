@@ -17,7 +17,6 @@ export class HeaderComponent {
   }
 
   goToLogin(): void {
-    // Por ahora solo log, luego se puede crear el componente de login
-    console.log('Ir al login');
+    this.router.navigate(['/login']);
   }
 }
