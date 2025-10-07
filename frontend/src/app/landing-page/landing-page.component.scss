@@ -1,5 +1,6 @@
 .hero-section {
-  background: linear-gradient(135deg, var(--light-blue) 0%, white 100%);
+  // background: linear-gradient(135deg, var(--light-blue) 0%, white 100%);
+  background: white;
   min-height: 60vh;
   display: flex;
   align-items: center;
@@ -11,6 +12,16 @@
 
 .cta-section {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  
+  .btn-warning-custom {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+  }
 }
 
 @media (max-width: 768px) {
