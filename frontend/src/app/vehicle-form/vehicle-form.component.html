@@ -1,0 +1,83 @@
+<!-- Estructura HTML del formulario para registrar un vehículo
+		 Solo HTML: sin scripts ni bindings; clases y nombres en español siguiendo el estilo del proyecto.
+-->
+<section class="card card--padded">
+	<header class="card__header">
+		<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
+		<h2 class="card__title">Agregar Nuevo Vehículo</h2>
+	</header>
+
+	<div class="card__body">
+		<p class="muted">Completa los datos básicos de tu vehículo para registrarlo en CarTrack</p>
+
+		<h3 class="section-title">Datos Básicos</h3>
+		<div class="form-grid">
+			<div class="form-group">
+				<label for="marca">Marca *</label>
+				<select id="marca" name="marca" class="form-control">
+					<option value="">Selecciona una marca</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="modelo">Modelo *</label>
+				<input id="modelo" name="modelo" type="text" class="form-control" placeholder="Ej: Corolla, Civic, Focus" />
+			</div>
+
+			<div class="form-group">
+				<label for="anio">Año *</label>
+				<input id="anio" name="anio" type="number" class="form-control" placeholder="2025" />
+			</div>
+
+			<div class="form-group">
+				<label for="motor">Motor *</label>
+				<input id="motor" name="motor" type="text" class="form-control" placeholder="Ej: 1.6L 4-Cyl, 2.0L Turbo" />
+			</div>
+
+			<div class="form-group">
+				<label for="color">Color *</label>
+				<select id="color" name="color" class="form-control">
+					<option value="">Selecciona un color</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="patente">Patente *</label>
+				<input id="patente" name="patente" type="text" class="form-control" placeholder="Ej: ABC-123" />
+			</div>
+		</div>
+
+		<h3 class="section-title">Estado y Características</h3>
+		<div class="form-grid">
+			<div class="form-group form-group--inline">
+				<label>Estado del Vehículo *</label>
+				<div class="radio-group">
+					<label><input type="radio" name="estado" value="nuevo" /> Nuevo</label>
+					<label><input type="radio" name="estado" value="usado" /> Usado</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="kilometraje">Kilometraje Actual *</label>
+				<input id="kilometraje" name="kilometraje" type="number" class="form-control" value="0" />
+			</div>
+
+			<div class="form-group">
+				<label for="fechaCompra">Fecha de Compra</label>
+				<input id="fechaCompra" name="fechaCompra" type="date" class="form-control" />
+			</div>
+
+			<div class="form-group">
+				<label for="precio">Precio de Compra (CLP)</label>
+				<input id="precio" name="precio" type="number" class="form-control" value="0" />
+			</div>
+		</div>
+	</div>
+
+	<footer class="card__footer">
+		<div class="footer-actions">
+			<button class="btn btn--ghost">Cancelar</button>
+			<button class="btn btn--primary">Registrar Vehículo</button>
+		</div>
+	</footer>
+</section>
