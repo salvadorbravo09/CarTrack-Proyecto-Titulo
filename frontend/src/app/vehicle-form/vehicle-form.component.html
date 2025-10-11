@@ -1,7 +1,30 @@
-<!-- Estructura HTML del formulario para registrar un vehículo
-		 Solo HTML: sin scripts ni bindings; clases y nombres en español siguiendo el estilo del proyecto.
--->
-<section class="card card--padded">
+<div class="vehicle-form-container">
+	<!-- Header -->
+    <div class="row">
+		<div class="col-12">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
+			<div class="container">
+				<a class="navbar-brand d-flex align-items-center" href="#">
+				<i class="fas fa-car me-2"></i>
+				<span class="fw-bold">CarTrack</span>
+				</a>
+				
+				<div class="d-flex align-items-center">
+				<span class="navbar-text me-3" >
+					Bienvenido, <!-- {{ currentUser.firstName }} -->
+				</span>
+				<button class="btn btn-outline-light">
+					<i class="fas fa-sign-out-alt me-2"></i>
+					Cerrar Sesión
+				</button>
+				</div>
+			</div>
+			</nav>
+		</div>
+    </div>
+	
+<div class="vehicle-form-content">
+	<section class="card card--padded">
 	<header class="card__header">
 		<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
 		<h2 class="card__title">Agregar Nuevo Vehículo</h2>
@@ -14,9 +37,7 @@
 		<div class="form-grid">
 			<div class="form-group">
 				<label for="marca">Marca *</label>
-				<select id="marca" name="marca" class="form-control">
-					<option value="">Selecciona una marca</option>
-				</select>
+				<input id="marca" name="marca" class="form-control" placeholder="Ej: Toyota, Ford, Chevrolet" />
 			</div>
 
 			<div class="form-group">
@@ -31,19 +52,35 @@
 
 			<div class="form-group">
 				<label for="motor">Motor *</label>
-				<input id="motor" name="motor" type="text" class="form-control" placeholder="Ej: 1.6L 4-Cyl, 2.0L Turbo" />
+				<input id="motor" name="motor" type="text" class="form-control" placeholder="Ej: 1.5L, 2.0L Turbo" />
 			</div>
 
 			<div class="form-group">
 				<label for="color">Color *</label>
-				<select id="color" name="color" class="form-control">
-					<option value="">Selecciona un color</option>
-				</select>
+				<div class="select-wrapper">
+					<select id="color" name="color" class="form-control">
+						<option value="">Selecciona un color</option>
+						<option value="blanco">Blanco</option>
+						<option value="negro">Negro</option>
+						<option value="gris">Gris</option>
+						<option value="plata">Plata</option>
+						<option value="rojo">Rojo</option>
+						<option value="azul">Azul</option>
+						<option value="verde">Verde</option>
+						<option value="amarillo">Amarillo</option>
+						<option value="naranja">Naranja</option>
+						<option value="marron">Marrón</option>
+						<option value="violeta">Violeta</option>
+						<option value="beige">Beige</option>
+						<option value="otro">Otro...</option>
+					</select>
+					<span class="select-caret" aria-hidden="true"></span>
+				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="patente">Patente *</label>
-				<input id="patente" name="patente" type="text" class="form-control" placeholder="Ej: ABC-123" />
+				<input id="patente" name="patente" type="text" class="form-control" placeholder="Ej: ABCD-12" />
 			</div>
 		</div>
 
@@ -57,14 +94,14 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-				<label for="kilometraje">Kilometraje Actual *</label>
-				<input id="kilometraje" name="kilometraje" type="number" class="form-control" value="0" />
+			<div class="form-group form-group--inline">
+				<label for="fechaCompra">Fecha de Compra</label>
+				<input id="fechaCompra" name="fechaCompra" type="date" class="form-control" />
 			</div>
 
 			<div class="form-group">
-				<label for="fechaCompra">Fecha de Compra</label>
-				<input id="fechaCompra" name="fechaCompra" type="date" class="form-control" />
+				<label for="kilometraje">Kilometraje Actual *</label>
+				<input id="kilometraje" name="kilometraje" type="number" class="form-control" value="0" />
 			</div>
 
 			<div class="form-group">
@@ -80,4 +117,5 @@
 			<button class="btn btn--primary">Registrar Vehículo</button>
 		</div>
 	</footer>
-</section>
+	</section>
+</div>
