@@ -1,0 +1,73 @@
+<div class="soap-form-container">
+	<!-- Header -->
+	<div class="row">
+		<div class="col-12">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
+				<div class="container">
+					<a class="navbar-brand d-flex align-items-center" href="#">
+						<i class="fas fa-car me-2"></i>
+						<span class="fw-bold">CarTrack</span>
+					</a>
+
+					<div class="d-flex align-items-center">
+						<span class="navbar-text me-3">
+							Bienvenido, <!-- {{ currentUser.firstName }} -->
+						</span>
+						<button class="btn btn-outline-light">
+							<i class="fas fa-sign-out-alt me-2"></i>
+							Cerrar Sesión
+						</button>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+
+	<div class="soap-form-content">
+		<section class="card card--padded">
+			<header class="card__header">
+				<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
+				<h2 class="card__title">Registrar SOAP</h2>
+			</header>
+
+			<div class="card__body">
+				<p class="muted">Completa la información del Seguro Obligatorio (SOAP) para tu vehículo.</p>
+
+				<h3 class="section-title">Datos del SOAP</h3>
+				<div class="form-grid">
+					<div class="form-group">
+						<label for="vigencia">Vigencia *</label>
+						<input id="vigencia" name="vigencia" type="date" class="form-control" />
+					</div>
+
+					<div class="form-group">
+						<label for="costo">Costo (CLP) *</label>
+						<input id="costo" name="costo" type="number" class="form-control" placeholder="Ej: 12000" />
+					</div>
+
+					<div class="form-group">
+						<label for="lugarCompra">Lugar de Compra *</label>
+						<input id="lugarCompra" name="lugarCompra" type="text" class="form-control" placeholder="Ej: BancoEstado, Portal SOAP, etc." />
+					</div>
+
+					<div class="form-group">
+						<label for="compania">Compañía Aseguradora</label>
+						<input id="compania" name="compania" type="text" class="form-control" placeholder="Ej: HDI, BCI, Consorcio..." />
+					</div>
+
+					<div class="form-group">
+						<label for="numeroPoliza">Número de Póliza</label>
+						<input id="numeroPoliza" name="numeroPoliza" type="text" class="form-control" placeholder="Ej: SOAP-2025-XXXXXX" />
+					</div>
+				</div>
+			</div>
+
+			<footer class="card__footer">
+				<div class="footer-actions">
+					<button class="btn btn--ghost">Cancelar</button>
+					<button class="btn btn--primary">Registrar SOAP</button>
+				</div>
+			</footer>
+		</section>
+	</div>
+</div>

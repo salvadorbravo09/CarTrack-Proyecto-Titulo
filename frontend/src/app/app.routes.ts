@@ -13,5 +13,12 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'vehicle-form', component: VehicleFormComponent },
   { path: 'seguimiento-mantenimiento', component: SeguimientoMantenimientoComponent },
+  {
+    path: 'registrar-soap',
+    loadComponent: () =>
+      import('./registrar-soap/registrar-soap.component').then(
+        (m) => m.RegistrarSoapComponent
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];
