@@ -16,22 +16,64 @@ enum Role {
   MECHANIC
 }
 
+enum VehicleStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  SOLD
+}
+
+enum VehicleCondition {
+  NEW
+  USED
+}
+
 // ========== MODELS ==========
 
 // Modelo de usuario (simplificado para login/register)
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?  @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String?   @unique
   password  String
   firstName String
   lastName  String
   phone     String?
   avatar    String?
-  role      Role     @default(USER)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role      @default(USER)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  // Relaciones
+  vehicles  Vehicle[]
 
   @@map("users")
+}
+
+// Modelo de vehículo
+model Vehicle {
+  id              Int              @id @default(autoincrement())
+  userId          Int
+  brand           String           // Marca del vehículo
+  model           String           // Modelo del vehículo
+  year            Int              // Año del vehículo
+  licensePlate    String           @unique // Patente/Placa
+  color           String           // Color del vehículo
+  engine          String           // Motor (ej: 1.5L, 2.0L Turbo)
+  currentKm       Int              @default(0) // Kilometraje actual
+  condition       VehicleCondition @default(USED) // Nuevo o Usado
+  purchaseDate    DateTime?        // Fecha de compra
+  purchasePrice   Decimal?         @db.Decimal(10, 2) // Precio de compra
+  status          VehicleStatus    @default(ACTIVE) // Estado del vehículo
+  notes           String?          @db.Text // Notas adicionales
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  // Relaciones
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("vehicles")
+  @@index([userId])
+  @@index([licensePlate])
 }
