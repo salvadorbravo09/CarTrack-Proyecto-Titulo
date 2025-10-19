@@ -1,13 +1,17 @@
 import { Router } from 'express';
 import authRoutes from './authRoutes.js';
+import vehicleRoutes from './vehicleRoutes.js';
 
 const router = Router();
 
 // Rutas de autenticación
 router.use('/auth', authRoutes);
 
-// TODO: Agregar más rutas, despues si
+// Rutas de vehículos
+router.use('/vehicles', vehicleRoutes);
+
+// TODO: Agregar más rutas después
 // router.use('/users', userRoutes);
-// router.use('/vehicles', vehicleRoutes);
+// router.use('/maintenance', maintenanceRoutes);
 
 export default router;
