@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { VehicleService, Vehicle } from '../services/vehicle.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,36 +14,21 @@ import { AuthService } from '../services/auth.service';
 export class DashboardComponent implements OnInit {
   currentUser: any = null;
   activeTab: string = 'resumen';
+  isLoadingVehicles = false;
+  isLoadingStats = false;
 
-  // Estadísticas (datos de ejemplo - después conectar con backend)
+  // Estadísticas
   stats = {
-    totalVehiculos: 2,
-    mantenimientos: 18,
-    gastoTotal: 4972240,
-    gastoCombustible: 3576240,
-    gastoMantenimiento: 1396000,
-    promedioVehiculo: 2486120
+    totalVehiculos: 0,
+    mantenimientos: 0,
+    gastoTotal: 0,
+    gastoCombustible: 0,
+    gastoMantenimiento: 0,
+    promedioVehiculo: 0
   };
 
-  // Vehículos (datos de ejemplo - después conectar con backend)
-  vehicles = [
-    {
-      id: 1,
-      brand: 'Toyota',
-      model: 'Corolla',
-      year: 2020,
-      licensePlate: 'ABC-123',
-      currentKm: 58500
-    },
-    {
-      id: 2,
-      brand: 'Honda',
-      model: 'Civic',
-      year: 2019,
-      licensePlate: 'XYZ-789',
-      currentKm: 78000
-    }
-  ];
+  // Vehículos desde backend
+  vehicles: Vehicle[] = [];
 
   // Mantenimientos (datos de ejemplo - después conectar con backend)
   maintenances = [
@@ -71,6 +57,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private vehicleService: VehicleService,
     private router: Router
   ) {}
 
@@ -83,10 +70,11 @@ export class DashboardComponent implements OnInit {
     // Si no hay usuario autenticado, redirigir al login
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
+      return;
     }
 
-    // Aquí después cargaremos los datos reales del backend
-    // this.loadDashboardData();
+    // Cargar datos del backend
+    this.loadDashboardData();
   }
 
   setActiveTab(tab: string): void {
@@ -98,10 +86,67 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  // Método para cargar datos del backend (implementar después)
-  // private loadDashboardData(): void {
-  //   // Cargar vehículos
-  //   // Cargar mantenimientos
-  //   // Calcular estadísticas
-  // }
+  /**
+   * Cargar datos del backend
+   */
+  private loadDashboardData(): void {
+    this.loadVehicles();
+    this.loadVehicleStats();
+    // Aquí después cargaremos mantenimientos
+    // this.loadMaintenances();
+  }
+
+  /**
+   * Cargar vehículos del usuario
+   */
+  private loadVehicles(): void {
+    this.isLoadingVehicles = true;
+    
+    this.vehicleService.getVehicles().subscribe({
+      next: (response) => {
+        if (response.success && response.vehicles) {
+          this.vehicles = response.vehicles;
+          console.log('Vehículos cargados:', this.vehicles);
+        }
+        this.isLoadingVehicles = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar vehículos:', error);
+        this.isLoadingVehicles = false;
+      }
+    });
+  }
+
+  /**
+   * Cargar estadísticas de vehículos
+   */
+  private loadVehicleStats(): void {
+    this.isLoadingStats = true;
+    
+    this.vehicleService.getVehicleStats().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.stats.totalVehiculos = response.stats.totalVehicles;
+          
+          // Calcular inversión total como gasto total (temporal)
+          // Después esto se calculará con datos de mantenimientos
+          this.stats.gastoTotal = Number(response.stats.totalInvestment) || 0;
+          
+          console.log('Estadísticas cargadas:', response.stats);
+        }
+        this.isLoadingStats = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar estadísticas:', error);
+        this.isLoadingStats = false;
+      }
+    });
+  }
+
+  /**
+   * Recargar datos (útil después de crear/editar vehículos)
+   */
+  refreshData(): void {
+    this.loadDashboardData();
+  }
 }
