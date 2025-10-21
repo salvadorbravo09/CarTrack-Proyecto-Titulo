@@ -1,10 +1,10 @@
 <div class="soap-form-container">
-	<!-- Header -->
+	<!-- Header - Corregido el routerLink para el brand -->
 	<div class="row">
 		<div class="col-12">
 			<nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
 				<div class="container">
-					<a class="navbar-brand d-flex align-items-center" href="#">
+					<a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
 						<i class="fas fa-car me-2"></i>
 						<span class="fw-bold">CarTrack</span>
 					</a>
@@ -24,50 +24,73 @@
 	</div>
 
 	<div class="soap-form-content">
+		<!-- Inicio del formulario con NgForm y evento de submit -->
 		<section class="card card--padded">
 			<header class="card__header">
 				<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
 				<h2 class="card__title">Registrar SOAP</h2>
 			</header>
 
-			<div class="card__body">
-				<p class="muted">Completa la información del Seguro Obligatorio (SOAP) para tu vehículo.</p>
+			<form #soapForm="ngForm" (ngSubmit)="onSubmit(soapForm)">
+				<div class="card__body">
+					<p class="muted">Completa la información del Seguro Obligatorio (SOAP) para tu vehículo.</p>
 
-				<h3 class="section-title">Datos del SOAP</h3>
-				<div class="form-grid">
-					<div class="form-group">
-						<label for="vigencia">Vigencia *</label>
-						<input id="vigencia" name="vigencia" type="date" class="form-control" />
-					</div>
+					<h3 class="section-title">Datos del SOAP</h3>
+					<div class="form-grid">
+						
+						<!-- Campo: Vigencia. Se mapea a 'fechaVigencia' en el TS. -->
+						<div class="form-group">
+							<label for="vigencia">Vigencia *</label>
+							<input id="vigencia" name="vigencia" type="date" class="form-control" 
+								[(ngModel)]="model.fechaVigencia" required />
+						</div>
 
-					<div class="form-group">
-						<label for="costo">Costo (CLP) *</label>
-						<input id="costo" name="costo" type="number" class="form-control" placeholder="Ej: 12000" />
-					</div>
+						<!-- Campo: Costo -->
+						<div class="form-group">
+							<label for="costo">Costo (CLP) *</label>
+							<input id="costo" name="costo" type="number" class="form-control" 
+								[(ngModel)]="model.costo" required placeholder="Ej: 12000" min="0" />
+						</div>
 
-					<div class="form-group">
-						<label for="lugarCompra">Lugar de Compra *</label>
-						<input id="lugarCompra" name="lugarCompra" type="text" class="form-control" placeholder="Ej: BancoEstado, Portal SOAP, etc." />
-					</div>
+						<!-- Campo: Lugar de Compra -->
+						<div class="form-group">
+							<label for="lugarCompra">Lugar de Compra *</label>
+							<input id="lugarCompra" name="lugarCompra" type="text" class="form-control" 
+								[(ngModel)]="model.lugarCompra" required placeholder="Ej: BancoEstado, Portal SOAP, etc." />
+						</div>
 
-					<div class="form-group">
-						<label for="compania">Compañía Aseguradora</label>
-						<input id="compania" name="compania" type="text" class="form-control" placeholder="Ej: HDI, BCI, Consorcio..." />
-					</div>
+						<!-- Campo: Compañía Aseguradora -->
+						<div class="form-group">
+							<label for="compania">Compañía Aseguradora *</label>
+							<input id="compania" name="compania" type="text" class="form-control" 
+								[(ngModel)]="model.compania" required placeholder="Ej: HDI, BCI, Consorcio..." />
+						</div>
 
-					<div class="form-group">
-						<label for="numeroPoliza">Número de Póliza</label>
-						<input id="numeroPoliza" name="numeroPoliza" type="text" class="form-control" placeholder="Ej: SOAP-2025-XXXXXX" />
+						<!-- Campo: Número de Póliza -->
+						<div class="form-group">
+							<label for="numeroPoliza">Número de Póliza *</label>
+							<input id="numeroPoliza" name="numeroPoliza" type="text" class="form-control" 
+								[(ngModel)]="model.numeroPoliza" required placeholder="Ej: SOAP-2025-XXXXXX" />
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<footer class="card__footer">
-				<div class="footer-actions">
-					<button class="btn btn--ghost">Cancelar</button>
-					<button class="btn btn--primary">Registrar SOAP</button>
-				</div>
-			</footer>
+				<footer class="card__footer">
+					<!-- Mensajes de estado -->
+					<div *ngIf="message" class="alert-message text-center me-3" 
+						[ngClass]="{'text-success': message.includes('éxito'), 'text-danger': message.includes('Error') || message.includes('❌')}">
+						{{ message }}
+					</div>
+					
+					<div class="footer-actions">
+						<button type="button" class="btn btn--ghost" [routerLink]="['/dashboard']">Cancelar</button>
+						<button type="submit" class="btn btn--primary" [disabled]="soapForm.invalid || isLoading">
+							<span *ngIf="!isLoading">Registrar SOAP</span>
+							<span *ngIf="isLoading">Registrando...</span>
+						</button>
+					</div>
+				</footer>
+			</form>
 		</section>
 	</div>
 </div>
