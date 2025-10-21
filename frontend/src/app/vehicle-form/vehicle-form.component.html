@@ -1,121 +1,254 @@
 <div class="vehicle-form-container">
-	<!-- Header -->
-    <div class="row">
-		<div class="col-12">
-			<nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
-			<div class="container">
-				<a class="navbar-brand d-flex align-items-center" href="#">
-				<i class="fas fa-car me-2"></i>
-				<span class="fw-bold">CarTrack</span>
-				</a>
-				
-				<div class="d-flex align-items-center">
-				<span class="navbar-text me-3" >
-					Bienvenido, <!-- {{ currentUser.firstName }} -->
-				</span>
-				<button class="btn btn-outline-light">
-					<i class="fas fa-sign-out-alt me-2"></i>
-					Cerrar Sesión
-				</button>
-				</div>
-			</div>
-			</nav>
-		</div>
+  <!-- Header -->
+  <div class="row">
+    <div class="col-12">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="fas fa-car me-2"></i>
+            <span class="fw-bold">CarTrack</span>
+          </a>
+
+          <div class="d-flex align-items-center">
+            <span class="navbar-text me-3" *ngIf="currentUser">
+              Bienvenido, {{ currentUser.firstName }}
+            </span>
+            <button class="btn btn-outline-light" (click)="logout()">
+              <i class="fas fa-sign-out-alt me-2"></i>
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </nav>
     </div>
-	
-<div class="vehicle-form-content">
-	<section class="card card--padded">
-	<header class="card__header">
-		<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
-		<h2 class="card__title">Agregar Nuevo Vehículo</h2>
-	</header>
+  </div>
 
-	<div class="card__body">
-		<p class="muted">Completa los datos básicos de tu vehículo para registrarlo en CarTrack</p>
+  <div class="vehicle-form-content">
+    <section class="card card--padded">
+      <header class="card__header">
+        <a routerLink="/dashboard" class="btn btn--link btn--back"
+          >&larr; Volver</a
+        >
+        <h2 class="card__title">Agregar Nuevo Vehículo</h2>
+      </header>
 
-		<h3 class="section-title">Datos Básicos</h3>
-		<div class="form-grid">
-			<div class="form-group">
-				<label for="marca">Marca *</label>
-				<input id="marca" name="marca" class="form-control" placeholder="Ej: Toyota, Ford, Chevrolet" />
-			</div>
+      <div class="card__body">
+        <!-- Mensajes de éxito/error -->
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <i class="fas fa-check-circle me-2"></i>
+          {{ successMessage }}
+        </div>
 
-			<div class="form-group">
-				<label for="modelo">Modelo *</label>
-				<input id="modelo" name="modelo" type="text" class="form-control" placeholder="Ej: Corolla, Civic, Focus" />
-			</div>
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ errorMessage }}
+        </div>
 
-			<div class="form-group">
-				<label for="anio">Año *</label>
-				<input id="anio" name="anio" type="number" class="form-control" placeholder="2025" />
-			</div>
+        <p class="muted">
+          Completa los datos básicos de tu vehículo para registrarlo en CarTrack
+        </p>
 
-			<div class="form-group">
-				<label for="motor">Motor *</label>
-				<input id="motor" name="motor" type="text" class="form-control" placeholder="Ej: 1.5L, 2.0L Turbo" />
-			</div>
+        <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+          <h3 class="section-title">Datos Básicos</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="marca">Marca *</label>
+              <input
+                id="marca"
+                formControlName="brand"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('brand')"
+                placeholder="Ej: Toyota, Ford, Chevrolet"
+              />
+              <small *ngIf="isFieldInvalid('brand')" class="text-danger">
+                {{ getFieldError("brand") }}
+              </small>
+            </div>
 
-			<div class="form-group">
-				<label for="color">Color *</label>
-				<div class="select-wrapper">
-					<select id="color" name="color" class="form-control">
-						<option value="">Selecciona un color</option>
-						<option value="blanco">Blanco</option>
-						<option value="negro">Negro</option>
-						<option value="gris">Gris</option>
-						<option value="plata">Plata</option>
-						<option value="rojo">Rojo</option>
-						<option value="azul">Azul</option>
-						<option value="verde">Verde</option>
-						<option value="amarillo">Amarillo</option>
-						<option value="naranja">Naranja</option>
-						<option value="marron">Marrón</option>
-						<option value="violeta">Violeta</option>
-						<option value="beige">Beige</option>
-						<option value="otro">Otro...</option>
-					</select>
-					<span class="select-caret" aria-hidden="true"></span>
-				</div>
-			</div>
+            <div class="form-group">
+              <label for="modelo">Modelo *</label>
+              <input
+                id="modelo"
+                formControlName="model"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('model')"
+                placeholder="Ej: Corolla, Civic, Focus"
+              />
+              <small *ngIf="isFieldInvalid('model')" class="text-danger">
+                {{ getFieldError("model") }}
+              </small>
+            </div>
 
-			<div class="form-group">
-				<label for="patente">Patente *</label>
-				<input id="patente" name="patente" type="text" class="form-control" placeholder="Ej: ABCD-12" />
-			</div>
-		</div>
+            <div class="form-group">
+              <label for="anio">Año *</label>
+              <input
+                id="anio"
+                formControlName="year"
+                type="number"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('year')"
+                placeholder="2025"
+              />
+              <small *ngIf="isFieldInvalid('year')" class="text-danger">
+                {{ getFieldError("year") }}
+              </small>
+            </div>
 
-		<h3 class="section-title">Estado y Características</h3>
-		<div class="form-grid">
-			<div class="form-group form-group--inline">
-				<label>Estado del Vehículo *</label>
-				<div class="radio-group">
-					<label><input type="radio" name="estado" value="nuevo" /> Nuevo</label>
-					<label><input type="radio" name="estado" value="usado" /> Usado</label>
-				</div>
-			</div>
+            <div class="form-group">
+              <label for="motor">Motor *</label>
+              <input
+                id="motor"
+                formControlName="engine"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('engine')"
+                placeholder="Ej: 1.5L, 2.0L Turbo"
+              />
+              <small *ngIf="isFieldInvalid('engine')" class="text-danger">
+                {{ getFieldError("engine") }}
+              </small>
+            </div>
 
-			<div class="form-group form-group--inline">
-				<label for="fechaCompra">Fecha de Compra</label>
-				<input id="fechaCompra" name="fechaCompra" type="date" class="form-control" />
-			</div>
+            <div class="form-group">
+              <label for="color">Color *</label>
+              <div class="select-wrapper">
+                <select
+                  id="color"
+                  formControlName="color"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('color')"
+                >
+                  <option value="">Selecciona un color</option>
+                  <option value="blanco">Blanco</option>
+                  <option value="negro">Negro</option>
+                  <option value="gris">Gris</option>
+                  <option value="plata">Plata</option>
+                  <option value="rojo">Rojo</option>
+                  <option value="azul">Azul</option>
+                  <option value="verde">Verde</option>
+                  <option value="amarillo">Amarillo</option>
+                  <option value="naranja">Naranja</option>
+                  <option value="marron">Marrón</option>
+                  <option value="violeta">Violeta</option>
+                  <option value="beige">Beige</option>
+                  <option value="otro">Otro...</option>
+                </select>
+                <span class="select-caret" aria-hidden="true"></span>
+              </div>
+              <small *ngIf="isFieldInvalid('color')" class="text-danger">
+                {{ getFieldError("color") }}
+              </small>
+            </div>
 
-			<div class="form-group">
-				<label for="kilometraje">Kilometraje Actual *</label>
-				<input id="kilometraje" name="kilometraje" type="number" class="form-control" value="0" />
-			</div>
+            <div class="form-group">
+              <label for="patente">Patente *</label>
+              <input
+                id="patente"
+                formControlName="licensePlate"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('licensePlate')"
+                placeholder="Ej: ABCD-12"
+              />
+              <small *ngIf="isFieldInvalid('licensePlate')" class="text-danger">
+                {{ getFieldError("licensePlate") }}
+              </small>
+            </div>
+          </div>
 
-			<div class="form-group">
-				<label for="precio">Precio de Compra (CLP)</label>
-				<input id="precio" name="precio" type="number" class="form-control" value="0" />
-			</div>
-		</div>
-	</div>
+          <h3 class="section-title">Estado y Características</h3>
+          <div class="form-grid">
+            <div class="form-group form-group--inline">
+              <label>Estado del Vehículo *</label>
+              <div class="radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    formControlName="condition"
+                    value="nuevo"
+                  />
+                  Nuevo
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    formControlName="condition"
+                    value="usado"
+                  />
+                  Usado
+                </label>
+              </div>
+            </div>
 
-	<footer class="card__footer">
-		<div class="footer-actions">
-			<button class="btn btn--ghost">Cancelar</button>
-			<button class="btn btn--primary">Registrar Vehículo</button>
-		</div>
-	</footer>
-	</section>
+            <div class="form-group form-group--inline">
+              <label for="fechaCompra">Fecha de Compra</label>
+              <input
+                id="fechaCompra"
+                formControlName="purchaseDate"
+                type="date"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="kilometraje">Kilometraje Actual *</label>
+              <input
+                id="kilometraje"
+                formControlName="currentKm"
+                type="number"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('currentKm')"
+              />
+              <small *ngIf="isFieldInvalid('currentKm')" class="text-danger">
+                {{ getFieldError("currentKm") }}
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="precio">Precio de Compra (CLP)</label>
+              <input
+                id="precio"
+                formControlName="purchasePrice"
+                type="number"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Notas (Opcional)</label>
+            <textarea
+              id="notes"
+              formControlName="notes"
+              class="form-control"
+              rows="3"
+              placeholder="Agrega cualquier información adicional sobre el vehículo..."
+            ></textarea>
+          </div>
+
+          <footer class="card__footer">
+            <div class="footer-actions">
+              <button
+                type="button"
+                class="btn btn--ghost"
+                (click)="onCancel()"
+                [disabled]="isSubmitting"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="btn btn--primary"
+                [disabled]="isSubmitting"
+              >
+                <span *ngIf="!isSubmitting"> Registrar Vehículo </span>
+                <span *ngIf="isSubmitting"> Registrando... </span>
+              </button>
+            </div>
+          </footer>
+        </form>
+      </div>
+    </section>
+  </div>
 </div>
