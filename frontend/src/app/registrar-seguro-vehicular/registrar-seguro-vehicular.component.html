@@ -1,0 +1,107 @@
+<!-- Contenedor principal que se alinea con el estilo del SOAP -->
+<div class="soap-form-container">
+  <!-- Barra de navegación (se mantiene consistente con el Dashboard y SOAP) -->
+  <div class="row">
+    <div class="col-12">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
+            <i class="fas fa-car me-2"></i>
+            <span class="fw-bold">CarTrack</span>
+          </a>
+          <div class="d-flex align-items-center">
+            <span class="navbar-text me-3">
+              Bienvenido
+            </span>
+            <!-- Asegúrate que la función de logout esté bien conectada o sea un routerLink -->
+            <button class="btn btn-outline-light" routerLink="/login"> 
+              <i class="fas fa-sign-out-alt me-2"></i>
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Contenido principal del formulario -->
+  <div class="soap-form-content">
+    <section class="card card--padded">
+      <header class="card__header">
+        <!-- Botón "Volver" corregido para usar routerLink -->
+        <a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
+        <h2 class="card__title">Registrar Seguro Vehicular</h2>
+      </header>
+
+      <form #seguroForm="ngForm" (ngSubmit)="onSubmit(seguroForm)">
+        <div class="card__body">
+          <p class="muted">Completa la información del seguro vehicular asociado a tu vehículo.</p>
+          <h3 class="section-title">Datos del Seguro</h3>
+          
+          <!-- Grid para los campos del formulario, como en el SOAP -->
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="compania">Compañía Aseguradora *</label>
+              <input type="text" id="compania" name="compania" class="form-control" 
+                     [(ngModel)]="seguroData.compania" required placeholder="Ej: HDI, BCI, Consorcio...">
+            </div>
+
+            <div class="form-group">
+              <label for="tipoCobertura">Tipo de Cobertura *</label>
+              <select id="tipoCobertura" name="tipoCobertura" class="form-control" 
+                      [(ngModel)]="seguroData.tipoCobertura" required>
+                <option value="" disabled>Seleccione una opción...</option>
+                <option value="basica">Básica</option>
+                <option value="intermedia">Intermedia</option>
+                <option value="completa">Completa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fechaInicio">Fecha Inicio Vigencia *</label>
+              <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" 
+                     [(ngModel)]="seguroData.fechaInicio" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fechaFin">Fecha Fin Vigencia *</label>
+              <input type="date" id="fechaFin" name="fechaFin" class="form-control" 
+                     [(ngModel)]="seguroData.fechaFin" required>
+            </div>
+
+            <div class="form-group">
+              <label for="costo">Costo Anual (CLP) *</label>
+              <input type="number" id="costo" name="costo" class="form-control" 
+                     [(ngModel)]="seguroData.costo" required placeholder="Ej: 350000" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="deducible">Deducible (UF) *</label>
+              <input type="number" id="deducible" name="deducible" class="form-control" 
+                     [(ngModel)]="seguroData.deducible" required placeholder="Ej: 3, 5, 10" min="0">
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="card__footer">
+          <!-- Mensaje de error, si existe -->
+          <div *ngIf="errorMessage" class="alert-message text-center me-3 text-danger">
+            {{ errorMessage }}
+          </div>
+          
+          <div class="footer-actions">
+            <!-- Botón Cancelar corregido para usar routerLink (similar al SOAP) -->
+            <button type="button" class="btn btn--ghost" routerLink="/dashboard">Cancelar</button>
+            <button type="submit" class="btn btn--primary" [disabled]="seguroForm.invalid || isLoading">
+              <span *ngIf="!isLoading">Registrar Seguro</span>
+              <span *ngIf="isLoading">Registrando...</span>
+            </button>
+          </div>
+        </footer>
+      </form>
+    </section>
+  </div>
+</div>
+
