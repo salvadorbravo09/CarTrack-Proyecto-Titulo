@@ -1,24 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
+import { MainNavComponent } from '../main-nav/main-nav.component';
 
 @Component({
   selector: 'app-vehiculos',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterLink, MainNavComponent],
   templateUrl: './vehiculos.component.html',
   styleUrls: ['./vehiculos.component.scss']
 })
 export class VehiculosComponent implements OnInit {
+
   vehicles: Vehicle[] = [];
   loading = false;
   errorMessage = '';
+  currentUser: any = null;
+  private userSub?: Subscription;
 
-  constructor(private vehicleService: VehicleService) {}
+  constructor(
+    private vehicleService: VehicleService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    // Suscribirse al usuario actual y verificar autenticación
+    this.userSub = this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+
+    if (!this.authService.isAuthenticated()) {
+      // Redirigir al login si no está autenticado
+      // (RouterLink es importado para templates; el redirect se hace por location)
+      window.location.href = '/login';
+      return;
+    }
+
     this.loadVehicles();
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
   }
 
   loadVehicles() {
@@ -55,5 +80,9 @@ export class VehiculosComponent implements OnInit {
         this.errorMessage = 'No se pudo eliminar el vehículo';
       }
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
