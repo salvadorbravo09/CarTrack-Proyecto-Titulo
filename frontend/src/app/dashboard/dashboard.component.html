@@ -20,48 +20,7 @@
   </nav>
 
   <!-- Navigation Tabs -->
-  <div class="nav-tabs-container">
-    <div class="container-fluid px-4">
-      <ul class="nav nav-tabs-custom">
-        <li class="nav-item">
-          <button 
-            class="nav-link" 
-            [class.active]="activeTab === 'resumen'"
-            (click)="setActiveTab('resumen')">
-            <i class="fas fa-home me-2"></i>
-            Resumen
-          </button>
-        </li>
-        <li class="nav-item">
-          <button 
-            class="nav-link" 
-            [class.active]="activeTab === 'vehiculos'"
-            (click)="setActiveTab('vehiculos')">
-            <i class="fas fa-car me-2"></i>
-            Vehículos
-          </button>
-        </li>
-        <li class="nav-item">
-          <button 
-            class="nav-link" 
-            [class.active]="activeTab === 'mantenimiento'"
-            (click)="setActiveTab('mantenimiento')">
-            <i class="fas fa-wrench me-2"></i>
-            Mantenimiento
-          </button>
-        </li>
-        <li class="nav-item">
-          <button 
-            class="nav-link" 
-            [class.active]="activeTab === 'analisis'"
-            (click)="setActiveTab('analisis')">
-            <i class="fas fa-chart-line me-2"></i>
-            Análisis
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <app-main-nav [activeTab]="activeTab"></app-main-nav>
 
   <div class="main-content">
     <div class="container-fluid px-4 py-4">
