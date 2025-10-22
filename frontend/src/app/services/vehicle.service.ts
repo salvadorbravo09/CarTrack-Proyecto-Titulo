@@ -19,6 +19,8 @@ export interface Vehicle {
   purchasePrice?: number;
   status?: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE' | 'SOLD';
   notes?: string;
+  seguros?: any[];
+  soaps?: any[];
   createdAt?: string | Date;
   updatedAt?: string | Date;
   user?: {
