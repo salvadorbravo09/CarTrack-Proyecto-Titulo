@@ -1,0 +1,63 @@
+<div class="container-vehiculos">
+    <div class="vehiculos-page container-fluid px-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-primary">Gestión de Vehículos</h3>
+            <a class="btn btn-primary" routerLink="/vehicle-form"><i class="fas fa-plus me-2"></i>Agregar Vehículo</a>
+        </div>
+
+        <div *ngIf="loading" class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+        </div>
+
+        <div *ngIf="!loading && vehicles.length === 0" class="empty-state text-center py-5">
+            <i class="fas fa-car fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No tienes vehículos registrados</p>
+            <a class="btn btn-primary" routerLink="/vehicle-form">Agregar primer vehículo</a>
+        </div>
+
+        <div *ngIf="vehicles.length > 0" class="row g-4">
+            <div *ngFor="let v of vehicles" class="col-lg-6">
+                <div class="card vehicle-card p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-1">{{ v.brand }} {{ v.model }}</h5>
+                            <small class="text-muted">{{ v.year }}</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge rounded-pill bg-white border border-1 text-dark">{{ v.licensePlate }}</span>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <div class="text-muted small">Motor:</div>
+                            <div class="fw-bold">{{ v.engine }}</div>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Color:</div>
+                            <div class="fw-bold">{{ v.color }}</div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small">Kilometraje:</div>
+                            <div class="fw-bold">{{ v.currentKm | number }} km</div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onView(v)" title="Ver"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onEdit(v)" title="Editar"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-outline-light btn-sm me-2 shadow-sm" title="SOAP/Seguro"><i class="fas fa-user-plus"></i></button>
+                            <button class="btn btn-outline-light btn-sm shadow-sm text-danger" (click)="onDelete(v)" title="Eliminar"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
