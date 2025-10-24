@@ -5,11 +5,12 @@ import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
+import { MainHeaderComponent } from '../main-header/main-header.component';
 
 @Component({
   selector: 'app-vehiculos',
   standalone: true,
-  imports: [CommonModule, RouterLink, MainNavComponent],
+  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent],
   templateUrl: './vehiculos.component.html',
   styleUrls: ['./vehiculos.component.scss']
 })
