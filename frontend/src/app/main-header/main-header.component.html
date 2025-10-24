@@ -1,0 +1,19 @@
+<!-- Header -->
+    <nav class="navbar navbar-dark bg-secondary-custom">
+        <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center">
+            <i [class]="iconClass"></i>
+            <span class="fw-bold fs-5">{{ brandText }}</span>
+        </a>
+
+        <div class="d-flex align-items-center">
+            <span class="text-white me-3" *ngIf="currentUser">
+            Bienvenido, {{ currentUser.firstName || 'Usuario Demo' }}
+            </span>
+            <button *ngIf="showLogout" class="btn btn-outline-light btn-sm" (click)="onLogout()">
+            <i class="fas fa-sign-out-alt me-2"></i>
+            Cerrar Sesión
+            </button>
+        </div>
+        </div>
+    </nav>
