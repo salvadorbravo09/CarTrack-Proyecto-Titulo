@@ -8,6 +8,8 @@ import { SeguimientoMantenimientoComponent } from './seguimiento-mantenimiento/s
 import { RegistrarSoapComponent } from './registrar-soap/registrar-soap.component';
 import { RegistrarSeguroVehicularComponent } from './registrar-seguro-vehicular/registrar-seguro-vehicular.component';
 import { VehiculosComponent } from './vehiculos/vehiculos.component';
+import { MainHeaderComponent } from './main-header/main-header.component';
+import { MantenimientoComponent } from './mantenimiento/mantenimiento.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -19,5 +21,6 @@ export const routes: Routes = [
   { path: 'registrar-soap/:id', component: RegistrarSoapComponent },
   { path: 'registrar-seguro/:id', component: RegistrarSeguroVehicularComponent },
   { path: 'vehiculos', component: VehiculosComponent },
+  { path: 'mantenimiento', component: MantenimientoComponent },
   { path: '**', redirectTo: '' },
 ];
