@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
@@ -25,6 +26,7 @@ export class VehiculosComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private authService: AuthService
+    , private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,8 +65,9 @@ export class VehiculosComponent implements OnInit {
   }
 
   onView(v: Vehicle) {
-    // placeholder: navigate or open modal
-    console.log('view', v.id);
+    if (!v.id) return;
+    // navigate to the vehicle detail view
+    this.router.navigate(['/vehiculo', v.id]);
   }
 
   onEdit(v: Vehicle) {

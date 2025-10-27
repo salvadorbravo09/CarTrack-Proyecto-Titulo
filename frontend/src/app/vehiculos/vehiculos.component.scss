@@ -32,5 +32,10 @@
 		justify-content: center;
 		border-radius: 8px;
 	}
+
+	.vehicle-card .btn:not(.text-danger),
+	.vehicle-card .btn:not(.text-danger) i {
+		color: #000 !important;
+	}
 }
 
