@@ -1,0 +1,28 @@
+.vehicle-view {
+	padding: 1rem 1.5rem;
+}
+
+.vehicle-view .card {
+	border-radius: 12px;
+	border: 1px solid rgba(7,59,76,0.06);
+	box-shadow: 0 8px 24px rgba(7,59,76,0.04);
+}
+
+.vehicle-view .fw-bold {
+	color: var(--text-dark);
+}
+
+.vehicle-view .card .small {
+	color: var(--text-light);
+}
+
+.vehicle-view .btn-light {
+	background: #fff;
+	border: 1px solid rgba(7,59,76,0.06);
+}
+
+@media (max-width: 768px) {
+	.vehicle-view {
+		padding: 1rem;
+	}
+}
