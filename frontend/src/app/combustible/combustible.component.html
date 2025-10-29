@@ -1,0 +1,143 @@
+<!-- Header -->
+<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
+
+<!-- Main navigation -->
+<app-main-nav [activeTab]="'vehiculos'"></app-main-nav>
+
+
+<div class="combustible-container container-fluid px-4 py-4">
+  <!-- Header con información del vehículo -->
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-light me-3" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="flex-grow-1">
+      <h2 class="fw-bold mb-0">{{ vehicle?.brand }} {{ vehicle?.model }}</h2>
+      <div class="text-muted">{{ vehicle?.year }} · {{ vehicle?.licensePlate }}</div>
+    </div>
+    <button class="btn btn-primary" (click)="onAgregarRecarga()">
+      <i class="fas fa-plus me-2"></i>
+      Agregar Recarga
+    </button>
+  </div>
+
+  <!-- main nav vehiculo -->
+<app-main-nav-vehiculo [activeTab]="activeVehicleTab" (tabChange)="onVehicleTabChange($event)"></app-main-nav-vehiculo>
+
+  <!-- Métricas principales -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+      <div class="metric-card">
+        <div class="metric-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="metric-content">
+          <div class="metric-label">Gasto Total</div>
+          <div class="metric-value">{{ gastoTotal | currency:'$':'symbol':'1.0-0' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="metric-card">
+        <div class="metric-icon">
+          <i class="fas fa-gas-pump"></i>
+        </div>
+        <div class="metric-content">
+          <div class="metric-label">Litros Totales</div>
+          <div class="metric-value">{{ litrosTotales | number:'1.1-1' }}L</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="metric-card">
+        <div class="metric-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="metric-content">
+          <div class="metric-label">Precio Promedio</div>
+          <div class="metric-value">{{ precioPromedio | currency:'$':'symbol':'1.0-0' }}/L</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="metric-card">
+        <div class="metric-icon">
+          <i class="fas fa-list"></i>
+        </div>
+        <div class="metric-content">
+          <div class="metric-label">Recargas</div>
+          <div class="metric-value">{{ totalRecargas }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de recargas -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Historial de Recargas</h5>
+    </div>
+    <div class="card-body p-0">
+      <div *ngIf="fuelRecords.length === 0" class="empty-state">
+        <i class="fas fa-gas-pump fa-3x text-muted mb-3"></i>
+        <p class="text-muted mb-3">No hay recargas registradas</p>
+        <button class="btn btn-primary" (click)="onAgregarRecarga()">
+          <i class="fas fa-plus me-2"></i>
+          Agregar primera recarga
+        </button>
+      </div>
+
+      <div *ngIf="fuelRecords.length > 0" class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Estación</th>
+              <th class="text-end">Litros</th>
+              <th class="text-end">Precio/L</th>
+              <th class="text-end">Total</th>
+              <th class="text-end">Kilometraje</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of fuelRecords">
+              <td>
+                <span class="fw-medium">{{ record.date | date:'dd/MM/yyyy' }}</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-gas-pump text-primary me-2"></i>
+                  <span>{{ record.station }}</span>
+                </div>
+              </td>
+              <td class="text-end">
+                <span class="badge bg-light text-dark">{{ record.liters | number:'1.1-1' }}L</span>
+              </td>
+              <td class="text-end">
+                {{ record.pricePerLiter | currency:'$':'symbol':'1.0-0' }}
+              </td>
+              <td class="text-end">
+                <span class="fw-bold text-success">{{ record.totalCost | currency:'$':'symbol':'1.0-0' }}</span>
+              </td>
+              <td class="text-end">
+                <span class="text-muted">{{ record.currentKm | number }} km</span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
