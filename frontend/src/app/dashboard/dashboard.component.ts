@@ -5,6 +5,7 @@ import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
+import { MaintenanceService, Maintenance } from '../services/maintenance.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,7 @@ export class DashboardComponent implements OnInit {
   activeTab: string = 'resumen';
   isLoadingVehicles = false;
   isLoadingStats = false;
+  isLoadingMaintenances = false;
 
   // Estadísticas
   stats = {
@@ -32,34 +34,13 @@ export class DashboardComponent implements OnInit {
   // Vehículos desde backend
   vehicles: Vehicle[] = [];
 
-  // Mantenimientos (datos de ejemplo - después conectar con backend)
-  maintenances = [
-    {
-      id: 1,
-      vehicleName: 'Toyota Corolla',
-      description: 'Cambio de aceite y filtro de aceite',
-      cost: 42000,
-      date: '2024-04-15'
-    },
-    {
-      id: 2,
-      vehicleName: 'Toyota Corolla',
-      description: 'Revisión de 50.000 km - cambio de bujías',
-      cost: 65000,
-      date: '2024-05-08'
-    },
-    {
-      id: 3,
-      vehicleName: 'Toyota Corolla',
-      description: 'Reparación de sensor de oxígeno',
-      cost: 95000,
-      date: '2024-06-22'
-    }
-  ];
+  // Mantenimientos desde backend
+  maintenances: Maintenance[] = [];
 
   constructor(
     private authService: AuthService,
     private vehicleService: VehicleService,
+    private maintenanceService: MaintenanceService,
     private router: Router
   ) {}
 
@@ -94,8 +75,7 @@ export class DashboardComponent implements OnInit {
   private loadDashboardData(): void {
     this.loadVehicles();
     this.loadVehicleStats();
-    // Aquí después cargaremos mantenimientos
-    // this.loadMaintenances();
+    this.loadMaintenances();
   }
 
   /**
@@ -130,10 +110,6 @@ export class DashboardComponent implements OnInit {
         if (response.success) {
           this.stats.totalVehiculos = response.stats.totalVehicles;
           
-          // Calcular inversión total como gasto total (temporal)
-          // Después esto se calculará con datos de mantenimientos
-          this.stats.gastoTotal = Number(response.stats.totalInvestment) || 0;
-          
           console.log('Estadísticas cargadas:', response.stats);
         }
         this.isLoadingStats = false;
@@ -142,6 +118,66 @@ export class DashboardComponent implements OnInit {
         console.error('Error al cargar estadísticas:', error);
         this.isLoadingStats = false;
       }
+    });
+  }
+
+  /**
+   * Cargar mantenimientos recientes del usuario
+   */
+  private loadMaintenances(): void {
+    this.isLoadingMaintenances = true;
+    
+    this.maintenanceService.getAllMaintenances().subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Obtener solo los 3 más recientes
+          this.maintenances = response.data
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 3);
+          
+          // Actualizar estadísticas de mantenimientos
+          this.stats.mantenimientos = response.data.length;
+          this.stats.gastoMantenimiento = response.data.reduce((sum, m) => sum + (Number(m.cost) || 0), 0);
+          
+          // Calcular gasto total (mantenimiento + combustible)
+          // Por ahora solo tenemos mantenimiento, combustible será 0
+          this.stats.gastoCombustible = 0; // TODO: Implementar cuando tengamos registros de combustible
+          this.stats.gastoTotal = this.stats.gastoMantenimiento + this.stats.gastoCombustible;
+          
+          // Calcular promedio por vehículo
+          if (this.stats.totalVehiculos > 0) {
+            this.stats.promedioVehiculo = this.stats.gastoTotal / this.stats.totalVehiculos;
+          }
+          
+          console.log('Mantenimientos cargados:', this.maintenances);
+          console.log('Estadísticas actualizadas:', this.stats);
+        }
+        this.isLoadingMaintenances = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar mantenimientos:', error);
+        this.maintenances = [];
+        this.isLoadingMaintenances = false;
+      }
+    });
+  }
+
+  /**
+   * Obtener nombre del vehículo por ID
+   */
+  getVehicleName(vehicleId: number): string {
+    const vehicle = this.vehicles.find(v => v.id === vehicleId);
+    return vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Vehículo';
+  }
+
+  /**
+   * Formatear fecha
+   */
+  formatDate(date: string): string {
+    return new Date(date).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
     });
   }
 

@@ -145,22 +145,39 @@
                 <h5 class="mb-1">Mantenimientos Recientes</h5>
                 <p class="text-muted small mb-0">Últimos registros de mantenimiento</p>
               </div>
+              <button class="btn btn-primary btn-sm" routerLink="/mantenimiento">
+                Ver todos
+              </button>
             </div>
             <div class="content-card-body">
-              <div *ngIf="maintenances.length === 0" class="empty-state">
-                <i class="fas fa-wrench fa-3x text-muted mb-3"></i>
-                <p class="text-muted">No hay mantenimientos registrados</p>
+              <!-- Spinner de carga -->
+              <div *ngIf="isLoadingMaintenances" class="text-center py-3">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
               </div>
 
-              <div *ngFor="let maintenance of maintenances" class="maintenance-item">
-                <div class="maintenance-info">
-                  <h6 class="mb-1">{{ maintenance.vehicleName }}</h6>
-                  <small class="text-muted">{{ maintenance.description }}</small>
-                </div>
-                <div class="maintenance-details">
-                  <div class="text-end">
-                    <div class="fw-bold">{{ maintenance.cost | currency:'$':'symbol':'1.0-0' }}</div>
-                    <small class="text-muted">{{ maintenance.date | date:'dd-MM-yyyy' }}</small>
+              <!-- Estado vacío -->
+              <div *ngIf="!isLoadingMaintenances && maintenances.length === 0" class="empty-state">
+                <i class="fas fa-wrench fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No hay mantenimientos registrados</p>
+                <button class="btn btn-primary btn-sm" routerLink="/seguimiento-mantenimiento">
+                  Registrar mantenimiento
+                </button>
+              </div>
+
+              <!-- Lista de mantenimientos -->
+              <div *ngIf="!isLoadingMaintenances && maintenances.length > 0">
+                <div *ngFor="let maintenance of maintenances" class="maintenance-item">
+                  <div class="maintenance-info">
+                    <h6 class="mb-1">{{ getVehicleName(maintenance.vehicleId) }}</h6>
+                    <small class="text-muted">{{ maintenance.description }}</small>
+                  </div>
+                  <div class="maintenance-details">
+                    <div class="text-end">
+                      <div class="fw-bold">{{ maintenance.cost | currency:'$':'symbol':'1.0-0' }}</div>
+                      <small class="text-muted">{{ formatDate(maintenance.date) }}</small>
+                    </div>
                   </div>
                 </div>
               </div>
