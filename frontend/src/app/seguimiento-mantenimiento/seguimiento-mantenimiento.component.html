@@ -1,123 +1,149 @@
 <div class="maintenance-form-container">
   <!-- Header -->
-  <div class="row">
-    <div class="col-12">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
-        <div class="container">
-          <a class="navbar-brand d-flex align-items-center" href="#">
-            <i class="fas fa-car me-2"></i>
-            <span class="fw-bold">CarTrack</span>
-          </a>
-          
-          <div class="d-flex align-items-center">
-            <span class="navbar-text me-3">
-              Bienvenido, <!-- {{ currentUser.firstName }} -->
-            </span>
-            <button class="btn btn-outline-light">
-              <i class="fas fa-sign-out-alt me-2"></i>
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </div>
+  <app-main-header></app-main-header>
 
   <div class="maintenance-form-content">
     <div class="page-header">
       <div class="title-section">
-        <h1 class="main-title">Seguimiento de Mantenimiento</h1>
-        <button class="btn btn--primary btn--add-maintenance">
-          <i class="fas fa-plus me-2"></i>
-          Agregar Mantenimiento
-        </button>
+        <h1 class="main-title">{{ isEditMode ? 'Editar Mantenimiento' : 'Nuevo Mantenimiento' }}</h1>
+        <a routerLink="/mantenimiento" class="btn btn--secondary">
+          <i class="fas fa-arrow-left me-2"></i>
+          Volver
+        </a>
       </div>
     </div>
 
-<!-- Formulario para registrar seguimiento de mantenimiento -->
+    <!-- Mensajes de éxito/error -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      <i class="fas fa-check-circle me-2"></i>
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      {{ errorMessage }}
+    </div>
 
     <!-- Card del formulario -->
     <section class="card card--padded">
-      <!-- Formulario de Nuevo Registro -->
-      <div class="new-maintenance-form">
-        <div class="form-header">
-          <h2 class="form-title">Nuevo Registro de Mantenimiento</h2>
-          <p class="form-subtitle">Registra un nuevo mantenimiento, reparación o servicio</p>
-        </div>
+      <form [formGroup]="maintenanceForm" (ngSubmit)="onSubmit()">
+        <div class="new-maintenance-form">
+          <div class="form-header">
+            <h2 class="form-title">{{ isEditMode ? 'Editar Registro' : 'Nuevo Registro de Mantenimiento' }}</h2>
+            <p class="form-subtitle">Registra un nuevo mantenimiento, reparación o servicio</p>
+          </div>
 
-        <div class="card__body">
-          <div class="form-grid">
-            <!-- Vehículo -->
-            <div class="form-group">
-              <label for="vehiculo">Vehículo *</label>
-              <div class="select-wrapper">
-                <select id="vehiculo" name="vehiculo" class="form-control">
-                  <option value="">Selecciona un vehículo</option>
-                </select>
-                <span class="select-caret" aria-hidden="true"></span>
+          <div class="card__body">
+            <div class="form-grid">
+              <!-- Vehículo -->
+              <div class="form-group">
+                <label for="vehiculo">Vehículo *</label>
+                <div class="select-wrapper">
+                  <select id="vehiculo" formControlName="vehicleId" class="form-control" 
+                          [class.is-invalid]="maintenanceForm.get('vehicleId')?.invalid && maintenanceForm.get('vehicleId')?.touched">
+                    <option value="">Selecciona un vehículo</option>
+                    <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+                      {{ vehicle.brand }} {{ vehicle.model }} - {{ vehicle.licensePlate }}
+                    </option>
+                  </select>
+                  <span class="select-caret" aria-hidden="true"></span>
+                </div>
+                <div *ngIf="maintenanceForm.get('vehicleId')?.invalid && maintenanceForm.get('vehicleId')?.touched" class="invalid-feedback d-block">
+                  Selecciona un vehículo
+                </div>
+              </div>
+
+              <!-- Tipo de Mantenimiento -->
+              <div class="form-group">
+                <label for="tipoMantenimiento">Tipo de Mantenimiento *</label>
+                <div class="select-wrapper">
+                  <select id="tipoMantenimiento" formControlName="maintenanceTypeId" class="form-control"
+                          [class.is-invalid]="maintenanceForm.get('maintenanceTypeId')?.invalid && maintenanceForm.get('maintenanceTypeId')?.touched">
+                    <option value="">Selecciona el tipo</option>
+                    <option *ngFor="let type of maintenanceTypes" [value]="type.id">
+                      {{ type.name }}
+                    </option>
+                  </select>
+                  <span class="select-caret" aria-hidden="true"></span>
+                </div>
+                <div *ngIf="maintenanceForm.get('maintenanceTypeId')?.invalid && maintenanceForm.get('maintenanceTypeId')?.touched" class="invalid-feedback d-block">
+                  Selecciona un tipo de mantenimiento
+                </div>
+              </div>
+
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="fecha">Fecha *</label>
+                <input id="fecha" formControlName="date" type="date" class="form-control"
+                       [class.is-invalid]="maintenanceForm.get('date')?.invalid && maintenanceForm.get('date')?.touched" />
+                <div *ngIf="maintenanceForm.get('date')?.invalid && maintenanceForm.get('date')?.touched" class="invalid-feedback d-block">
+                  Ingresa una fecha válida
+                </div>
+              </div>
+
+              <!-- Kilometraje -->
+              <div class="form-group">
+                <label for="kilometraje">Kilometraje *</label>
+                <input id="kilometraje" formControlName="mileage" type="number" class="form-control" placeholder="0" min="0"
+                       [class.is-invalid]="maintenanceForm.get('mileage')?.invalid && maintenanceForm.get('mileage')?.touched" />
+                <div *ngIf="maintenanceForm.get('mileage')?.invalid && maintenanceForm.get('mileage')?.touched" class="invalid-feedback d-block">
+                  Ingresa el kilometraje
+                </div>
+              </div>
+
+              <!-- Taller -->
+              <div class="form-group">
+                <label for="taller">Taller</label>
+                <input id="taller" formControlName="workshopName" type="text" class="form-control" placeholder="Nombre del taller" />
+              </div>
+
+              <!-- Costo -->
+              <div class="form-group">
+                <label for="costo">Costo (CLP)</label>
+                <input id="costo" formControlName="cost" type="number" class="form-control" placeholder="0" min="0" />
               </div>
             </div>
 
-            <!-- Tipo de Mantenimiento -->
-            <div class="form-group">
-              <label for="tipoMantenimiento">Tipo de Mantenimiento *</label>
-              <div class="select-wrapper">
-                <select id="tipoMantenimiento" name="tipoMantenimiento" class="form-control">
-                  <option value="">Selecciona el tipo</option>
-                  <option value="cambio-aceite">Cambio de Aceite</option>
-                  <option value="revision-general">Revisión General</option>
-                  <option value="cambio-filtros">Cambio de Filtros</option>
-                  <option value="cambio-neumaticos">Cambio de Neumáticos</option>
-                  <option value="alineacion-balanceo">Alineación y Balanceo</option>
-                  <option value="cambio-frenos">Cambio de Frenos</option>
-                  <option value="revision-suspension">Revisión de Suspensión</option>
-                  <option value="cambio-bateria">Cambio de Batería</option>
-                  <option value="reparacion-motor">Reparación de Motor</option>
-                  <option value="otros">Otros</option>
-                </select>
-                <span class="select-caret" aria-hidden="true"></span>
+            <!-- Descripción -->
+            <div class="form-group form-group--full-width">
+              <label for="descripcion">Descripción *</label>
+              <textarea 
+                id="descripcion" 
+                formControlName="description"
+                class="form-control form-control--textarea" 
+                rows="4"
+                placeholder="Describe el mantenimiento realizado..."
+                [class.is-invalid]="maintenanceForm.get('description')?.invalid && maintenanceForm.get('description')?.touched">
+              </textarea>
+              <div *ngIf="maintenanceForm.get('description')?.invalid && maintenanceForm.get('description')?.touched" class="invalid-feedback d-block">
+                Ingresa una descripción
               </div>
             </div>
 
-            <!-- Fecha -->
-            <div class="form-group">
-              <label for="fecha">Fecha *</label>
-              <input id="fecha" name="fecha" type="date" class="form-control" value="2025-10-11" />
-            </div>
-
-            <!-- Kilometraje -->
-            <div class="form-group">
-              <label for="kilometraje">Kilometraje</label>
-              <input id="kilometraje" name="kilometraje" type="number" class="form-control" placeholder="0" min="0" />
-            </div>
-
-            <!-- Costo -->
-            <div class="form-group form-group--span-2">
-              <label for="costo">Costo (CLP)</label>
-              <input id="costo" name="costo" type="number" class="form-control" placeholder="0" min="0" />
+            <!-- Observaciones -->
+            <div class="form-group form-group--full-width">
+              <label for="observaciones">Observaciones</label>
+              <textarea 
+                id="observaciones" 
+                formControlName="observations"
+                class="form-control form-control--textarea" 
+                rows="3"
+                placeholder="Observaciones adicionales (opcional)">
+              </textarea>
             </div>
           </div>
 
-          <!-- Descripción -->
-          <div class="form-group form-group--full-width">
-            <label for="descripcion">Descripción *</label>
-            <textarea 
-              id="descripcion" 
-              name="descripcion" 
-              class="form-control form-control--textarea" 
-              rows="4"
-              placeholder="Describe el mantenimiento realizado...">
-            </textarea>
-          </div>
+          <footer class="card__footer">
+            <div class="footer-actions">
+              <button class="btn btn--ghost" type="button" (click)="cancel()" [disabled]="isLoading">Cancelar</button>
+              <button class="btn btn--primary" type="submit" [disabled]="isLoading || maintenanceForm.invalid">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isEditMode ? 'Actualizar Registro' : 'Guardar Registro' }}
+              </button>
+            </div>
+          </footer>
         </div>
-
-        <footer class="card__footer">
-          <div class="footer-actions">
-            <button class="btn btn--ghost" type="button">Cancelar</button>
-            <button class="btn btn--primary" type="submit">Guardar Registro</button>
-          </div>
-        </footer>
-      </div>
+      </form>
     </section>
   </div>
 </div>
