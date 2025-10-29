@@ -1,0 +1,176 @@
+<div class="agregar-combustible-container">
+  <div class="form-card">
+    <!-- Header -->
+    <div class="form-header">
+      <h3 class="mb-1">Nueva Recarga de Combustible</h3>
+      <p class="text-muted mb-0" *ngIf="vehicle">
+        Registra una nueva recarga para {{ vehicle.brand }} {{ vehicle.model }}
+      </p>
+    </div>
+
+    <!-- Mensajes de error/éxito -->
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      {{ successMessage }}
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="fuelForm" (ngSubmit)="onSubmit()">
+      <div class="row g-3">
+        <!-- Fecha -->
+        <div class="col-md-4">
+          <label for="fecha" class="form-label">
+            Fecha <span class="text-danger">*</span>
+          </label>
+          <input
+            type="date"
+            id="fecha"
+            class="form-control"
+            formControlName="fecha"
+            [class.is-invalid]="isFieldInvalid('fecha')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('fecha')">
+            {{ getFieldError('fecha') }}
+          </div>
+        </div>
+
+        <!-- Estación de Servicio -->
+        <div class="col-md-4">
+          <label for="estacion" class="form-label">
+            Estación de Servicio <span class="text-danger">*</span>
+          </label>
+          <select
+            id="estacion"
+            class="form-select"
+            formControlName="estacion"
+            [class.is-invalid]="isFieldInvalid('estacion')"
+          >
+            <option value="">Selecciona estación</option>
+            <option *ngFor="let est of estaciones" [value]="est.value">
+              {{ est.label }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('estacion')">
+            {{ getFieldError('estacion') }}
+          </div>
+        </div>
+
+        <!-- Tipo de Combustible -->
+        <div class="col-md-4">
+          <label for="tipoCombustible" class="form-label">
+            Tipo de Combustible <span class="text-danger">*</span>
+          </label>
+          <select
+            id="tipoCombustible"
+            class="form-select"
+            formControlName="tipoCombustible"
+            [class.is-invalid]="isFieldInvalid('tipoCombustible')"
+          >
+            <option *ngFor="let tipo of tiposCombustible" [value]="tipo.value">
+              {{ tipo.label }}
+            </option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoCombustible')">
+            {{ getFieldError('tipoCombustible') }}
+          </div>
+        </div>
+
+        <!-- Precio por Litro -->
+        <div class="col-md-4">
+          <label for="precioPorLitro" class="form-label">
+            Precio por Litro (CLP) <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            id="precioPorLitro"
+            class="form-control"
+            formControlName="precioPorLitro"
+            placeholder="0"
+            min="0"
+            [class.is-invalid]="isFieldInvalid('precioPorLitro')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('precioPorLitro')">
+            {{ getFieldError('precioPorLitro') }}
+          </div>
+        </div>
+
+        <!-- Costo Total -->
+        <div class="col-md-4">
+          <label for="costoTotal" class="form-label">
+            Costo Total (CLP) <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            id="costoTotal"
+            class="form-control"
+            formControlName="costoTotal"
+            placeholder="0"
+            min="0"
+            [class.is-invalid]="isFieldInvalid('costoTotal')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('costoTotal')">
+            {{ getFieldError('costoTotal') }}
+          </div>
+        </div>
+
+        <!-- Litros (calculado) -->
+        <div class="col-md-4">
+          <label class="form-label">Litros</label>
+          <div class="form-control-plaintext calculated-value">
+            {{ litrosCalculados | number:'1.2-2' }} L
+          </div>
+        </div>
+
+        <!-- Kilometraje -->
+        <div class="col-md-12">
+          <label for="kilometraje" class="form-label">
+            Kilometraje <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            id="kilometraje"
+            class="form-control"
+            formControlName="kilometraje"
+            placeholder="58500"
+            min="0"
+            [class.is-invalid]="isFieldInvalid('kilometraje')"
+          />
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('kilometraje')">
+            {{ getFieldError('kilometraje') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="onCancel()"
+          [disabled]="isSubmitting"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">
+            <i class="fas fa-save me-2"></i>
+            Guardar Recarga
+          </span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin me-2"></i>
+            Guardando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
