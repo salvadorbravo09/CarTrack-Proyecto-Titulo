@@ -30,23 +30,24 @@ enum VehicleCondition {
 
 // ========== MODELS ==========
 
-// Modelo de usuario (simplificado para login/register)
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String?   @unique
-  password  String
-  firstName String
-  lastName  String
-  phone     String?
-  avatar    String?
-  role      Role      @default(USER)
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id                    Int                 @id @default(autoincrement())
+  email                 String              @unique
+  username              String?             @unique
+  password              String
+  firstName             String
+  lastName              String
+  phone                 String?
+  avatar                String?
+  role                  Role                @default(USER)
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
   
   // Relaciones
-  vehicles  Vehicle[]
+  vehicles              Vehicle[]
+  transfersOrigin       VehicleTransfer[]   @relation("TransferOrigin")
+  transfersDestination  VehicleTransfer[]   @relation("TransferDestination")
 
   @@map("users")
 }
@@ -55,25 +56,156 @@ model User {
 model Vehicle {
   id              Int              @id @default(autoincrement())
   userId          Int
-  brand           String           // Marca del vehículo
-  model           String           // Modelo del vehículo
-  year            Int              // Año del vehículo
-  licensePlate    String           @unique // Patente/Placa
-  color           String           // Color del vehículo
-  engine          String           // Motor (ej: 1.5L, 2.0L Turbo)
-  currentKm       Int              @default(0) // Kilometraje actual
-  condition       VehicleCondition @default(USED) // Nuevo o Usado
-  purchaseDate    DateTime?        // Fecha de compra
-  purchasePrice   Decimal?         @db.Decimal(10, 2) // Precio de compra
-  status          VehicleStatus    @default(ACTIVE) // Estado del vehículo
-  notes           String?          @db.Text // Notas adicionales
+  brand           String           
+  model           String           
+  year            Int              
+  licensePlate    String           @unique
+  color           String           
+  engine          String           
+  currentKm       Int              @default(0)
+  condition       VehicleCondition @default(USED)
+  purchaseDate    DateTime?        
+  purchasePrice   Decimal?         @db.Decimal(10, 2) 
+  status          VehicleStatus    @default(ACTIVE) 
+  notes           String?          @db.Text
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   
   // Relaciones
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  maintenances    Maintenance[]
+  documents       VehicleDocument[]
+  transfers       VehicleTransfer[]
+  seguros         VehicleInsurance[]
+  soaps           Soap[]
 
   @@map("vehicles")
   @@index([userId])
   @@index([licensePlate])
+}
+
+// Modelo de tipos de mantenimiento
+model MaintenanceType {
+  id              Int           @id @default(autoincrement())
+  name            String        @unique
+  description     String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relaciones
+  maintenances    Maintenance[]
+
+  @@map("tipos_mantenimiento")
+}
+
+// Modelo de mantenimientos
+model Maintenance {
+  id                  Int              @id @default(autoincrement())
+  vehicleId           Int
+  maintenanceTypeId   Int
+  date                DateTime         
+  description         String           @db.Text
+  workshopName        String?          
+  cost                Decimal?         @db.Decimal(10, 2)
+  mileage             Int              
+  observations        String?          @db.Text
+  status              String?          
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  deletedAt           DateTime?        
+  
+  // Relaciones
+  vehicle             Vehicle          @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  maintenanceType     MaintenanceType  @relation(fields: [maintenanceTypeId], references: [id])
+
+  @@map("mantenimientos")
+  @@index([vehicleId])
+  @@index([maintenanceTypeId])
+  @@index([date])
+}
+
+// Modelo de documentos del vehículo
+model VehicleDocument {
+  id                Int       @id @default(autoincrement())
+  vehicleId         Int
+  documentType      String    
+  documentNumber    String?   
+  fileUrl           String?   
+  issueDate         DateTime? 
+  expiryDate        DateTime? 
+  description       String?   @db.Text
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime? 
+  
+  // Relaciones
+  vehicle           Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("documentos_vehiculo")
+  @@index([vehicleId])
+  @@index([expiryDate])
+}
+
+// Modelo de transferencias de vehículos
+model VehicleTransfer {
+  id                Int       @id @default(autoincrement())
+  vehicleId         Int
+  originUserId      Int
+  destinationUserId Int
+  transferEmail     String    
+  transferCode      String    @unique 
+  status            String    @default("pending") 
+  message           String?   @db.Text
+  expiresAt         DateTime  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relaciones
+  vehicle           Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  originUser        User      @relation("TransferOrigin", fields: [originUserId], references: [id])
+  destinationUser   User      @relation("TransferDestination", fields: [destinationUserId], references: [id])
+
+  @@map("transferencias_vehiculos")
+  @@index([vehicleId])
+  @@index([originUserId])
+  @@index([destinationUserId])
+  @@index([transferCode])
+}
+
+// Modelo de seguros vehiculares
+model VehicleInsurance {
+  id              Int       @id @default(autoincrement())
+  vehicleId       Int
+  compania        String    
+  tipoCobertura   String    
+  costo           Decimal   @db.Decimal(10, 2)
+  deducible       Decimal   @db.Decimal(10, 2)
+  fechaInicio     DateTime  
+  fechaFin        DateTime  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relaciones
+  vehicle         Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("seguros_vehiculares")
+  @@index([vehicleId])
+}
+
+// Modelo de SOAP 
+model Soap {
+  id              Int       @id @default(autoincrement())
+  vehicleId       Int
+  compania        String    
+  lugarCompra     String?   
+  numeroPoliza    String?   
+  fechaVigencia   DateTime  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relaciones
+  vehicle         Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("soaps")
+  @@index([vehicleId])
 }
