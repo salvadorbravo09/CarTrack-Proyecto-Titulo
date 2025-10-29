@@ -1,0 +1,31 @@
+<!-- Nav vehiculo -->
+<div class="nav-vehiculo-container">
+  <div class="container-fluid px-4">
+    <nav class="nav-vehiculo">
+      <button
+        class="nav-vehiculo-item"
+        [class.active]="activeTab === 'resumen'"
+        (click)="setActiveTab('resumen')">
+        <i class="fas fa-home"></i>
+        <span>Resumen</span>
+      </button>
+
+      <button
+        class="nav-vehiculo-item"
+        [class.active]="activeTab === 'combustible'"
+        (click)="setActiveTab('combustible')">
+        <i class="fas fa-gas-pump"></i>
+        <span>Combustible</span>
+      </button>
+
+      <button
+        class="nav-vehiculo-item"
+        [class.active]="activeTab === 'calculadoras'"
+        (click)="setActiveTab('calculadoras')">
+        <i class="fas fa-calculator"></i>
+        <span>Calculadoras</span>
+      </button>
+    </nav>
+  </div>
+</div>
+
