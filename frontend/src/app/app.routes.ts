@@ -11,6 +11,8 @@ import { VehiculosComponent } from './vehiculos/vehiculos.component';
 import { VerVehiculoComponent } from './ver-vehiculo/ver-vehiculo.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { MantenimientoComponent } from './mantenimiento/mantenimiento.component';
+import { CombustibleComponent } from './combustible/combustible.component';
+import { AgregarCombustibleComponent } from './agregar-combustible/agregar-combustible.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -24,6 +26,9 @@ export const routes: Routes = [
   { path: 'registrar-seguro/:id', component: RegistrarSeguroVehicularComponent },
   { path: 'vehiculos', component: VehiculosComponent },
   { path: 'vehiculo/:id', component: VerVehiculoComponent },
+  { path: 'combustible/:id', component: CombustibleComponent },
+  { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
   { path: 'mantenimiento', component: MantenimientoComponent },
   { path: '**', redirectTo: '' },
 ];
+
