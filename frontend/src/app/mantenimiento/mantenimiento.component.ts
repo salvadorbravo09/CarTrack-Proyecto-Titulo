@@ -3,20 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
+import { MaintenanceService, Maintenance } from '../services/maintenance.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
-
-interface MaintenanceRecord {
-  id: string;
-  vehicleId: number;
-  vehicleName?: string;
-  type?: string;
-  title?: string;
-  description?: string;
-  date?: string;
-  km?: number;
-  cost?: number;
-}
 
 @Component({
   selector: 'app-mantenimiento',
@@ -28,23 +17,24 @@ interface MaintenanceRecord {
 export class MantenimientoComponent implements OnInit {
   currentUser: any = null;
   vehicles: Vehicle[] = [];
-  maintenances: MaintenanceRecord[] = [];
+  maintenances: Maintenance[] = [];
   activeFilter: 'all' | number = 'all';
 
   isLoading = false;
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
     private vehicleService: VehicleService,
+    private maintenanceService: MaintenanceService,
     private router: Router
-
   ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.loadVehicles();
-      this.loadMaintenancesFromStorage();
+      this.loadMaintenances();
     });
   }
 
@@ -59,30 +49,32 @@ export class MantenimientoComponent implements OnInit {
         }
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading vehicles:', error);
         this.vehicles = [];
         this.isLoading = false;
       }
     });
   }
 
-  private loadMaintenancesFromStorage(): void {
-    if (!this.currentUser || !this.currentUser.id) {
-      this.maintenances = [];
-      return;
-    }
-
-    try {
-      const key = `cartrack_maintenances_${this.currentUser.id}`;
-      const raw = localStorage.getItem(key);
-      this.maintenances = raw ? JSON.parse(raw) : [];
-    } catch (err) {
-      console.error('Error loading maintenances from storage', err);
-      this.maintenances = [];
-    }
+  private loadMaintenances(): void {
+    this.isLoading = true;
+    this.maintenanceService.getAllMaintenances().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.maintenances = response.data;
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading maintenances:', error);
+        this.errorMessage = 'Error al cargar los mantenimientos';
+        this.isLoading = false;
+      }
+    });
   }
 
-  filteredMaintenances(): MaintenanceRecord[] {
+  filteredMaintenances(): Maintenance[] {
     if (this.activeFilter === 'all') return this.maintenances;
     return this.maintenances.filter(m => m.vehicleId === this.activeFilter);
   }
@@ -96,7 +88,6 @@ export class MantenimientoComponent implements OnInit {
       this.activeFilter = 'all';
       return;
     }
-
     this.activeFilter = vehicleId;
   }
 
@@ -107,6 +98,46 @@ export class MantenimientoComponent implements OnInit {
   goToAdd(): void {
     if (!this.canAddMaintenance()) return;
     this.router.navigate(['/seguimiento-mantenimiento']);
+  }
+
+  deleteMaintenance(id: number | undefined): void {
+    if (!id) return;
+
+    if (confirm('¿Estás seguro de que deseas eliminar este mantenimiento?')) {
+      this.maintenanceService.deleteMaintenance(id).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.loadMaintenances(); // Recargar la lista
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting maintenance:', error);
+          this.errorMessage = 'Error al eliminar el mantenimiento';
+        }
+      });
+    }
+  }
+
+  getVehicleName(vehicleId: number): string {
+    const vehicle = this.vehicles.find(v => v.id === vehicleId);
+    return vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Vehículo desconocido';
+  }
+
+  formatDate(date: string | undefined): string {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  formatCurrency(amount: number | undefined): string {
+    if (!amount) return '$0';
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP'
+    }).format(amount);
   }
 
   logout(): void {
