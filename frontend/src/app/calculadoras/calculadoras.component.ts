@@ -131,20 +131,6 @@ export class CalculadorasComponent implements OnInit {
     };
   }
 
-  // Usar datos registrados
-  async usarDatosRegistrados(): Promise<void> {
-    this.useRegisteredData = !this.useRegisteredData;
-    
-    if (this.useRegisteredData) {
-      // Cargar datos reales del usuario
-      await this.loadUserData();
-    } else {
-      // Limpiar formularios
-      this.initializeForms();
-      this.resetResults();
-    }
-  }
-
   private async loadUserData(): Promise<void> {
     // Cargar estadísticas de combustible
     this.fuelService.getFuelStats().subscribe({
