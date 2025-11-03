@@ -22,7 +22,13 @@ export const authenticateToken = (req, res, next) => {
   }
 
   // Agregar información del usuario a la request
-  req.user = verificationResult.data;
+  // Normalizar userId a id para consistencia
+  const userData = verificationResult.data;
+  req.user = {
+    id: userData.userId || userData.id,
+    email: userData.email,
+    role: userData.role
+  };
   next();
 };
 
