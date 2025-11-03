@@ -6,17 +6,9 @@ import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { MainNavVehiculoComponent } from '../main-nav-vehiculo/main-nav-vehiculo.component';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
+import { MaintenanceService, Maintenance } from '../services/maintenance.service';
+import { FuelService, FuelRefill } from '../services/fuel.service';
 import { AuthService } from '../services/auth.service';
-
-interface MaintenanceRecord {
-  id: string;
-  vehicleId: number;
-  title?: string;
-  description?: string;
-  date?: string;
-  km?: number;
-  cost?: number;
-}
 
 @Component({
   selector: 'app-ver-vehiculo',
@@ -28,8 +20,8 @@ interface MaintenanceRecord {
 export class VerVehiculoComponent implements OnInit {
   currentUser: any = null;
   vehicle: Vehicle | null = null;
-  maintenances: MaintenanceRecord[] = [];
-  refuels: any[] = [];
+  maintenances: Maintenance[] = [];
+  refuels: FuelRefill[] = [];
   loading = false;
   activeVehicleTab: string = 'resumen';
 
@@ -37,6 +29,8 @@ export class VerVehiculoComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService,
+    private maintenanceService: MaintenanceService,
+    private fuelService: FuelService,
     private authService: AuthService
   ) {}
 
@@ -70,38 +64,47 @@ export class VerVehiculoComponent implements OnInit {
   }
 
   private loadMaintenanceAndRefuels(vehicleId: number): void {
-    if (!this.currentUser || !this.currentUser.id) return;
-    try {
-      const key = `cartrack_maintenances_${this.currentUser.id}`;
-      const raw = localStorage.getItem(key);
-      const all: MaintenanceRecord[] = raw ? JSON.parse(raw) : [];
-      this.maintenances = all.filter(m => m.vehicleId === vehicleId).slice(0,5);
-    } catch (err) {
-      console.error('Error loading maintenances', err);
-      this.maintenances = [];
-    }
+    // Cargar mantenimientos desde la API
+    this.maintenanceService.getMaintenancesByVehicle(vehicleId).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.maintenances = response.data.slice(0, 5); // Últimos 5 mantenimientos
+        } else {
+          this.maintenances = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error loading maintenances', err);
+        this.maintenances = [];
+      }
+    });
 
-    // refuels/combustible could be stored similarly; attempt to load
-    try {
-      const rKey = `cartrack_refuels_${this.currentUser.id}`;
-      const rawR = localStorage.getItem(rKey);
-      const allR = rawR ? JSON.parse(rawR) : [];
-      this.refuels = allR.filter((r: any) => r.vehicleId === vehicleId).slice(0,5);
-    } catch (err) {
-      this.refuels = [];
-    }
+    // Cargar recargas de combustible desde la API
+    this.fuelService.getFuelRefillsByVehicle(vehicleId).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.refuels = response.data.slice(0, 5); // Últimas 5 recargas
+        } else {
+          this.refuels = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error loading fuel refills', err);
+        this.refuels = [];
+      }
+    });
   }
 
   /** Returns total cost of maintenances shown */
   getTotalMaintenance(): number {
     if (!this.maintenances) return 0;
-    return this.maintenances.reduce((s, m) => s + (m.cost || 0), 0);
+    return this.maintenances.reduce((s, m) => s + (Number(m.cost) || 0), 0);
   }
 
   /** Returns total cost of refuels shown */
   getTotalRefuels(): number {
     if (!this.refuels) return 0;
-    return this.refuels.reduce((s, r) => s + (r.cost || 0), 0);
+    return this.refuels.reduce((s, r) => s + (Number(r.totalCost) || 0), 0);
   }
 
   getTotalCost(): number {
