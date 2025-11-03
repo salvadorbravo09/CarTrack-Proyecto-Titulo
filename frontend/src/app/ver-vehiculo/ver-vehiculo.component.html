@@ -83,10 +83,10 @@
 				<div *ngIf="!maintenances || maintenances.length === 0" class="text-muted">No hay mantenimientos registrados</div>
 				<div *ngFor="let m of maintenances" class="d-flex justify-content-between align-items-center py-2 border rounded mb-2 px-2">
 					<div>
-						<div class="fw-bold">{{ m.title || m.description }}</div>
-						<div class="small text-muted">{{ m.date }} · {{ (m.km || 0) | number }} km</div>
+						<div class="fw-bold">{{ m.maintenanceType?.name || m.description }}</div>
+						<div class="small text-muted">{{ m.date | date:'dd/MM/yyyy' }} · {{ (m.mileage || 0) | number }} km</div>
 					</div>
-					<div class="fw-bold">{{ m.cost | currency:'$':'symbol':'1.0-0' }}</div>
+					<div class="fw-bold">{{ (m.cost || 0) | currency:'$':'symbol':'1.0-0' }}</div>
 				</div>
 			</div>
 		</div>
@@ -97,10 +97,10 @@
 				<div *ngIf="!refuels || refuels.length === 0" class="text-muted">No hay recargas registradas</div>
 				<div *ngFor="let r of refuels" class="d-flex justify-content-between align-items-center py-2 border rounded mb-2 px-2">
 					<div>
-						<div class="fw-bold">{{ r.quantity || r.liters }}L - {{ r.station || r.place }}</div>
-						<div class="small text-muted">{{ r.date }} · {{ r.pricePerLiter ? ('$' + r.pricePerLiter + '/L') : '' }}</div>
+						<div class="fw-bold">{{ r.liters | number:'1.1-1' }}L - {{ r.station }}</div>
+						<div class="small text-muted">{{ r.date | date:'dd/MM/yyyy' }} · {{ r.pricePerLiter | currency:'$':'symbol':'1.0-0' }}/L</div>
 					</div>
-					<div class="fw-bold">{{ r.cost | currency:'$':'symbol':'1.0-0' }}</div>
+					<div class="fw-bold">{{ r.totalCost | currency:'$':'symbol':'1.0-0' }}</div>
 				</div>
 			</div>
 		</div>
