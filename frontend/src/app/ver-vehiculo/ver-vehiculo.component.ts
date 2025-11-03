@@ -127,9 +127,6 @@ export class VerVehiculoComponent implements OnInit {
     
     if (tab === 'combustible') {
       this.router.navigate(['/combustible', this.vehicle.id]);
-    } else if (tab === 'calculadoras') {
-      // TODO: crear ruta de calculadoras
-      console.log('Navigate to calculadoras');
     }
     // Si es 'resumen', no hacemos nada porque ya estamos en ver-vehiculo
   }
