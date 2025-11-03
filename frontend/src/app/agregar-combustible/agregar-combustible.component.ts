@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
+import { FuelService } from '../services/fuel.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -42,6 +43,7 @@ export class AgregarCombustibleComponent implements OnInit {
     private router: Router,
     private location: Location,
     private vehicleService: VehicleService,
+    private fuelService: FuelService,
     private authService: AuthService
   ) {}
 
@@ -130,37 +132,38 @@ export class AgregarCombustibleComponent implements OnInit {
 
     const formData = this.fuelForm.value;
     const newRecord = {
-      id: Date.now().toString(),
       vehicleId: this.vehicleId,
       date: formData.fecha,
       station: formData.estacion,
-      fuelType: formData.tipoCombustible,
       liters: this.litrosCalculados,
       totalCost: parseFloat(formData.costoTotal),
       pricePerLiter: parseFloat(formData.precioPorLitro),
-      currentKm: parseInt(formData.kilometraje)
+      currentKm: parseInt(formData.kilometraje),
+      notes: formData.tipoCombustible // Guardar tipo de combustible en notas
     };
 
-    // Guardar en localStorage (temporal)
-    try {
-      const key = `cartrack_fuel_${this.currentUser.id}`;
-      const raw = localStorage.getItem(key);
-      const allRecords = raw ? JSON.parse(raw) : [];
-      allRecords.push(newRecord);
-      localStorage.setItem(key, JSON.stringify(allRecords));
+    // Guardar usando la API
+    this.fuelService.createFuelRefill(newRecord).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.successMessage = '¡Recarga guardada exitosamente!';
+          this.isSubmitting = false;
 
-      this.successMessage = '¡Recarga guardada exitosamente!';
-      this.isSubmitting = false;
-
-      // Redirigir después de 1 segundo
-      setTimeout(() => {
-        this.router.navigate(['/combustible', this.vehicleId]);
-      }, 1000);
-    } catch (err) {
-      console.error('Error saving fuel record', err);
-      this.errorMessage = 'Error al guardar la recarga';
-      this.isSubmitting = false;
-    }
+          // Redirigir después de 1 segundo
+          setTimeout(() => {
+            this.router.navigate(['/combustible', this.vehicleId]);
+          }, 1000);
+        } else {
+          this.errorMessage = response.message || 'Error al guardar la recarga';
+          this.isSubmitting = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error saving fuel record', err);
+        this.errorMessage = err || 'Error al guardar la recarga';
+        this.isSubmitting = false;
+      }
+    });
   }
 
   onCancel(): void {
