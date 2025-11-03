@@ -78,6 +78,7 @@ model Vehicle {
   transfers       VehicleTransfer[]
   seguros         VehicleInsurance[]
   soaps           Soap[]
+  fuelRefills     FuelRefill[]
 
   @@map("vehicles")
   @@index([userId])
@@ -208,4 +209,27 @@ model Soap {
 
   @@map("soaps")
   @@index([vehicleId])
+}
+
+// Modelo de recargas de combustible
+model FuelRefill {
+  id              Int       @id @default(autoincrement())
+  vehicleId       Int
+  date            DateTime  
+  liters          Decimal   @db.Decimal(10, 2)
+  pricePerLiter   Decimal   @db.Decimal(10, 2)
+  totalCost       Decimal   @db.Decimal(10, 2)
+  station         String    
+  currentKm       Int       
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  
+  // Relaciones
+  vehicle         Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("recargas_combustible")
+  @@index([vehicleId])
+  @@index([date])
 }
