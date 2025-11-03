@@ -13,6 +13,7 @@ import { MainHeaderComponent } from './main-header/main-header.component';
 import { MantenimientoComponent } from './mantenimiento/mantenimiento.component';
 import { CombustibleComponent } from './combustible/combustible.component';
 import { AgregarCombustibleComponent } from './agregar-combustible/agregar-combustible.component';
+import { CalculadorasComponent } from './calculadoras/calculadoras.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'combustible/:id', component: CombustibleComponent },
   { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
   { path: 'mantenimiento', component: MantenimientoComponent },
+  { path: 'calculadoras', component: CalculadorasComponent },
   { path: '**', redirectTo: '' },
 ];
 
