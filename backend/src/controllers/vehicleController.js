@@ -4,7 +4,7 @@ export class VehicleController {
   // Crear un nuevo vehículo
   static async createVehicle(req, res) {
     try {
-      const userId = req.user.userId; // Obtenido del middleware de autenticación
+      const userId = req.user.id; // Obtenido del middleware de autenticación
       const vehicleData = req.body;
 
       // Validaciones básicas
@@ -69,7 +69,7 @@ export class VehicleController {
   // Obtener todos los vehículos del usuario autenticado
   static async getUserVehicles(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
 
       const result = await VehicleService.getVehiclesByUserId(userId);
 
@@ -88,7 +88,7 @@ export class VehicleController {
   // Obtener un vehículo específico por ID
   static async getVehicleById(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const vehicleId = parseInt(req.params.id);
 
       if (isNaN(vehicleId)) {
@@ -115,7 +115,7 @@ export class VehicleController {
   // Actualizar un vehículo
   static async updateVehicle(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const vehicleId = parseInt(req.params.id);
       const updateData = req.body;
 
@@ -173,7 +173,7 @@ export class VehicleController {
   // Eliminar un vehículo (soft delete)
   static async deleteVehicle(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const vehicleId = parseInt(req.params.id);
 
       if (isNaN(vehicleId)) {
@@ -200,7 +200,7 @@ export class VehicleController {
   // Actualizar solo el kilometraje
   static async updateKilometers(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       const vehicleId = parseInt(req.params.id);
       const { currentKm } = req.body;
 
@@ -235,7 +235,7 @@ export class VehicleController {
   // Obtener estadísticas de vehículos
   static async getVehicleStats(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
 
       const result = await VehicleService.getVehicleStats(userId);
 
