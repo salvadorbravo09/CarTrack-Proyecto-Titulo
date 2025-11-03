@@ -6,16 +6,7 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
-
-interface FuelRecord {
-  id: string;
-  date: string;
-  liters: number;
-  pricePerLiter: number;
-  totalCost: number;
-  station: string;
-  currentKm: number;
-}
+import { FuelService, FuelRefill } from '../services/fuel.service';
 
 @Component({
   selector: 'app-combustible',
@@ -31,8 +22,8 @@ export class CombustibleComponent implements OnInit {
   activeVehicleTab: string = 'combustible';
   loading = false;
   
-  // Datos de combustible (temporalmente desde localStorage)
-  fuelRecords: FuelRecord[] = [];
+  // Datos de combustible desde la API
+  fuelRecords: FuelRefill[] = [];
   
   // Métricas calculadas
   gastoTotal: number = 0;
@@ -44,7 +35,8 @@ export class CombustibleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private fuelService: FuelService
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +52,6 @@ export class CombustibleComponent implements OnInit {
     
     this.loadVehicle(this.vehicleId);
     this.loadFuelData();
-    this.calculateMetrics();
   }
 
   private loadVehicle(id: number): void {
@@ -79,78 +70,25 @@ export class CombustibleComponent implements OnInit {
   }
 
   private loadFuelData(): void {
-    if (!this.currentUser || !this.vehicleId) return;
+    if (!this.vehicleId) return;
     
-    try {
-      const key = `cartrack_fuel_${this.currentUser.id}`;
-      const raw = localStorage.getItem(key);
-      const allRecords: FuelRecord[] = raw ? JSON.parse(raw) : [];
-      this.fuelRecords = allRecords.filter((r: any) => r.vehicleId === this.vehicleId);
-      
-      // Si no hay datos, crear algunos de ejemplo (solo para demo)
-      if (this.fuelRecords.length === 0 && this.vehicleId) {
-        this.initializeDemoData();
-      }
-    } catch (err) {
-      console.error('Error loading fuel data', err);
-      this.fuelRecords = [];
-    }
-  }
-
-  private initializeDemoData(): void {
-    // Datos de ejemplo para demostración
-    const demoData: FuelRecord[] = [
-      {
-        id: '1',
-        date: '2025-10-25',
-        liters: 45.5,
-        pricePerLiter: 861,
-        totalCost: 39175.5,
-        station: 'Copec Centro',
-        currentKm: 85000
+    this.loading = true;
+    this.fuelService.getFuelRefillsByVehicle(this.vehicleId).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.fuelRecords = response.data;
+          this.calculateMetrics();
+        } else {
+          this.fuelRecords = [];
+        }
+        this.loading = false;
       },
-      {
-        id: '2',
-        date: '2025-10-15',
-        liters: 40.0,
-        pricePerLiter: 855,
-        totalCost: 34200,
-        station: 'Shell Norte',
-        currentKm: 84520
-      },
-      {
-        id: '3',
-        date: '2025-10-05',
-        liters: 42.3,
-        pricePerLiter: 850,
-        totalCost: 35955,
-        station: 'Petrobras Sur',
-        currentKm: 84050
+      error: (err) => {
+        console.error('Error loading fuel data', err);
+        this.fuelRecords = [];
+        this.loading = false;
       }
-    ];
-    
-    this.fuelRecords = demoData;
-    
-    // Guardar en localStorage para persistencia
-    try {
-      const key = `cartrack_fuel_${this.currentUser.id}`;
-      const raw = localStorage.getItem(key);
-      let allRecords: any[] = raw ? JSON.parse(raw) : [];
-      
-      // Agregar vehicleId a los registros demo
-      const recordsWithVehicleId = demoData.map(r => ({
-        ...r,
-        vehicleId: this.vehicleId
-      }));
-      
-      // Filtrar registros existentes de este vehículo y agregar los nuevos
-      allRecords = allRecords.filter((r: any) => r.vehicleId !== this.vehicleId);
-      allRecords.push(...recordsWithVehicleId);
-      
-      localStorage.setItem(key, JSON.stringify(allRecords));
-    } catch (err) {
-      console.error('Error saving demo data', err);
-    }
+    });
   }
 
   private calculateMetrics(): void {
@@ -163,8 +101,8 @@ export class CombustibleComponent implements OnInit {
     }
     
     this.totalRecargas = this.fuelRecords.length;
-    this.gastoTotal = this.fuelRecords.reduce((sum, r) => sum + r.totalCost, 0);
-    this.litrosTotales = this.fuelRecords.reduce((sum, r) => sum + r.liters, 0);
+    this.gastoTotal = this.fuelRecords.reduce((sum, r) => sum + Number(r.totalCost), 0);
+    this.litrosTotales = this.fuelRecords.reduce((sum, r) => sum + Number(r.liters), 0);
     this.precioPromedio = this.litrosTotales > 0 ? this.gastoTotal / this.litrosTotales : 0;
   }
 
