@@ -38,6 +38,15 @@
           Análisis
         </button>
       </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          [class.active]="isActive('calculadoras')"
+          (click)="navigateTo('calculadoras')">
+          <i class="fas fa-calculator me-2"></i>
+          Calculadoras
+        </button>
+      </li>
     </ul>
   </div>
 </div>
