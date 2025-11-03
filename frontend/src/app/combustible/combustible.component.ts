@@ -114,9 +114,6 @@ export class CombustibleComponent implements OnInit {
     
     if (tab === 'resumen') {
       this.router.navigate(['/vehiculo', this.vehicleId]);
-    } else if (tab === 'calculadoras') {
-      // TODO: crear ruta de calculadoras
-      console.log('Navigate to calculadoras');
     }
     // Si es 'combustible', no hacemos nada porque ya estamos aquí
   }
