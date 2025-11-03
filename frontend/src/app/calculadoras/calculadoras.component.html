@@ -1,0 +1,263 @@
+<!-- Header -->
+<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
+
+<!-- Main navigation -->
+<app-main-nav [activeTab]="'calculadoras'"></app-main-nav>
+
+<div class="calculadoras-container container-fluid px-4 py-4">
+  <!-- Header con título y botón -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Calculadoras</h2>
+  </div>
+
+  <!-- Tabs de calculadoras -->
+  <div class="calculator-tabs mb-4">
+    <button 
+      class="calculator-tab"
+      [class.active]="activeCalculator === 'costo-km'"
+      (click)="setActiveCalculator('costo-km')">
+      Costo por KM
+    </button>
+    <button 
+      class="calculator-tab"
+      [class.active]="activeCalculator === 'rendimiento'"
+      (click)="setActiveCalculator('rendimiento')">
+      Rendimiento
+    </button>
+    <button 
+      class="calculator-tab"
+      [class.active]="activeCalculator === 'viaje'"
+      (click)="setActiveCalculator('viaje')">
+      Calculadora de Viaje
+    </button>
+  </div>
+
+  <!-- Calculadora Costo por KM -->
+  <div *ngIf="activeCalculator === 'costo-km'" class="calculator-card">
+    <div class="calculator-header">
+      <i class="fas fa-dollar-sign"></i>
+      <div>
+        <h5 class="mb-1">Calculadora de Costo por Kilómetro</h5>
+        <p class="text-muted mb-0">Calcula el costo promedio por kilómetro de tu vehículo</p>
+      </div>
+    </div>
+
+    <form [formGroup]="costoKmForm" (ngSubmit)="calcularCostoKm()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Costo Total (CLP)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="costoTotal"
+            placeholder="Ej: 500000">
+          <div class="form-text">Suma de todos los gastos (combustible, mantención, etc.)</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Kilómetros Recorridos</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="kilometros"
+            placeholder="Ej: 10000">
+          <div class="form-text">Kilómetros totales del periodo</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">
+        <i class="fas fa-calculator me-2"></i>
+        Calcular Costo por KM
+      </button>
+
+      <!-- Resultado -->
+      <div *ngIf="costoKmResult !== null" class="result-card mt-4">
+        <h6>Resultado</h6>
+        <div class="result-value">
+          {{ costoKmResult | currency:'$':'symbol':'1.0-2' }} <span class="unit">por km</span>
+        </div>
+        <p class="text-muted mb-0">
+          Con un gasto total de {{ costoKmForm.value.costoTotal | currency:'$':'symbol':'1.0-0' }} 
+          en {{ costoKmForm.value.kilometros | number }} km recorridos
+        </p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Calculadora Rendimiento -->
+  <div *ngIf="activeCalculator === 'rendimiento'" class="calculator-card">
+    <div class="calculator-header">
+      <i class="fas fa-tachometer-alt"></i>
+      <div>
+        <h5 class="mb-1">Calculadora de Rendimiento</h5>
+        <p class="text-muted mb-0">Calcula cuántos kilómetros recorre tu vehículo por litro</p>
+      </div>
+    </div>
+
+    <form [formGroup]="rendimientoForm" (ngSubmit)="calcularRendimiento()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Litros Cargados</label>
+          <input 
+            type="number" 
+            step="0.1"
+            class="form-control" 
+            formControlName="litros"
+            placeholder="Ej: 45.5">
+          <div class="form-text">Cantidad de litros de combustible</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Kilómetros Recorridos</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="kilometrosRecorridos"
+            placeholder="Ej: 500">
+          <div class="form-text">Kilómetros recorridos con esa carga</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">
+        <i class="fas fa-calculator me-2"></i>
+        Calcular Rendimiento
+      </button>
+
+      <!-- Resultado -->
+      <div *ngIf="rendimientoResult !== null" class="result-card mt-4">
+        <h6>Resultado</h6>
+        <div class="result-value">
+          {{ rendimientoResult | number:'1.1-1' }} <span class="unit">km/L</span>
+        </div>
+        <p class="text-muted mb-0">
+          Tu vehículo recorre {{ rendimientoResult | number:'1.1-1' }} kilómetros por cada litro de combustible
+        </p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Calculadora de Viaje -->
+  <div *ngIf="activeCalculator === 'viaje'" class="calculator-card">
+    <div class="calculator-header">
+      <i class="fas fa-route"></i>
+      <div>
+        <h5 class="mb-1">Calculadora de Viaje</h5>
+        <p class="text-muted mb-0">Estima los costos totales de un viaje incluyendo combustible, peajes y gastos adicionales</p>
+      </div>
+    </div>
+
+    <form [formGroup]="viajeForm" (ngSubmit)="calcularViaje()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Distancia (km)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="distancia"
+            placeholder="Ej: 300">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Consumo (L/100km)</label>
+          <input 
+            type="number" 
+            step="0.1"
+            class="form-control" 
+            formControlName="consumo"
+            placeholder="Ej: 8.5">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Precio Combustible ($/L)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="precioCombustible"
+            placeholder="800">
+          <div class="form-text text-danger" *ngIf="viajeForm.get('precioCombustible')?.hasError('required') && viajeForm.get('precioCombustible')?.touched">
+            Campo requerido
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Peajes (CLP)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="peajes"
+            placeholder="Ej: 5000">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Estacionamientos (CLP)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="estacionamientos"
+            placeholder="Ej: 2000">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Otros Gastos (CLP)</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            formControlName="otrosGastos"
+            placeholder="Ej: 1000">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">
+        <i class="fas fa-calculator me-2"></i>
+        Calcular Costo del Viaje
+      </button>
+
+      <!-- Resultado -->
+      <div *ngIf="viajeResult !== null" class="result-card mt-4">
+        <h6>Resultado del Viaje</h6>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="result-item">
+              <span class="result-label">Litros Necesarios:</span>
+              <span class="result-value-sm">{{ viajeResult.litrosNecesarios | number:'1.1-1' }} L</span>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <div class="result-item">
+              <span class="result-label">Costo Combustible:</span>
+              <span class="result-value-sm">{{ viajeResult.costoCombustible | currency:'$':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <div class="result-item">
+              <span class="result-label">Costo por KM:</span>
+              <span class="result-value-sm">{{ viajeResult.costoPorKm | currency:'$':'symbol':'1.0-2' }}</span>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="result-value-total">
+              <span class="result-label">Costo Total del Viaje:</span>
+              <span class="result-value">{{ viajeResult.costoTotal | currency:'$':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-details mt-3 pt-3 border-top">
+          <p class="text-muted mb-1">
+            <strong>Desglose:</strong>
+          </p>
+          <ul class="list-unstyled mb-0">
+            <li>• Combustible: {{ viajeResult.costoCombustible | currency:'$':'symbol':'1.0-0' }}</li>
+            <li *ngIf="viajeForm.value.peajes > 0">• Peajes: {{ viajeForm.value.peajes | currency:'$':'symbol':'1.0-0' }}</li>
+            <li *ngIf="viajeForm.value.estacionamientos > 0">• Estacionamientos: {{ viajeForm.value.estacionamientos | currency:'$':'symbol':'1.0-0' }}</li>
+            <li *ngIf="viajeForm.value.otrosGastos > 0">• Otros gastos: {{ viajeForm.value.otrosGastos | currency:'$':'symbol':'1.0-0' }}</li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

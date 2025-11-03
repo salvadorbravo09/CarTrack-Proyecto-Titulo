@@ -1,0 +1,236 @@
+.calculadoras-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.calculator-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  
+  .calculator-tab {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #6b7280;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    
+    &:hover {
+      color: #1f2937;
+      border-bottom-color: #d1d5db;
+    }
+    
+    &.active {
+      color: #0ea5e9;
+      border-bottom-color: #0ea5e9;
+    }
+  }
+}
+
+.calculator-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  .calculator-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #f3f4f6;
+    
+    i {
+      font-size: 2rem;
+      color: #0ea5e9;
+      margin-top: 0.25rem;
+    }
+    
+    h5 {
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    p {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.result-card {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  color: white;
+  
+  h6 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+  
+  .result-value {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    
+    .unit {
+      font-size: 1.5rem;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+  }
+  
+  .result-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .result-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .result-value-sm {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  }
+  
+  .result-value-total {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .result-label {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .result-value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
+  
+  .result-details {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    
+    p {
+      margin-bottom: 0.5rem;
+      opacity: 0.95;
+    }
+    
+    ul {
+      opacity: 0.9;
+      
+      li {
+        padding: 0.25rem 0;
+      }
+    }
+  }
+  
+  p {
+    opacity: 0.85;
+    font-size: 0.95rem;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border: none;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+  }
+}
+
+.btn-outline-primary {
+  &.active {
+    background: #0ea5e9;
+    color: white;
+    border-color: #0ea5e9;
+  }
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  
+  &:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-text {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  
+  &.text-danger {
+    color: #ef4444 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator-tabs {
+    .calculator-tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .calculator-card {
+    padding: 1.5rem;
+    
+    .calculator-header {
+      i {
+        font-size: 1.5rem;
+      }
+      
+      h5 {
+        font-size: 1.1rem;
+      }
+    }
+  }
+  
+  .result-card {
+    .result-value {
+      font-size: 2rem;
+      
+      .unit {
+        font-size: 1rem;
+      }
+    }
+  }
+}
