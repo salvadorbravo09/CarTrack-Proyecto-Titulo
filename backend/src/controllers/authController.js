@@ -91,7 +91,7 @@ export class AuthController {
   // Obtener perfil del usuario autenticado
   static async getProfile(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       
       const user = await AuthService.getUserById(userId);
 
@@ -113,7 +113,7 @@ export class AuthController {
   // Verificar token (endpoint para validar si el token es válido)
   static async verifyToken(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user.id;
       
       const user = await AuthService.getUserById(userId);
 
