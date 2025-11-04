@@ -1,27 +1,6 @@
 <div class="soap-form-container">
-	<!-- Header - Corregido el routerLink para el brand -->
-	<div class="row">
-		<div class="col-12">
-			<nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
-				<div class="container">
-					<a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
-						<i class="fas fa-car me-2"></i>
-						<span class="fw-bold">CarTrack</span>
-					</a>
-
-					<div class="d-flex align-items-center">
-						<span class="navbar-text me-3">
-							Bienvenido, <!-- {{ currentUser.firstName }} -->
-						</span>
-						<button class="btn btn-outline-light">
-							<i class="fas fa-sign-out-alt me-2"></i>
-							Cerrar Sesión
-						</button>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
+	<!-- Header -->
+	<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
 
 	<div class="soap-form-content">
 		<!-- Inicio del formulario con NgForm y evento de submit -->

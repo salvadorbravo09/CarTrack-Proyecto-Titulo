@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgForm, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SegurosService, SoapData } from '../services/seguros.service'; // Aseg√∫rate que la ruta sea correcta
+import { MainHeaderComponent } from '../main-header/main-header.component';
 
 @Component({
   selector: 'app-registrar-soap',
@@ -10,7 +11,8 @@ import { SegurosService, SoapData } from '../services/seguros.service'; // Aseg√
   imports: [
     CommonModule,   // Necesario para directivas como *ngIf
     FormsModule,    // Necesario para ngForm y [(ngModel)]
-    RouterLink      // Necesario para los botones con routerLink
+    RouterLink,      // Necesario para los botones con routerLink
+    MainHeaderComponent
   ],
   templateUrl: './registrar-soap.component.html',
   styleUrls: ['./registrar-soap.component.scss']
@@ -27,6 +29,7 @@ export class RegistrarSoapComponent implements OnInit {
     costo: 0
   };
 
+  currentUser: any = { firstName: 'Usuario' };
   isLoading = false;
   message: string | null = null;
   
@@ -69,6 +72,12 @@ export class RegistrarSoapComponent implements OnInit {
         console.error('Error al registrar SOAP:', err);
       }
     });
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }
 
