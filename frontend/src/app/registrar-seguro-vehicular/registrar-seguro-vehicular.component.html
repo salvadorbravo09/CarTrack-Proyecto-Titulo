@@ -1,28 +1,7 @@
 <!-- Contenedor principal que se alinea con el estilo del SOAP -->
 <div class="soap-form-container">
-  <!-- Barra de navegación (se mantiene consistente con el Dashboard y SOAP) -->
-  <div class="row">
-    <div class="col-12">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
-        <div class="container">
-          <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
-            <i class="fas fa-car me-2"></i>
-            <span class="fw-bold">CarTrack</span>
-          </a>
-          <div class="d-flex align-items-center">
-            <span class="navbar-text me-3">
-              Bienvenido
-            </span>
-            <!-- Asegúrate que la función de logout esté bien conectada o sea un routerLink -->
-            <button class="btn btn-outline-light" routerLink="/login"> 
-              <i class="fas fa-sign-out-alt me-2"></i>
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </div>
+  <!-- Header -->
+  <app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
 
   <!-- Contenido principal del formulario -->
   <div class="soap-form-content">

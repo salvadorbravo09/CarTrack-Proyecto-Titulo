@@ -5,6 +5,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { SegurosService } from '../services/seguros.service';
+import { MainHeaderComponent } from '../main-header/main-header.component';
 
 @Component({
   selector: 'app-registrar-seguro-vehicular',
@@ -13,7 +14,8 @@ import { SegurosService } from '../services/seguros.service';
   imports: [
     CommonModule, 
     FormsModule, 
-    RouterLink
+    RouterLink,
+    MainHeaderComponent
   ],
   templateUrl: './registrar-seguro-vehicular.component.html',
   styleUrls: ['./registrar-seguro-vehicular.component.scss'] // Se enlaza el nuevo archivo de estilos
@@ -31,6 +33,7 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
     deducible: null
   };
 
+  currentUser: any = { firstName: 'Usuario' };
   isLoading = false;
   errorMessage: string | null = null;
   
@@ -71,5 +74,11 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
         console.error('Error creating seguro:', err);
       }
     });
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }
