@@ -10,11 +10,8 @@ router.use(authenticateToken);
 router.use(requireAdmin);
 
 // Rutas de gestión de usuarios (solo para admin)
-router.get('/stats', UserController.getUserStats);           // Obtener estadísticas
-router.get('/', UserController.getAllUsers);                 // Obtener todos los usuarios
-router.get('/:id', UserController.getUserById);              // Obtener usuario por ID
-router.patch('/:id/role', UserController.updateUserRole);    // Actualizar rol
-router.patch('/:id/toggle', UserController.toggleUserStatus);// Activar/Desactivar
-router.delete('/:id', UserController.deleteUser);            // Eliminar usuario
+router.get('/stats', UserController.getUserStats);              // Obtener estadísticas
+router.get('/', UserController.getAllUsers);                    // Obtener todos los usuarios
+router.patch('/:id/toggle', UserController.toggleUserStatus);   // Activar/Desactivar
 
 export default router;
