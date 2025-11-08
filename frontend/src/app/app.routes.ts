@@ -14,6 +14,8 @@ import { MantenimientoComponent } from './mantenimiento/mantenimiento.component'
 import { CombustibleComponent } from './combustible/combustible.component';
 import { AgregarCombustibleComponent } from './agregar-combustible/agregar-combustible.component';
 import { CalculadorasComponent } from './calculadoras/calculadoras.component';
+import { AdminUsuariosComponent } from './admin-usuarios/admin-usuarios.component';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -32,6 +34,7 @@ export const routes: Routes = [
   { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
   { path: 'mantenimiento', component: MantenimientoComponent },
   { path: 'calculadoras', component: CalculadorasComponent },
+  { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: '' },
 ];
 
