@@ -21,6 +21,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'vehicle-form', component: VehicleFormComponent },
+  { path: 'vehicle-form/:id', component: VehicleFormComponent },
   { path: 'seguimiento-mantenimiento', component: SeguimientoMantenimientoComponent },
   { path: 'seguimiento-mantenimiento/:id', component: SeguimientoMantenimientoComponent },
   { path: 'registrar-soap/:id', component: RegistrarSoapComponent },
