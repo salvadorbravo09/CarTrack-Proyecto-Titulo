@@ -7,23 +7,43 @@
   <div class="soap-form-content">
     <section class="card card--padded">
       <header class="card__header">
-        <!-- Botón "Volver" corregido para usar routerLink -->
-        <a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
+        <!-- Botón "Volver" -->
+        <a class="btn btn--link btn--back" (click)="onCancel()" style="cursor: pointer;">&larr; Volver</a>
         <h2 class="card__title">Registrar Seguro Vehicular</h2>
       </header>
 
-      <form #seguroForm="ngForm" (ngSubmit)="onSubmit(seguroForm)">
-        <div class="card__body">
-          <p class="muted">Completa la información del seguro vehicular asociado a tu vehículo.</p>
+      <div class="card__body">
+        <!-- Mensajes de éxito/error -->
+        <div *ngIf="successMessage" class="alert alert-success mb-3" role="alert">
+          <i class="fas fa-check-circle me-2"></i>
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mb-3" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Información del vehículo -->
+        <div *ngIf="vehicleInfo" class="alert alert-info mb-4">
+          <strong><i class="fas fa-car me-2"></i>Vehículo:</strong> 
+          {{ vehicleInfo.brand }} {{ vehicleInfo.model }} {{ vehicleInfo.year }} 
+          <span class="badge bg-primary ms-2">{{ vehicleInfo.licensePlate }}</span>
+        </div>
+
+        <p class="muted">Completa la información del seguro vehicular asociado a tu vehículo.</p>
+        
+        <form #seguroForm="ngForm" (ngSubmit)="onSubmit(seguroForm)">
           <h3 class="section-title">Datos del Seguro</h3>
           
-          <!-- Grid para los campos del formulario, como en el SOAP -->
+          <!-- Grid para los campos del formulario -->
           <div class="form-grid">
 
             <div class="form-group">
               <label for="compania">Compañía Aseguradora *</label>
               <input type="text" id="compania" name="compania" class="form-control" 
-                     [(ngModel)]="seguroData.compania" required placeholder="Ej: HDI, BCI, Consorcio...">
+                     [(ngModel)]="seguroData.compania" required 
+                     placeholder="Ej: HDI, BCI, Consorcio, Liberty...">
             </div>
 
             <div class="form-group">
@@ -31,9 +51,9 @@
               <select id="tipoCobertura" name="tipoCobertura" class="form-control" 
                       [(ngModel)]="seguroData.tipoCobertura" required>
                 <option value="" disabled>Seleccione una opción...</option>
-                <option value="basica">Básica</option>
-                <option value="intermedia">Intermedia</option>
-                <option value="completa">Completa</option>
+                <option value="basica">Básica (Responsabilidad Civil)</option>
+                <option value="intermedia">Intermedia (Daños a Terceros)</option>
+                <option value="completa">Completa (Todo Riesgo)</option>
               </select>
             </div>
 
@@ -52,35 +72,36 @@
             <div class="form-group">
               <label for="costo">Costo Anual (CLP) *</label>
               <input type="number" id="costo" name="costo" class="form-control" 
-                     [(ngModel)]="seguroData.costo" required placeholder="Ej: 350000" min="0">
+                     [(ngModel)]="seguroData.costo" required 
+                     placeholder="Ej: 350000" min="0" step="1000">
             </div>
 
             <div class="form-group">
               <label for="deducible">Deducible (UF) *</label>
               <input type="number" id="deducible" name="deducible" class="form-control" 
-                     [(ngModel)]="seguroData.deducible" required placeholder="Ej: 3, 5, 10" min="0">
+                     [(ngModel)]="seguroData.deducible" required 
+                     placeholder="Ej: 3, 5, 10" min="0" step="0.5">
             </div>
 
           </div>
-        </div>
 
-        <footer class="card__footer">
-          <!-- Mensaje de error, si existe -->
-          <div *ngIf="errorMessage" class="alert-message text-center me-3 text-danger">
-            {{ errorMessage }}
-          </div>
-          
-          <div class="footer-actions">
-            <!-- Botón Cancelar corregido para usar routerLink (similar al SOAP) -->
-            <button type="button" class="btn btn--ghost" routerLink="/dashboard">Cancelar</button>
-            <button type="submit" class="btn btn--primary" [disabled]="seguroForm.invalid || isLoading">
-              <span *ngIf="!isLoading">Registrar Seguro</span>
-              <span *ngIf="isLoading">Registrando...</span>
-            </button>
-          </div>
-        </footer>
-      </form>
+          <footer class="card__footer">
+            <div class="footer-actions">
+              <button type="button" class="btn btn--ghost" (click)="onCancel()" [disabled]="isLoading">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn--primary" [disabled]="seguroForm.invalid || isLoading">
+                <span *ngIf="!isLoading">
+                  <i class="fas fa-save me-2"></i>Registrar Seguro
+                </span>
+                <span *ngIf="isLoading">
+                  <i class="fas fa-spinner fa-spin me-2"></i>Registrando...
+                </span>
+              </button>
+            </div>
+          </footer>
+        </form>
+      </div>
     </section>
   </div>
 </div>
-
