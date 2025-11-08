@@ -13,7 +13,6 @@ datasource db {
 enum Role {
   USER
   ADMIN
-  MECHANIC
 }
 
 enum VehicleStatus {
