@@ -26,10 +26,10 @@
   <div class="vehicle-form-content">
     <section class="card card--padded">
       <header class="card__header">
-        <a routerLink="/dashboard" class="btn btn--link btn--back"
+        <a routerLink="/vehiculos" class="btn btn--link btn--back"
           >&larr; Volver</a
         >
-        <h2 class="card__title">Agregar Nuevo Vehículo</h2>
+        <h2 class="card__title">{{ isEditMode ? 'Editar Vehículo' : 'Agregar Nuevo Vehículo' }}</h2>
       </header>
 
       <div class="card__body">
@@ -45,7 +45,7 @@
         </div>
 
         <p class="muted">
-          Completa los datos básicos de tu vehículo para registrarlo en CarTrack
+          {{ isEditMode ? 'Modifica los datos de tu vehículo' : 'Completa los datos básicos de tu vehículo para registrarlo en CarTrack' }}
         </p>
 
         <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
@@ -242,8 +242,12 @@
                 class="btn btn--primary"
                 [disabled]="isSubmitting"
               >
-                <span *ngIf="!isSubmitting"> Registrar Vehículo </span>
-                <span *ngIf="isSubmitting"> Registrando... </span>
+                <span *ngIf="!isSubmitting">
+                  {{ isEditMode ? 'Actualizar Vehículo' : 'Registrar Vehículo' }}
+                </span>
+                <span *ngIf="isSubmitting">
+                  {{ isEditMode ? 'Actualizando...' : 'Registrando...' }}
+                </span>
               </button>
             </div>
           </footer>
