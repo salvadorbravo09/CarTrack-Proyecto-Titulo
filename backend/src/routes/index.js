@@ -4,6 +4,7 @@ import vehicleRoutes from './vehicleRoutes.js';
 import maintenanceRoutes from './maintenanceRoutes.js';
 import fuelRoutes from './fuelRoutes.js';
 import insuranceRoutes from './insuranceRoutes.js';
+import userRoutes from './userRoutes.js';
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.use('/fuel', fuelRoutes);
 // Rutas de seguros vehiculares
 router.use('/insurances', insuranceRoutes);
 
-// TODO: Agregar más rutas después
-// router.use('/users', userRoutes);
+// Rutas de gestión de usuarios (solo admin)
+router.use('/users', userRoutes);
 
 export default router;
