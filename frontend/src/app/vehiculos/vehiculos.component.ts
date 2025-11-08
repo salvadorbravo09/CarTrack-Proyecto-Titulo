@@ -71,7 +71,9 @@ export class VehiculosComponent implements OnInit {
   }
 
   onEdit(v: Vehicle) {
-    console.log('edit', v.id);
+    if (!v.id) return;
+    // navigate to the edit form
+    this.router.navigate(['/vehicle-form', v.id]);
   }
 
   onDelete(v: Vehicle) {
