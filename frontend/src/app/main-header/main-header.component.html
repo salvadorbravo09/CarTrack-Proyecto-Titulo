@@ -6,13 +6,23 @@
             <span class="fw-bold fs-5">{{ brandText }}</span>
         </a>
 
-        <div class="d-flex align-items-center">
-            <span class="text-white me-3" *ngIf="currentUser">
-            Bienvenido, {{ currentUser.firstName || 'Usuario Demo' }}
+        <div class="d-flex align-items-center gap-3">
+            <!-- Botón Admin (solo si es admin) -->
+            <a *ngIf="currentUser?.role === 'ADMIN'" 
+               routerLink="/admin/usuarios" 
+               class="btn btn-warning btn-sm">
+              <i class="fas fa-users-cog me-2"></i>
+              Panel Admin
+            </a>
+            
+            <span class="text-white" *ngIf="currentUser">
+              Bienvenido, {{ currentUser.firstName || 'Usuario Demo' }}
+              <span *ngIf="currentUser.role === 'ADMIN'" class="badge bg-danger ms-2">ADMIN</span>
             </span>
+            
             <button *ngIf="showLogout" class="btn btn-outline-light btn-sm" (click)="onLogout()">
-            <i class="fas fa-sign-out-alt me-2"></i>
-            Cerrar Sesión
+              <i class="fas fa-sign-out-alt me-2"></i>
+              Cerrar Sesión
             </button>
         </div>
         </div>
