@@ -76,6 +76,12 @@ export class VehiculosComponent implements OnInit {
     this.router.navigate(['/vehicle-form', v.id]);
   }
 
+  onAddInsurance(v: Vehicle) {
+    if (!v.id) return;
+    // navigate to the insurance form
+    this.router.navigate(['/registrar-seguro', v.id]);
+  }
+
   onDelete(v: Vehicle) {
     if (!confirm('¿Eliminar vehículo?')) return;
     if (!v.id) return;
