@@ -37,7 +37,6 @@ export interface SoapData {
   lugarCompra: string;
   numeroPoliza: string;
   fechaVigencia: string;
-  costo: number;
 }
 
 @Injectable({
