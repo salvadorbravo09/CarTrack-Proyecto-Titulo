@@ -57,8 +57,3 @@ export const authorizeRoles = (...allowedRoles) => {
 export const requireAdmin = (req, res, next) => {
   return authorizeRoles('ADMIN')(req, res, next);
 };
-
-// Middleware para verificar si el usuario es mecánico o administrador
-export const requireMechanicOrAdmin = (req, res, next) => {
-  return authorizeRoles('ADMIN', 'MECHANIC')(req, res, next);
-};
