@@ -5,6 +5,7 @@ import maintenanceRoutes from './maintenanceRoutes.js';
 import fuelRoutes from './fuelRoutes.js';
 import insuranceRoutes from './insuranceRoutes.js';
 import userRoutes from './userRoutes.js';
+import soapRoutes from './soapRoutes.js';
 
 const router = Router();
 
@@ -22,6 +23,9 @@ router.use('/fuel', fuelRoutes);
 
 // Rutas de seguros vehiculares
 router.use('/insurances', insuranceRoutes);
+
+// Rutas de SOAP
+router.use('/soap', soapRoutes);
 
 // Rutas de gestión de usuarios (solo admin)
 router.use('/users', userRoutes);
