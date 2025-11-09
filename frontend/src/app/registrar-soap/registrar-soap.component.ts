@@ -25,8 +25,7 @@ export class RegistrarSoapComponent implements OnInit {
     compania: '',
     lugarCompra: '',
     numeroPoliza: '',
-    fechaVigencia: '',
-    costo: 0
+    fechaVigencia: ''
   };
 
   currentUser: any = { firstName: 'Usuario' };
