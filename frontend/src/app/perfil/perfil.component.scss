@@ -1,0 +1,37 @@
+.vehicle-item {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #e9ecef !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateX(5px);
+  }
+}
+
+.vehicle-list {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.card {
+  border: none;
+  
+  .card-header {
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+  }
+}
