@@ -1,0 +1,263 @@
+<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
+<app-main-nav [activeTab]="'analisis'"></app-main-nav>
+
+<div class="container-fluid analisis-container px-4 py-4">
+  <!-- Título y Filtro -->
+  <div class="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-3">
+    <div>
+      <h2 class="fw-bold mb-2">Análisis General</h2>
+      <p class="text-muted mb-0">Resumen de gastos totales de todos tus vehículos</p>
+    </div>
+    <div class="vehicle-filter">
+      <label class="form-label small text-muted mb-1">Filtrar por vehículo</label>
+      <select class="form-select" (change)="onVehicleFilterChange($event)" [value]="selectedVehicleId || 'all'">
+        <option value="all">Todos los vehículos</option>
+        <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+          {{ vehicle.brand }} {{ vehicle.model }} - {{ vehicle.licensePlate }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row g-3 mb-4">
+    <!-- Gasto Total -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Gasto Total</div>
+          <div class="stat-value">{{ gastoTotalMes | currency:'$':'symbol':'1.0-0' }}</div>
+          <div class="stat-subtitle">Combustible + Mantenimiento</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gasto Combustible -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Gasto Combustible</div>
+          <div class="stat-value">{{ gastoMensualCombustible | currency:'$':'symbol':'1.0-0' }}</div>
+          <div class="stat-subtitle">Total en gasolina</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Litros Totales -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Litros Totales</div>
+          <div class="stat-value">{{ totalLitrosMes | number:'1.1-1' }}L</div>
+          <div class="stat-subtitle">Combustible cargado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Precio Promedio -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Precio Promedio/Litro</div>
+          <div class="stat-value">{{ precioPromedioLitro | currency:'$':'symbol':'1.0-0' }}</div>
+          <div class="stat-subtitle">Costo por litro</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gasto Mantenimiento -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Gasto Mantenimiento</div>
+          <div class="stat-value">{{ gastoMensualMantenimiento | currency:'$':'symbol':'1.0-0' }}</div>
+          <div class="stat-subtitle">Reparaciones y servicios</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mantenimientos Realizados -->
+    <div class="col-lg-2 col-md-4 col-sm-6">
+      <div class="stat-card">
+        <div class="stat-content">
+          <div class="stat-label">Mantenimientos</div>
+          <div class="stat-value">{{ totalMantenimientosMes }}</div>
+          <div class="stat-subtitle">Servicios realizados</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribución de Gastos -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="content-card">
+        <div class="content-card-header">
+          <div>
+            <h5 class="mb-1">Distribución de Gastos</h5>
+            <p class="text-muted small mb-0">Proporción entre combustible y mantenimiento</p>
+          </div>
+        </div>
+        <div class="content-card-body">
+          <!-- Combustible -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-gas-pump text-primary"></i>
+                <span class="fw-semibold">Combustible</span>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold">{{ gastoMensualCombustible | currency:'$':'symbol':'1.0-0' }}</span>
+                <span class="text-muted ms-2">({{ porcentajeCombustible | number:'1.0-0' }}%)</span>
+              </div>
+            </div>
+            <div class="progress" style="height: 30px;">
+              <div 
+                class="progress-bar bg-primary" 
+                role="progressbar" 
+                [style.width.%]="porcentajeCombustible"
+                [attr.aria-valuenow]="porcentajeCombustible" 
+                aria-valuemin="0" 
+                aria-valuemax="100">
+                <span class="progress-text">{{ porcentajeCombustible | number:'1.0-0' }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mantenimiento -->
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-wrench text-danger"></i>
+                <span class="fw-semibold">Mantenimiento</span>
+              </div>
+              <div class="text-end">
+                <span class="fw-bold">{{ gastoMensualMantenimiento | currency:'$':'symbol':'1.0-0' }}</span>
+                <span class="text-muted ms-2">({{ porcentajeMantenimiento | number:'1.0-0' }}%)</span>
+              </div>
+            </div>
+            <div class="progress" style="height: 30px;">
+              <div 
+                class="progress-bar bg-danger" 
+                role="progressbar" 
+                [style.width.%]="porcentajeMantenimiento"
+                [attr.aria-valuenow]="porcentajeMantenimiento" 
+                aria-valuemin="0" 
+                aria-valuemax="100">
+                <span class="progress-text">{{ porcentajeMantenimiento | number:'1.0-0' }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ranking de Vehículos -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="content-card">
+        <div class="content-card-header">
+          <div>
+            <h5 class="mb-1">Gasto por Vehículo</h5>
+            <p class="text-muted small mb-0">Ranking ordenado por gasto total</p>
+          </div>
+        </div>
+        <div class="content-card-body">
+          <div *ngIf="vehiculosRanking.length === 0" class="empty-state">
+            <i class="fas fa-car fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No hay datos de vehículos disponibles</p>
+          </div>
+
+          <div *ngIf="vehiculosRanking.length > 0" class="vehicle-ranking">
+            <div *ngFor="let item of vehiculosRanking" class="ranking-item">
+              <div class="ranking-position">
+                <span class="position-badge" [class.top-1]="item.position === 1" [class.top-2]="item.position === 2" [class.top-3]="item.position === 3">
+                  <i *ngIf="item.position === 1" class="fas fa-crown"></i>
+                  <span *ngIf="item.position !== 1">{{ item.position }}</span>
+                </span>
+              </div>
+              <div class="ranking-vehicle">
+                <div class="vehicle-name">{{ item.vehicle?.brand }} {{ item.vehicle?.model }}</div>
+                <div class="vehicle-plate">{{ item.vehicle?.licensePlate }}</div>
+              </div>
+              <div class="ranking-details">
+                <div class="detail-item">
+                  <i class="fas fa-gas-pump text-primary"></i>
+                  <span>{{ item.combustible | currency:'$':'symbol':'1.0-0' }}</span>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-wrench text-danger"></i>
+                  <span>{{ item.mantenimiento | currency:'$':'symbol':'1.0-0' }}</span>
+                </div>
+              </div>
+              <div class="ranking-total">
+                <div class="total-label">Total</div>
+                <div class="total-value">{{ item.total | currency:'$':'symbol':'1.0-0' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline de Eventos (Colapsable) -->
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="content-card timeline-card">
+        <div class="content-card-header clickable" (click)="toggleTimeline()">
+          <div class="d-flex align-items-center justify-content-between w-100">
+            <div>
+              <h5 class="mb-1">
+                <i class="fas fa-history me-2"></i>
+                Línea de Tiempo
+              </h5>
+              <p class="text-muted small mb-0">Últimos 10 eventos registrados</p>
+            </div>
+            <div class="collapse-indicator">
+              <i class="fas" [class.fa-chevron-down]="!isTimelineExpanded" [class.fa-chevron-up]="isTimelineExpanded"></i>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isTimelineExpanded" class="timeline-collapse">
+          <div class="content-card-body">
+          <div *ngIf="timelineEvents.length === 0" class="empty-state">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No hay eventos registrados</p>
+          </div>
+
+          <div *ngIf="timelineEvents.length > 0" class="timeline">
+            <div *ngFor="let event of timelineEvents; let last = last" class="timeline-item" [class.last]="last">
+              <div class="timeline-marker">
+                <div class="timeline-icon" [ngClass]="event.iconColor">
+                  <i class="fas" [ngClass]="event.icon"></i>
+                </div>
+                <div *ngIf="!last" class="timeline-line"></div>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <div class="timeline-title">{{ event.title }}</div>
+                  <div class="timeline-amount">{{ event.amount | currency:'$':'symbol':'1.0-0' }}</div>
+                </div>
+                <div class="timeline-details">
+                  <span class="timeline-vehicle">
+                    <i class="fas fa-car me-1"></i>
+                    {{ event.vehicle?.brand }} {{ event.vehicle?.model }}
+                  </span>
+                  <span class="timeline-separator">•</span>
+                  <span class="timeline-info">{{ event.details }}</span>
+                </div>
+                <div class="timeline-date">
+                  <i class="far fa-clock me-1"></i>
+                  {{ event.date | date:'dd MMM yyyy, HH:mm' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
