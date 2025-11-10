@@ -6,11 +6,12 @@ import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MaintenanceService, Maintenance } from '../services/maintenance.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-mantenimiento',
   standalone: true,
-  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent],
+  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent, FooterComponent],
   templateUrl: './mantenimiento.component.html',
   styleUrls: ['./mantenimiento.component.scss']
 })

@@ -1,6 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .analisis-container {
   background-color: #f0f4f8;
-  min-height: calc(100vh - 200px);
+  flex: 1;
 }
 
 // Statistics Cards (mismo estilo que dashboard)

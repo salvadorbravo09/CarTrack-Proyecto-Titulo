@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
+import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../services/auth.service';
 import { VehicleService } from '../services/vehicle.service';
 import { FuelService } from '../services/fuel.service';
@@ -12,7 +13,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-analisis',
   standalone: true,
-  imports: [CommonModule, MainHeaderComponent, MainNavComponent],
+  imports: [CommonModule, MainHeaderComponent, MainNavComponent, FooterComponent],
   templateUrl: './analisis.component.html',
   styleUrl: './analisis.component.scss'
 })

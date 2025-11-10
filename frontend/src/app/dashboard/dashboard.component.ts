@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MaintenanceService, Maintenance } from '../services/maintenance.service';
@@ -10,7 +11,7 @@ import { MaintenanceService, Maintenance } from '../services/maintenance.service
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent], 
+  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent, FooterComponent], 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

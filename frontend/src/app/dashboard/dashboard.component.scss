@@ -1,6 +1,12 @@
 .dashboard-container {
   min-height: 100vh;
   background-color: #f0f4f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-container > div:not(app-footer) {
+  flex: 1;
 }
 
 // Header

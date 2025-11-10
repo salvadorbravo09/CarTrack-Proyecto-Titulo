@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../services/auth.service';
 import { FuelService } from '../services/fuel.service';
 import { MaintenanceService } from '../services/maintenance.service';
@@ -10,7 +11,7 @@ import { MaintenanceService } from '../services/maintenance.service';
 @Component({
   selector: 'app-calculadoras',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MainNavComponent, MainHeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, MainNavComponent, MainHeaderComponent, FooterComponent],
   templateUrl: './calculadoras.component.html',
   styleUrl: './calculadoras.component.scss'
 })
