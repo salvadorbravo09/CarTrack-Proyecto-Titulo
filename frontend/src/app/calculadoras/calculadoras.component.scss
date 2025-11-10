@@ -1,6 +1,12 @@
 .calculadoras-container {
+  background-color: #f0f4f8;
+  min-height: calc(100vh - 200px);
+}
+
+.calculadoras-container > * {
   max-width: 1400px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .calculator-tabs {
