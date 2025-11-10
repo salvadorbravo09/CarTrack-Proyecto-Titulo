@@ -2,7 +2,7 @@
     <nav class="navbar navbar-dark bg-secondary-custom">
         <div class="container-fluid px-4">
         <a class="navbar-brand d-flex align-items-center">
-            <i [class]="iconClass"></i>
+            <img src="/favicon.ico" alt="CarTrack Logo" class="me-2" style="width: 32px; height: 32px;">
             <span class="fw-bold fs-5">{{ brandText }}</span>
         </a>
 
@@ -20,10 +20,32 @@
               <span *ngIf="currentUser.role === 'ADMIN'" class="badge bg-danger ms-2">ADMIN</span>
             </span>
             
-            <button *ngIf="showLogout" class="btn btn-outline-light btn-sm" (click)="onLogout()">
-              <i class="fas fa-sign-out-alt me-2"></i>
-              Cerrar Sesión
-            </button>
+            <!-- Dropdown de usuario -->
+            <div class="dropdown position-relative" *ngIf="showLogout">
+              <button class="btn btn-outline-light btn-sm" 
+                      type="button" 
+                      (click)="toggleDropdown()"
+                      [attr.aria-expanded]="isDropdownOpen">
+                <i class="fas fa-cog"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" 
+                  [class.show]="isDropdownOpen"
+                  style="position: absolute; right: 0;">
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil" (click)="closeDropdown()">
+                    <i class="fas fa-user me-2"></i>
+                    Perfil
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item text-danger" (click)="onLogout()" style="cursor: pointer;">
+                    <i class="fas fa-sign-out-alt me-2"></i>
+                    Cerrar Sesión
+                  </a>
+                </li>
+              </ul>
+            </div>
         </div>
         </div>
     </nav>
