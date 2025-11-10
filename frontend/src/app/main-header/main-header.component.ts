@@ -23,7 +23,19 @@ export class MainHeaderComponent {
   /** Evento emitido cuando el usuario solicita cerrar sesión */
   @Output() logout = new EventEmitter<void>();
 
+  /** Estado del dropdown */
+  isDropdownOpen = false;
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown(): void {
+    this.isDropdownOpen = false;
+  }
+
   onLogout(): void {
+    this.closeDropdown();
     this.logout.emit();
   }
 
