@@ -16,12 +16,15 @@ import { AgregarCombustibleComponent } from './agregar-combustible/agregar-combu
 import { CalculadorasComponent } from './calculadoras/calculadoras.component';
 import { AdminUsuariosComponent } from './admin-usuarios/admin-usuarios.component';
 import { adminGuard } from './guards/admin.guard';
+import { AnalisisComponent } from './analisis/analisis.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'perfil', component: PerfilComponent },
   { path: 'vehicle-form', component: VehicleFormComponent },
   { path: 'vehicle-form/:id', component: VehicleFormComponent },
   { path: 'seguimiento-mantenimiento', component: SeguimientoMantenimientoComponent },
@@ -34,6 +37,7 @@ export const routes: Routes = [
   { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
   { path: 'mantenimiento', component: MantenimientoComponent },
   { path: 'calculadoras', component: CalculadorasComponent },
+  { path: 'analisis', component: AnalisisComponent },
   { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: '' },
 ];
