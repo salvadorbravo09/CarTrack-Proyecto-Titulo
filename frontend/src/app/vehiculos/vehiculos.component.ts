@@ -7,11 +7,12 @@ import { Subscription } from 'rxjs';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-vehiculos',
   standalone: true,
-  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent],
+  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent, FooterComponent],
   templateUrl: './vehiculos.component.html',
   styleUrls: ['./vehiculos.component.scss']
 })
