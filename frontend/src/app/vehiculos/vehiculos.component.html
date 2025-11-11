@@ -58,8 +58,28 @@
 
                         <div class="d-flex align-items-center">
                             <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onView(v)" title="Ver"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onEdit(v)" title="Editar"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onAddInsurance(v)" title="Agregar Seguro"><i class="fas fa-shield-alt"></i></button>
+<button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onEdit(v)" title="Editar"><i class="fas fa-edit"></i></button>
+
+<div *ngIf="!v.soaps || v.soaps.length === 0; else verSoapBtn" class="d-inline-block">
+    <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onAddSoap(v)" title="Agregar SOAP">
+        <i class="fas fa-file-invoice"></i> </button>
+</div>
+<ng-template #verSoapBtn>
+    <a [routerLink]="['/editar-soap', v.soaps?.[0]?.id]" class="btn btn-outline-info btn-sm me-2 shadow-sm" title="Ver/Editar SOAP">
+        <i class="fas fa-file-invoice"></i>
+    </a>
+</ng-template>
+
+<div *ngIf="!v.seguros || v.seguros.length === 0; else verSeguroBtn" class="d-inline-block">
+    <button class="btn btn-outline-light btn-sm me-2 shadow-sm" (click)="onAddInsurance(v)" title="Agregar Seguro">
+        <i class="fas fa-shield-alt"></i>
+    </button>
+</div>
+<ng-template #verSeguroBtn>
+    <a [routerLink]="['/editar-seguro', v.seguros?.[0]?.id]" class="btn btn-outline-success btn-sm me-2 shadow-sm" title="Ver/Editar Seguro">
+        <i class="fas fa-shield-alt"></i>
+    </a>
+</ng-template>
                             <button class="btn btn-outline-light btn-sm shadow-sm text-danger" (click)="onDelete(v)" title="Eliminar"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
