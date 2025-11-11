@@ -21,7 +21,7 @@ export class RegistrarSoapComponent implements OnInit {
   
   // Se usa la interfaz SoapData para un tipado fuerte del modelo.
   model: SoapData = {
-    vehicleId: '',
+    vehicleId: 0,
     compania: '',
     lugarCompra: '',
     numeroPoliza: '',
@@ -41,7 +41,7 @@ export class RegistrarSoapComponent implements OnInit {
   ngOnInit(): void {
     const vehicleId = this.route.snapshot.paramMap.get('id');
     if (vehicleId) {
-      this.model.vehicleId = vehicleId;
+      this.model.vehicleId = +vehicleId;
     } else {
       this.message = 'Error: No se encontró el ID del vehículo.';
       console.error("No vehicle ID found in route parameters.");
