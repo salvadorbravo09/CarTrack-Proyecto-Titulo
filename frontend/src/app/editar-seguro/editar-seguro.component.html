@@ -1,0 +1,106 @@
+<div class="dashboard-container">
+  <app-main-header></app-main-header>
+
+  <app-main-nav activeTab="vehiculos"></app-main-nav>
+
+  <div class="main-content">
+    <div class="container-fluid px-4 py-4">
+
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando datos del seguro...</p>
+      </div>
+
+      <div *ngIf="errorMessage && !isLoading" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ errorMessage }}
+        <a [routerLink]="['/dashboard']" class="alert-link ms-3">Volver al Dashboard</a>
+      </div>
+
+      <div *ngIf="!isLoading && insurance" class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h3 class="mb-0">Ver / Editar Seguro Vehicular</h3>
+              <p class="text-muted mb-0">
+                Póliza del vehículo: 
+                <strong>{{ insurance.vehicle?.brand }} {{ insurance.vehicle?.model }} ({{ insurance.vehicle?.licensePlate }})</strong>
+              </p>
+            </div>
+            <a [routerLink]="['/dashboard']" class="btn btn-outline-secondary">
+              <i class="fas fa-arrow-left me-2"></i> Volver
+            </a>
+          </div>
+
+          <div class="content-card">
+            <div class="content-card-body p-4">
+              
+              <form [formGroup]="insuranceForm" (ngSubmit)="onSubmit()">
+                
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="compania" class="form-label">Compañía Aseguradora</label>
+                    <input type="text" id="compania" class="form-control" formControlName="compania">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="tipoCobertura" class="form-label">Tipo de Cobertura</label>
+                    <input type="text" id="tipoCobertura" class="form-control" formControlName="tipoCobertura">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="costo" class="form-label">Costo (CLP)</label>
+                    <input type="number" id="costo" class="form-control" formControlName="costo">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="deducible" class="form-label">Deducible (CLP)</label>
+                    <input type="number" id="deducible" class="form-control" formControlName="deducible">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                    <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="fechaFin" class="form-label">Fecha de Vencimiento</label>
+                    <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div *ngIf="successMessage" class="alert alert-success">
+                  <i class="fas fa-check-circle me-2"></i>
+                  {{ successMessage }}
+                </div>
+                
+                <div *ngIf="errorMessage" class="alert alert-danger">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  {{ errorMessage }}
+                </div>
+
+                <div class="text-end">
+                  <button type="submit" class="btn btn-primary" [disabled]="insuranceForm.invalid || isLoading">
+                    <span *ngIf="!isLoading">
+                      <i class="fas fa-save me-2"></i> Guardar Cambios
+                    </span>
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  </button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
