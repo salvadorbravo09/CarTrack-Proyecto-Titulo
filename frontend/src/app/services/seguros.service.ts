@@ -5,138 +5,179 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface InsuranceData {
-  id?: number;
-  vehicleId: number;
-  compania: string;
-  tipoCobertura: string;
-  costo: number;
-  deducible: number;
-  fechaInicio: string | Date;
-  fechaFin: string | Date;
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
-  vehicle?: {
-    id: number;
-    brand: string;
-    model: string;
-    year: number;
-    licensePlate: string;
-  };
+  id?: number;
+  vehicleId: number;
+  compania: string;
+  tipoCobertura: string;
+  costo: number;
+  deducible: number;
+  fechaInicio: string | Date;
+  fechaFin: string | Date;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  vehicle?: {
+    id: number;
+    brand: string;
+    model: string;
+    year: number;
+    licensePlate: string;
+  };
 }
 
 export interface InsuranceResponse {
-  success: boolean;
-  message?: string;
-  data?: InsuranceData | InsuranceData[];
-  count?: number;
+  success: boolean;
+  message?: string;
+  data?: InsuranceData | InsuranceData[];
+  count?: number;
 }
 
 export interface SoapData {
-  vehicleId: string;
-  compania: string;
-  lugarCompra: string;
-  numeroPoliza: string;
-  fechaVigencia: string;
+  id?: number; // Añadido
+  vehicleId: number; // Cambiado a number
+  compania: string;
+  lugarCompra?: string; // Marcado como opcional
+  numeroPoliza: string;
+  fechaVigencia: string | Date; // Permitir Date
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  vehicle?: { // Añadido
+    id: number;
+    brand: string;
+    model: string;
+    year: number;
+    licensePlate: string;
+  };
+}
+
+// --- NUEVA INTERFAZ AÑADIDA ---
+export interface SoapResponse {
+  success: boolean;
+  message?: string;
+  data?: SoapData; // Respuesta singular
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'
 })
 export class SegurosService {
-  private apiUrl = `${environment.apiUrl}`;
+  private apiUrl = `${environment.apiUrl}`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  /**
-   * Crear un nuevo seguro vehicular
-   */
-  createSeguro(seguroData: any): Observable<InsuranceResponse> {
-    return this.http.post<InsuranceResponse>(`${this.apiUrl}/insurances`, seguroData)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Crear un nuevo seguro vehicular
+   */
+  createSeguro(seguroData: any): Observable<InsuranceResponse> {
+    return this.http.post<InsuranceResponse>(`${this.apiUrl}/insurances`, seguroData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Obtener todos los seguros de un vehículo
-   */
-  getInsurancesByVehicle(vehicleId: number): Observable<InsuranceResponse> {
-    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/vehicle/${vehicleId}`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Obtener todos los seguros de un vehículo
+   */
+  getInsurancesByVehicle(vehicleId: number): Observable<InsuranceResponse> {
+    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/vehicle/${vehicleId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Obtener seguro activo de un vehículo
-   */
-  getActiveInsurance(vehicleId: number): Observable<InsuranceResponse> {
-    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/vehicle/${vehicleId}/active`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Obtener seguro activo de un vehículo
+   */
+  getActiveInsurance(vehicleId: number): Observable<InsuranceResponse> {
+    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/vehicle/${vehicleId}/active`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Obtener un seguro específico por ID
-   */
-  getInsuranceById(insuranceId: number): Observable<InsuranceResponse> {
-    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Obtener un seguro específico por ID
+   */
+  getInsuranceById(insuranceId: number): Observable<InsuranceResponse> {
+    return this.http.get<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Actualizar un seguro
-   */
-  updateInsurance(insuranceId: number, updateData: Partial<InsuranceData>): Observable<InsuranceResponse> {
-    return this.http.put<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`, updateData)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Actualizar un seguro
+   */
+  updateInsurance(insuranceId: number, updateData: Partial<InsuranceData>): Observable<InsuranceResponse> {
+    return this.http.put<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`, updateData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Eliminar un seguro
-   */
-  deleteInsurance(insuranceId: number): Observable<InsuranceResponse> {
-    return this.http.delete<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Eliminar un seguro
+   */
+  deleteInsurance(insuranceId: number): Observable<InsuranceResponse> {
+    return this.http.delete<InsuranceResponse>(`${this.apiUrl}/insurances/${insuranceId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // --- MÉTODOS DE SOAP ---
 
-  /**
-   * Crear SOAP (mantener compatibilidad)
-   */
-  createSoap(soapData: SoapData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/soap`, soapData)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  /**
+   * Crear SOAP (mantener compatibilidad)
+   */
+  createSoap(soapData: SoapData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/soap`, soapData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  /**
-   * Manejar errores HTTP
-   */
-  private handleError = (error: HttpErrorResponse): Observable<never> => {
-    let errorMessage = 'Ha ocurrido un error inesperado';
-    
-    if (error.error && error.error.message) {
-      errorMessage = error.error.message;
-    } else if (error.status === 0) {
-      errorMessage = 'No se puede conectar con el servidor. Verifica tu conexión.';
-    } else if (error.status === 401) {
-      errorMessage = 'No estás autenticado. Por favor, inicia sesión.';
-    } else if (error.status === 404) {
-      errorMessage = 'Recurso no encontrado.';
-    } else if (error.status >= 500) {
-      errorMessage = 'Error del servidor. Inténtalo más tarde.';
-    }
+  /**
+   * Obtener un SOAP específico por ID
+   * --- NUEVA FUNCIÓN AÑADIDA ---
+   */
+  getSoapById(soapId: number): Observable<SoapResponse> {
+    return this.http.get<SoapResponse>(`${this.apiUrl}/soap/${soapId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-    console.error('SegurosService Error:', error);
-    return throwError(() => errorMessage);
-  };
+  /**
+   * Actualizar un SOAP
+   * --- NUEVA FUNCIÓN AÑADIDA ---
+   */
+  updateSoap(soapId: number, updateData: Partial<SoapData>): Observable<SoapResponse> {
+    return this.http.put<SoapResponse>(`${this.apiUrl}/soap/${soapId}`, updateData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+
+  /**
+   * Manejar errores HTTP
+   */
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    let errorMessage = 'Ha ocurrido un error inesperado';
+    
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    } else if (error.status === 0) {
+      errorMessage = 'No se puede conectar con el servidor. Verifica tu conexión.';
+    } else if (error.status === 401) {
+      errorMessage = 'No estás autenticado. Por favor, inicia sesión.';
+    } else if (error.status === 404) {
+      errorMessage = 'Recurso no encontrado.';
+    } else if (error.status >= 500) {
+      errorMessage = 'Error del servidor. Inténtalo más tarde.';
+    }
+
+    console.error('SegurosService Error:', error);
+    return throwError(() => errorMessage);
+  };
 }
-
