@@ -82,6 +82,11 @@ export class VehiculosComponent implements OnInit {
     // navigate to the insurance form
     this.router.navigate(['/registrar-seguro', v.id]);
   }
+  onAddSoap(v: Vehicle) {
+    if (!v.id) return;
+    // navigate to the SOAP registration form
+    this.router.navigate(['/registrar-soap', v.id]);
+  }
 
   onDelete(v: Vehicle) {
     if (!confirm('¿Eliminar vehículo?')) return;
