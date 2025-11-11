@@ -18,27 +18,30 @@ import { AdminUsuariosComponent } from './admin-usuarios/admin-usuarios.componen
 import { adminGuard } from './guards/admin.guard';
 import { AnalisisComponent } from './analisis/analisis.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { EditarSeguroComponent } from './editar-seguro/editar-seguro.component';
+import { EditarSoapComponent } from './editar-soap/editar-soap.component';
 
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'perfil', component: PerfilComponent },
-  { path: 'vehicle-form', component: VehicleFormComponent },
-  { path: 'vehicle-form/:id', component: VehicleFormComponent },
-  { path: 'seguimiento-mantenimiento', component: SeguimientoMantenimientoComponent },
-  { path: 'seguimiento-mantenimiento/:id', component: SeguimientoMantenimientoComponent },
-  { path: 'registrar-soap/:id', component: RegistrarSoapComponent },
-  { path: 'registrar-seguro/:id', component: RegistrarSeguroVehicularComponent },
-  { path: 'vehiculos', component: VehiculosComponent },
-  { path: 'vehiculo/:id', component: VerVehiculoComponent },
-  { path: 'combustible/:id', component: CombustibleComponent },
-  { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
-  { path: 'mantenimiento', component: MantenimientoComponent },
-  { path: 'calculadoras', component: CalculadorasComponent },
-  { path: 'analisis', component: AnalisisComponent },
-  { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard] },
-  { path: '**', redirectTo: '' },
+  { path: '', component: LandingPageComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'perfil', component: PerfilComponent },
+  { path: 'vehicle-form', component: VehicleFormComponent },
+  { path: 'vehicle-form/:id', component: VehicleFormComponent },
+  { path: 'seguimiento-mantenimiento', component: SeguimientoMantenimientoComponent },
+  { path: 'seguimiento-mantenimiento/:id', component: SeguimientoMantenimientoComponent },
+  { path: 'registrar-soap/:id', component: RegistrarSoapComponent },
+  { path: 'registrar-seguro/:id', component: RegistrarSeguroVehicularComponent },
+  { path: 'editar-seguro/:id', component: EditarSeguroComponent },
+  { path: 'editar-soap/:id', component: EditarSoapComponent },
+  { path: 'vehiculos', component: VehiculosComponent },
+  { path: 'vehiculo/:id', component: VerVehiculoComponent },
+  { path: 'combustible/:id', component: CombustibleComponent },
+  { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
+  { path: 'mantenimiento', component: MantenimientoComponent },
+  { path: 'calculadoras', component: CalculadorasComponent },
+  { path: 'analisis', component: AnalisisComponent },
+  { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard] },
+  { path: '**', redirectTo: '' },
 ];
-
