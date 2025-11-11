@@ -90,30 +90,36 @@ export class VehicleService {
   }
 
   // Obtener todos los vehículos de un usuario
-  static async getVehiclesByUserId(userId) {
-    try {
-      const vehicles = await prisma.vehicle.findMany({
-        where: { 
-          userId,
-          status: {
-            not: 'SOLD'
-          }
+  static async getVehiclesByUserId(userId) {
+    try {
+      const vehicles = await prisma.vehicle.findMany({
+        where: { 
+          userId,
+          status: {
+            not: 'SOLD'
+          }
         },
-        orderBy: {
-          createdAt: 'desc'
-        }
-      });
+        
+        include: {
+          seguros: true,  // Incluye la relación de seguros
+          soaps: true     // Incluye la relación de soaps 
+        },
+     
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
 
-      return {
-        success: true,
-        count: vehicles.length,
-        vehicles
-      };
+      return {
+        success: true,
+        count: vehicles.length,
+        vehicles
+      };
 
-    } catch (error) {
-      throw new Error(error.message || 'Error al obtener vehículos');
-    }
-  }
+    } catch (error) {
+      throw new Error(error.message || 'Error al obtener vehículos');
+    }
+  }
 
   // Obtener un vehículo por ID
   static async getVehicleById(vehicleId, userId) {
