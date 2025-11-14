@@ -10,7 +10,7 @@ export interface RegisterData {
   lastName: string;
   username?: string;
   email: string;
-  phone?: string;
+  phone: string; // Campo obligatorio con formato chileno +56912345678
   password: string;
 }
 
@@ -167,17 +167,8 @@ export class AuthService {
    * Manejar errores HTTP
    */
   private handleError = (error: HttpErrorResponse): Observable<never> => {
-    let errorMessage = 'Ha ocurrido un error inesperado';
-    
-    if (error.error && error.error.message) {
-      errorMessage = error.error.message;
-    } else if (error.status === 0) {
-      errorMessage = 'No se puede conectar con el servidor. Verifica tu conexión.';
-    } else if (error.status >= 500) {
-      errorMessage = 'Error del servidor. Inténtalo más tarde.';
-    }
-
     console.error('AuthService Error:', error);
-    return throwError(() => errorMessage);
+    // Retornar el error completo para que el componente pueda acceder a toda la información
+    return throwError(() => error);
   };
 }
