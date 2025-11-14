@@ -31,6 +31,7 @@ async function createAdminUser() {
         password: hashedPassword,
         firstName: 'Admin',
         lastName: 'CarTrack',
+        phone: '+56912345678',
         role: 'ADMIN',
         isActive: true
       }
