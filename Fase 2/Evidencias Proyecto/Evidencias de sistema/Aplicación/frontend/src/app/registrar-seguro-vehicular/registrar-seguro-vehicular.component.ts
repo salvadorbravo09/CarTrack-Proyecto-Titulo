@@ -22,6 +22,9 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 })
 export class RegistrarSeguroVehicularComponent implements OnInit {
   
+  // --- MODIFICACIÓN 1: Añadir esta variable ---
+  minDate: string;
+
   // Modelo para los datos del formulario
   seguroData: any = {
     vehicleId: null,
@@ -45,7 +48,15 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
     private segurosService: SegurosService,
     private vehicleService: VehicleService,
     private authService: AuthService
-  ) {}
+  ) {
+    // --- MODIFICACIÓN 2: Inicializar la variable ---
+    // Esto asegura que la fecha mínima sea "hoy" en la zona horaria local.
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
+  }
 
   ngOnInit(): void {
     // Obtener usuario actual
@@ -63,7 +74,7 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
     const vehicleIdParam = this.route.snapshot.paramMap.get('id');
     if (!vehicleIdParam) {
       this.errorMessage = "Error: No se ha proporcionado un ID de vehículo.";
-      console.error("No vehicle ID found in route parameters.");
+      // console.error(...) ELIMINADO
       return;
     }
 
@@ -81,7 +92,7 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error al cargar vehículo:', error);
+        // console.error(...) ELIMINADO
         this.errorMessage = 'No se pudo cargar la información del vehículo';
       }
     });
@@ -102,7 +113,7 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         this.successMessage = response.message || 'Seguro registrado con éxito';
-        console.log('Seguro registrado con éxito:', response);
+        // console.log(...) ELIMINADO
         
         // Redirige después de 2 segundos
         setTimeout(() => {
@@ -112,7 +123,7 @@ export class RegistrarSeguroVehicularComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err || 'Ocurrió un error al registrar el seguro.';
-        console.error('Error creating seguro:', err);
+        // console.error(...) ELIMINADO
         
         // Scroll hacia arriba para mostrar el error
         window.scrollTo({ top: 0, behavior: 'smooth' });
