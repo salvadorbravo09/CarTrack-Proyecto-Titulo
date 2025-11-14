@@ -66,8 +66,18 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage = error || 'Error al conectar con el servidor';
           console.error('Error en login:', error);
+          
+          // Manejar el error HTTP correctamente
+          if (error.error && error.error.message) {
+            this.errorMessage = error.error.message;
+          } else if (error.status === 0) {
+            this.errorMessage = 'No se puede conectar con el servidor';
+          } else if (error.message) {
+            this.errorMessage = error.message;
+          } else {
+            this.errorMessage = 'Error al conectar con el servidor';
+          }
         }
       });
     } else {
