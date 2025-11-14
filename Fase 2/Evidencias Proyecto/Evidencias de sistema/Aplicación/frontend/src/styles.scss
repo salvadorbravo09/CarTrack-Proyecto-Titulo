@@ -40,6 +40,20 @@ app-root {
   width: 100%;
 }
 
+// Efecto hover global para todos los botones
+button, .btn {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
