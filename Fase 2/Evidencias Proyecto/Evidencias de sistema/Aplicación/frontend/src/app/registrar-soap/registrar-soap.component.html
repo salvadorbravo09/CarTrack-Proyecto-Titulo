@@ -1,68 +1,69 @@
 <div class="soap-form-container">
-	<!-- Header -->
-	<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
+    <!-- Header -->
+    <app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
 
-	<div class="soap-form-content">
-		<!-- Inicio del formulario con NgForm y evento de submit -->
-		<section class="card card--padded">
-			<header class="card__header">
-				<a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
-				<h2 class="card__title">Registrar SOAP</h2>
-			</header>
+    <div class="soap-form-content">
+        <!-- Inicio del formulario con NgForm y evento de submit -->
+        <section class="card card--padded">
+            <header class="card__header">
+                <a routerLink="/dashboard" class="btn btn--link btn--back">&larr; Volver</a>
+                <h2 class="card__title">Registrar SOAP</h2>
+            </header>
 
-			<form #soapForm="ngForm" (ngSubmit)="onSubmit(soapForm)">
-				<div class="card__body">
-					<p class="muted">Completa la información del Seguro Obligatorio (SOAP) para tu vehículo.</p>
+            <form #soapForm="ngForm" (ngSubmit)="onSubmit(soapForm)">
+                <div class="card__body">
+                    <p class="muted">Completa la información del Seguro Obligatorio (SOAP) para tu vehículo.</p>
 
-					<h3 class="section-title">Datos del SOAP</h3>
-					<div class="form-grid">
-						
-						<!-- Campo: Vigencia. Se mapea a 'fechaVigencia' en el TS. -->
-						<div class="form-group">
-							<label for="vigencia">Vigencia *</label>
-							<input id="vigencia" name="vigencia" type="date" class="form-control" 
-								[(ngModel)]="model.fechaVigencia" required />
-						</div>
+                    <h3 class="section-title">Datos del SOAP</h3>
+                    <div class="form-grid">
+                        
+                        <!-- Campo: Vigencia. Se mapea a 'fechaVigencia' en el TS. -->
+                        <div class="form-group">
+                            <label for="vigencia">Vigencia *</label>
+                            <input id="vigencia" name="vigencia" type="date" class="form-control" 
+                                   [(ngModel)]="model.fechaVigencia" required 
+                                   [min]="minDate" /> <!-- MODIFICACIÓN AQUÍ -->
+                        </div>
 
-						<!-- Campo: Lugar de Compra -->
-						<div class="form-group">
-							<label for="lugarCompra">Lugar de Compra *</label>
-							<input id="lugarCompra" name="lugarCompra" type="text" class="form-control" 
-								[(ngModel)]="model.lugarCompra" required placeholder="Ej: BancoEstado, Portal SOAP, etc." />
-						</div>
+                        <!-- Campo: Lugar de Compra -->
+                        <div class="form-group">
+                            <label for="lugarCompra">Lugar de Compra *</label>
+                            <input id="lugarCompra" name="lugarCompra" type="text" class="form-control" 
+                                   [(ngModel)]="model.lugarCompra" required placeholder="Ej: BancoEstado, Portal SOAP, etc." />
+                        </div>
 
-						<!-- Campo: Compañía Aseguradora -->
-						<div class="form-group">
-							<label for="compania">Compañía Aseguradora *</label>
-							<input id="compania" name="compania" type="text" class="form-control" 
-								[(ngModel)]="model.compania" required placeholder="Ej: HDI, BCI, Consorcio..." />
-						</div>
+                        <!-- Campo: Compañía Aseguradora -->
+                        <div class="form-group">
+                            <label for="compania">Compañía Aseguradora *</label>
+                            <input id="compania" name="compania" type="text" class="form-control" 
+                                   [(ngModel)]="model.compania" required placeholder="Ej: HDI, BCI, Consorcio..." />
+                        </div>
 
-						<!-- Campo: Número de Póliza -->
-						<div class="form-group">
-							<label for="numeroPoliza">Número de Póliza *</label>
-							<input id="numeroPoliza" name="numeroPoliza" type="text" class="form-control" 
-								[(ngModel)]="model.numeroPoliza" required placeholder="Ej: SOAP-2025-XXXXXX" />
-						</div>
-					</div>
-				</div>
+                        <!-- Campo: Número de Póliza -->
+                        <div class="form-group">
+                            <label for="numeroPoliza">Número de Póliza *</label>
+                            <input id="numeroPoliza" name="numeroPoliza" type="text" class="form-control" 
+                                   [(ngModel)]="model.numeroPoliza" required placeholder="Ej: SOAP-2025-XXXXXX" />
+                        </div>
+                    </div>
+                </div>
 
-				<footer class="card__footer">
-					<!-- Mensajes de estado -->
-					<div *ngIf="message" class="alert-message text-center me-3" 
-						[ngClass]="{'text-success': message.includes('éxito'), 'text-danger': message.includes('Error') || message.includes('❌')}">
-						{{ message }}
-					</div>
-					
-					<div class="footer-actions">
-						<button type="button" class="btn btn--ghost" [routerLink]="['/dashboard']">Cancelar</button>
-						<button type="submit" class="btn btn--primary" [disabled]="soapForm.invalid || isLoading">
-							<span *ngIf="!isLoading">Registrar SOAP</span>
-							<span *ngIf="isLoading">Registrando...</span>
-						</button>
-					</div>
-				</footer>
-			</form>
-		</section>
-	</div>
+                <footer class="card__footer">
+                    <!-- Mensajes de estado -->
+                    <div *ngIf="message" class="alert-message text-center me-3" 
+                         [ngClass]="{'text-success': message.includes('éxito'), 'text-danger': message.includes('Error') || message.includes('❌')}">
+                        {{ message }}
+                    </div>
+                    
+                    <div class="footer-actions">
+                        <button type="button" class="btn btn--ghost" [routerLink]="['/dashboard']">Cancelar</button>
+                        <button type="submit" class="btn btn--primary" [disabled]="soapForm.invalid || isLoading">
+                            <span *ngIf="!isLoading">Registrar SOAP</span>
+                            <span *ngIf="isLoading">Registrando...</span>
+                        </button>
+                    </div>
+                </footer>
+            </form>
+        </section>
+    </div>
 </div>
