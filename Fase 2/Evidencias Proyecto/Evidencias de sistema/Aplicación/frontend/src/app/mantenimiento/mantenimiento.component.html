@@ -5,9 +5,9 @@
     <!-- Main navigation -->
     <app-main-nav [activeTab]="'mantenimiento'"></app-main-nav>
     
-<div class="mantenimiento-container">    
+<div class="mantenimiento-container container-fluid px-4 py-4">    
 	<div class="page-header d-flex align-items-center justify-content-between mb-4">
-		<h1 class="main-title">Seguimiento de Mantenimiento</h1>
+		<h3 class="fw-bold text-primary">Seguimiento de Mantenimiento</h3>
 		<button class="btn btn-primary" [class.disabled]="!canAddMaintenance()" (click)="goToAdd()" [attr.aria-disabled]="!canAddMaintenance()">
 			<i class="fas fa-plus me-2"></i>
 			Agregar Mantenimiento
