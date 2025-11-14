@@ -33,6 +33,9 @@ export interface SoapResponse {
 })
 export class EditarSoapComponent implements OnInit {
 
+  // --- MODIFICACIÓN 1: Añadir esta variable ---
+  minDate: string;
+
   soapId: number | null = null;
   soap: SoapData | null = null;
   // Renombramos la variable del formulario para evitar conflictos
@@ -47,6 +50,13 @@ export class EditarSoapComponent implements OnInit {
     private fb: FormBuilder,
     private segurosService: SegurosService // Usamos el mismo servicio donde está la lógica de SOAP
   ) {
+    // --- MODIFICACIÓN 2: Inicializar la variable de fecha mínima ---
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
+
     // Inicializar el formulario con los campos del SOAP
     this.soapForm = this.fb.group({
       compania: ['', [Validators.required]],
