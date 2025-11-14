@@ -26,6 +26,9 @@ import { FooterComponent } from '../footer/footer.component';
 })
 export class EditarSeguroComponent implements OnInit {
 
+  // --- MODIFICACIÓN 1: Añadir esta variable ---
+  minDate: string;
+
   insuranceId: number | null = null;
   insurance: InsuranceData | null = null;
   insuranceForm: FormGroup;
@@ -39,6 +42,13 @@ export class EditarSeguroComponent implements OnInit {
     private fb: FormBuilder,
     private segurosService: SegurosService
   ) {
+    // --- MODIFICACIÓN 2: Inicializar la variable de fecha mínima ---
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
+
     // Inicializar el formulario (vacío al principio)
     this.insuranceForm = this.fb.group({
       compania: ['', [Validators.required]],
