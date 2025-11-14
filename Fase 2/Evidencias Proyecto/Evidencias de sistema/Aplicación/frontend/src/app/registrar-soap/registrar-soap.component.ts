@@ -11,7 +11,7 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
   imports: [
     CommonModule,   // Necesario para directivas como *ngIf
     FormsModule,    // Necesario para ngForm y [(ngModel)]
-    RouterLink,      // Necesario para los botones con routerLink
+    RouterLink,     // Necesario para los botones con routerLink
     MainHeaderComponent
   ],
   templateUrl: './registrar-soap.component.html',
@@ -19,6 +19,9 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 })
 export class RegistrarSoapComponent implements OnInit {
   
+  // --- MODIFICACIÓN 1: Añadir esta variable ---
+  minDate: string;
+
   // Se usa la interfaz SoapData para un tipado fuerte del modelo.
   model: SoapData = {
     vehicleId: 0,
@@ -36,7 +39,14 @@ export class RegistrarSoapComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private segurosService: SegurosService
-  ) {}
+  ) {
+    // --- MODIFICACIÓN 2: Inicializar la variable de fecha mínima ---
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
+  }
 
   ngOnInit(): void {
     const vehicleId = this.route.snapshot.paramMap.get('id');
@@ -44,7 +54,7 @@ export class RegistrarSoapComponent implements OnInit {
       this.model.vehicleId = +vehicleId;
     } else {
       this.message = 'Error: No se encontró el ID del vehículo.';
-      console.error("No vehicle ID found in route parameters.");
+      // console.error(...) ELIMINADO
     }
   }
 
@@ -61,14 +71,14 @@ export class RegistrarSoapComponent implements OnInit {
       next: (response: any) => {
         this.isLoading = false;
         this.message = '✅ SOAP registrado con éxito!';
-        console.log('SOAP registrado:', response);
+        // console.log(...) ELIMINADO
         // Espera un momento y luego redirige al dashboard.
         setTimeout(() => this.router.navigate(['/dashboard']), 1500);
       },
       error: (err: any) => {
         this.isLoading = false;
         this.message = `❌ Error al registrar: ${err.error?.error || 'Error desconocido.'}`;
-        console.error('Error al registrar SOAP:', err);
+        // console.error(...) ELIMINADO
       }
     });
   }
@@ -79,4 +89,3 @@ export class RegistrarSoapComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 }
-
