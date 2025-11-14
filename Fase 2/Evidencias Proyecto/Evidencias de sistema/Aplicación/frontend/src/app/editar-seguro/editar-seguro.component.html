@@ -63,12 +63,14 @@
 
                   <div class="col-md-6">
                     <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
-                    <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
+                    <!-- MODIFICACIÓN AQUÍ -->
+                    <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio" [min]="minDate">
                   </div>
 
                   <div class="col-md-6">
                     <label for="fechaFin" class="form-label">Fecha de Vencimiento</label>
-                    <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
+                    <!-- MODIFICACIÓN AQUÍ -->
+                    <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin" [min]="insuranceForm.get('fechaInicio')?.value || minDate">
                   </div>
                 </div>
 
@@ -102,5 +104,3 @@
     </div>
   </div>
 </div>
-
-<app-footer></app-footer>
