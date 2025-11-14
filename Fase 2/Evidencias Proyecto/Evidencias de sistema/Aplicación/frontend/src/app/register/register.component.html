@@ -89,18 +89,28 @@
           </div>
         </div>
 
-        <!-- Teléfono (Opcional) -->
+        <!-- Teléfono -->
         <div class="form-group mb-3">
           <label for="phone" class="form-label"
-            >Teléfono</label
+            >Teléfono <span class="text-danger">*</span></label
           >
           <input
             type="tel"
             class="form-control"
             id="phone"
             formControlName="phone"
-            placeholder="+56 9 1234 5678"
+            placeholder="+56912345678"
+            [class.is-invalid]="isFieldInvalid('phone')"
           />
+          <small class="form-text text-muted">Formato: +56912345678 (código de país + 9 dígitos)</small>
+          <div class="invalid-feedback" *ngIf="isFieldInvalid('phone')">
+            <span *ngIf="registerForm.get('phone')?.errors?.['required']"
+              >El teléfono es requerido</span
+            >
+            <span *ngIf="registerForm.get('phone')?.errors?.['invalidPhone']"
+              >Formato inválido. Debe ser +56912345678</span
+            >
+          </div>
         </div>
 
         <!-- Contraseña -->

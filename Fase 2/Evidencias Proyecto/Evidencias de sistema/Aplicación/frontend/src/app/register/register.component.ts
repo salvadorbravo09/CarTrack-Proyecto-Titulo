@@ -5,6 +5,8 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, RegisterData } from '../services/auth.service';
@@ -22,6 +24,13 @@ export class RegisterComponent {
   showConfirmPassword: boolean = false;
   isLoading: boolean = false;
 
+  // Validador personalizado para teléfono chileno
+  static chileanPhoneValidator(control: AbstractControl): ValidationErrors | null {
+    const phoneRegex = /^\+569\d{8}$/;
+    const valid = phoneRegex.test(control.value);
+    return valid ? null : { invalidPhone: true };
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -32,7 +41,7 @@ export class RegisterComponent {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       username: ['', [Validators.minLength(3)]], // Si se proporciona, debe tener al menos 3 caracteres
       email: ['', [Validators.required, Validators.email]],
-      phone: [''], // Campo opcional
+      phone: ['', [Validators.required, RegisterComponent.chileanPhoneValidator]], // Campo obligatorio con formato chileno
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -84,7 +93,6 @@ export class RegisterComponent {
 
         // Limpiar campos vacíos opcionales
         if (!userData.username) delete userData.username;
-        if (!userData.phone) delete userData.phone;
 
         this.authService.register(userData as RegisterData).subscribe({
           next: (result) => {
@@ -94,7 +102,7 @@ export class RegisterComponent {
               if (result.user) this.authService.setUser(result.user);
 
               alert('¡Cuenta creada exitosamente!');
-              this.router.navigate(['/']);
+              this.router.navigate(['/login']);
             } else {
               alert(result.message || 'Error al crear la cuenta');
             }
@@ -108,7 +116,17 @@ export class RegisterComponent {
               errorMessage =
                 'No se puede conectar al servidor. Verifica que el backend esté corriendo.';
             } else if (error.error?.message) {
+              // Usar el mensaje específico del backend
               errorMessage = error.error.message;
+              
+              // Mensajes específicos para errores comunes
+              if (errorMessage.includes('teléfono') || errorMessage.includes('telefono') || errorMessage.includes('phone')) {
+                errorMessage = errorMessage + '\n\nPor favor, utiliza un número de teléfono diferente.';
+              } else if (errorMessage.includes('email')) {
+                errorMessage = errorMessage + '\n\nIntenta con otro correo electrónico.';
+              } else if (errorMessage.includes('usuario') || errorMessage.includes('username')) {
+                errorMessage = errorMessage + '\n\nElige otro nombre de usuario.';
+              }
             } else if (error.status === 400) {
               errorMessage =
                 'Datos inválidos. Verifica los campos del formulario.';
