@@ -34,6 +34,15 @@ export class AuthService {
         }
       }
 
+      // Verificar si el teléfono ya está registrado
+      const existingUserByPhone = await prisma.user.findUnique({
+        where: { phone }
+      });
+
+      if (existingUserByPhone) {
+        throw new Error('El número de teléfono ya está registrado');
+      }
+
       // Encriptar la contraseña
       const saltRounds = 12;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
