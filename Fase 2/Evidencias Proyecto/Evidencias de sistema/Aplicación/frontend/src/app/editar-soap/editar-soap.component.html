@@ -57,7 +57,8 @@
 
                   <div class="col-md-6">
                     <label for="fechaVigencia" class="form-label">Fecha de Vencimiento</label>
-                    <input type="date" id="fechaVigencia" class="form-control" formControlName="fechaVigencia">
+                    <!-- MODIFICACIÓN AQUÍ -->
+                    <input type="date" id="fechaVigencia" class="form-control" formControlName="fechaVigencia" [min]="minDate">
                   </div>
                 </div>
 
@@ -91,5 +92,3 @@
     </div>
   </div>
 </div>
-
-<app-footer></app-footer>
