@@ -8,7 +8,6 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 1.5rem;
 	box-sizing: border-box;
 	width: 100%;
 	background-color: #f0f4f8;
@@ -17,7 +16,7 @@
 
 .page-header{
 	width: 100%;
-	max-width: 1000px;
+	max-width: 1600px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -46,7 +45,7 @@
 
 .maintenance-list{
 	width: 100%;
-	max-width: 1000px;
+	max-width: 1600px;
 }
 
 .maintenance-card{

@@ -2,11 +2,14 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #f0f4f8;
 }
 
 .analisis-container {
-  background-color: #f0f4f8;
   flex: 1;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 // Statistics Cards (mismo estilo que dashboard)
