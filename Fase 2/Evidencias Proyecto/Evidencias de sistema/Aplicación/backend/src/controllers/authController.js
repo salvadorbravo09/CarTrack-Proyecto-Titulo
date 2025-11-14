@@ -7,10 +7,10 @@ export class AuthController {
       const { email, username, password, firstName, lastName, phone, role } = req.body;
 
       // Validaciones básicas
-      if (!email || !password || !firstName || !lastName) {
+      if (!email || !password || !firstName || !lastName || !phone) {
         return res.status(400).json({
           success: false,
-          message: 'Email, contraseña, nombre y apellido son requeridos'
+          message: 'Email, contraseña, nombre, apellido y teléfono son requeridos'
         });
       }
 
@@ -20,6 +20,15 @@ export class AuthController {
         return res.status(400).json({
           success: false,
           message: 'Formato de email inválido'
+        });
+      }
+
+      // Validar formato de teléfono chileno (+56912121212)
+      const phoneRegex = /^\+569\d{8}$/;
+      if (!phoneRegex.test(phone)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Formato de teléfono inválido. Debe ser +56912121212'
         });
       }
 
