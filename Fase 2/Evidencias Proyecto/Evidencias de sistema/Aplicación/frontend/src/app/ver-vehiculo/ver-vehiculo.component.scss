@@ -1,7 +1,13 @@
-.vehicle-view {
-	padding: 1rem 1.5rem;
+:host {
+	display: block;
 	background: #f0f4f8;
 	min-height: 100vh;
+}
+
+.vehicle-view {
+	padding: 1rem 1.5rem;
+	max-width: 1600px;
+	margin: 0 auto;
 }
 
 .vehicle-view .card {
