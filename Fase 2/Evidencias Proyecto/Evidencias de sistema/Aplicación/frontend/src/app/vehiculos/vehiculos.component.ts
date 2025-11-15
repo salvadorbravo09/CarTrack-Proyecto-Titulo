@@ -77,6 +77,12 @@ export class VehiculosComponent implements OnInit {
     this.router.navigate(['/vehicle-form', v.id]);
   }
 
+  onDocuments(v: Vehicle) {
+    if (!v.id) return;
+    // navigate to the documents management page
+    this.router.navigate(['/vehiculo', v.id, 'documentos']);
+  }
+
   onAddInsurance(v: Vehicle) {
     if (!v.id) return;
     // navigate to the insurance form
