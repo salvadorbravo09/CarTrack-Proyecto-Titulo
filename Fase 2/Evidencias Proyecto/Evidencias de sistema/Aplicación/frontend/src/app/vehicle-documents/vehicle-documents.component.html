@@ -1,0 +1,243 @@
+<div class="container-vehicle-documents">
+  <!-- Header -->
+  <app-main-header
+    [currentUser]="currentUser"
+    (logout)="logout()"
+  ></app-main-header>
+
+  <!-- Main navigation -->
+  <app-main-nav [activeTab]="'vehiculos'"></app-main-nav>
+
+  <div class="vehicle-documents-page container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="fw-bold text-primary mb-1">Documentos del Vehículo</h3>
+        <p class="text-muted mb-0" *ngIf="vehicle">
+          {{ vehicle.brand }} {{ vehicle.model }} - {{ vehicle.licensePlate }}
+        </p>
+      </div>
+      <button class="btn btn-outline-secondary" (click)="goBack()">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+      </button>
+    </div>
+
+    <!-- Success/Error messages -->
+    <div
+      *ngIf="successMessage"
+      class="alert alert-success alert-dismissible fade show"
+      role="alert"
+    >
+      <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="successMessage = ''"
+      ></button>
+    </div>
+
+    <div
+      *ngIf="errorMessage"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="errorMessage = ''"
+      ></button>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-cloud-upload-alt me-2"></i>Subir Documento
+        </h5>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="uploadDocument()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="documentType" class="form-label"
+                >Tipo de Documento *</label
+              >
+              <select
+                class="form-select"
+                id="documentType"
+                [(ngModel)]="documentType"
+                name="documentType"
+                required
+              >
+                <option *ngFor="let type of documentTypes" [value]="type.value">
+                  {{ type.label }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="documentNumber" class="form-label"
+                >Número de Documento</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="documentNumber"
+                [(ngModel)]="documentNumber"
+                name="documentNumber"
+                placeholder="Ej: 123456789"
+              />
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="issueDate" class="form-label">Fecha de Emisión</label>
+              <input
+                type="date"
+                class="form-control"
+                id="issueDate"
+                [(ngModel)]="issueDate"
+                name="issueDate"
+              />
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="expiryDate" class="form-label"
+                >Fecha de Vencimiento</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="expiryDate"
+                [(ngModel)]="expiryDate"
+                name="expiryDate"
+              />
+            </div>
+
+            <div class="col-12 mb-3">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea
+                class="form-control"
+                id="description"
+                rows="2"
+                [(ngModel)]="description"
+                name="description"
+                placeholder="Descripción adicional sobre el documento"
+              ></textarea>
+            </div>
+
+            <div class="col-12 mb-3">
+              <label for="fileInput" class="form-label">Archivo *</label>
+              <input
+                type="file"
+                class="form-control"
+                id="fileInput"
+                (change)="onFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                required
+              />
+              <small class="form-text text-muted">
+                Formatos permitidos: PDF, JPG, PNG, DOC, DOCX. Tamaño máximo:
+                10MB
+              </small>
+            </div>
+
+            <div class="col-12">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="uploading || !selectedFile"
+              >
+                <i class="fas fa-upload me-2"></i>
+                <span *ngIf="!uploading">Subir Documento</span>
+                <span *ngIf="uploading">
+                  <i class="fas fa-spinner fa-spin me-2"></i>Subiendo...
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Documents List -->
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-file-alt me-2"></i>Documentos Guardados
+        </h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="loading" class="text-center py-4">
+          <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+        </div>
+
+        <div
+          *ngIf="!loading && documents.length === 0"
+          class="text-center py-5"
+        >
+          <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+          <p class="text-muted">
+            No hay documentos guardados para este vehículo
+          </p>
+        </div>
+
+        <div *ngIf="!loading && documents.length > 0" class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Número</th>
+                <th>Fecha de Emisión</th>
+                <th>Fecha de Vencimiento</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of documents">
+                <td>
+                  <span class="badge bg-info">
+                    {{ getDocumentTypeLabel(doc.documentType) }}
+                  </span>
+                </td>
+                <td>{{ doc.documentNumber || "-" }}</td>
+                <td>{{ formatDate(doc.issueDate) }}</td>
+                <td>
+                  <span
+                    *ngIf="doc.expiryDate"
+                    [class.text-danger]="isExpired(doc.expiryDate)"
+                  >
+                    {{ formatDate(doc.expiryDate) }}
+                  </span>
+                  <span *ngIf="!doc.expiryDate" class="text-muted">N/A</span>
+                </td>
+                <td>{{ doc.description || "-" }}</td>
+                <td>
+                  <a
+                    *ngIf="doc.fileUrl"
+                    [href]="getFileUrl(doc.fileUrl)"
+                    target="_blank"
+                    class="btn btn-sm btn-outline-primary me-2"
+                    title="Ver documento"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="deleteDocument(doc)"
+                    title="Eliminar documento"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+</div>
