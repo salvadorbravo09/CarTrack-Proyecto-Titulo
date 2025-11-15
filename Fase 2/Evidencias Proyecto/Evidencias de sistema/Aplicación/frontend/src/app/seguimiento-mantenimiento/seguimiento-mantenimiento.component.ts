@@ -6,11 +6,12 @@ import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MaintenanceService, MaintenanceType, Maintenance } from '../services/maintenance.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { NumberFormatDirective } from '../directives/number-format.directive';
 
 @Component({
   selector: 'app-seguimiento-mantenimiento',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MainNavComponent, MainHeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MainNavComponent, MainHeaderComponent, NumberFormatDirective],
   templateUrl: './seguimiento-mantenimiento.component.html',
   styleUrl: './seguimiento-mantenimiento.component.scss'
 })
@@ -184,6 +185,14 @@ export class SeguimientoMantenimientoComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/mantenimiento']);
+  }
+
+  getCurrentKm(): number | null {
+    const vehicleId = this.maintenanceForm.get('vehicleId')?.value;
+    if (!vehicleId) return null;
+    
+    const vehicle = this.vehicles.find(v => v.id === parseInt(vehicleId));
+    return vehicle ? vehicle.currentKm : null;
   }
 }
 
