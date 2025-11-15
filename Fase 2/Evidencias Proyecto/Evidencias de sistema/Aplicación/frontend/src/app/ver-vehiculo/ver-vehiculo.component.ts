@@ -13,7 +13,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-ver-vehiculo',
   standalone: true,
-  imports: [CommonModule, RouterLink, MainNavComponent, MainHeaderComponent, MainNavVehiculoComponent],
+  imports: [CommonModule, MainNavComponent, MainHeaderComponent, MainNavVehiculoComponent],
   templateUrl: './ver-vehiculo.component.html',
   styleUrls: ['./ver-vehiculo.component.scss']
 })
