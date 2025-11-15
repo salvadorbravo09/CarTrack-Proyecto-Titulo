@@ -15,9 +15,18 @@
 .vehiculos-page {
 	.vehicle-card {
 		border-radius: 12px;
-		border: 1px solid rgba(0,0,0,0.06);
+		border: 2px solid rgba(0,0,0,0.06);
 		box-shadow: 0 1px 0 rgba(0,0,0,0.02);
 		background: #fff;
+		cursor: pointer;
+		transition: all 0.3s ease, transform 0.2s ease-in-out;
+
+		&:hover {
+			transform: scale(1.03);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			border-color: var(--primary-color);
+			border-width: 2px;
+		}
 	}
 
 	.empty-state i {
@@ -40,11 +49,89 @@
 		align-items: center;
 		justify-content: center;
 		border-radius: 8px;
+		transition: all 0.3s ease;
 	}
 
-	.vehicle-card .btn:not(.text-danger),
-	.vehicle-card .btn:not(.text-danger) i {
-		color: #000 !important;
+	// Botones normales (outline-light)
+	.vehicle-card .btn-outline-light {
+		border: 1px solid #dee2e6;
+		background-color: #f8f9fa;
+		color: #495057 !important;
+		
+		i {
+			color: #495057 !important;
+		}
+		
+		&:hover {
+			background-color: #e9ecef;
+			border-color: #adb5bd;
+			transform: translateY(-2px);
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			color: #212529 !important;
+			
+			i {
+				color: #212529 !important;
+			}
+		}
+		
+		&.text-danger {
+			color: var(--destructive-color) !important;
+			
+			i {
+				color: var(--destructive-color) !important;
+			}
+			
+			&:hover {
+				background-color: #f8d7da;
+				border-color: var(--destructive-color);
+			}
+		}
+	}
+	
+	// Botón SOAP con estado registrado (info)
+	.vehicle-card .btn-outline-info {
+		border-color: #0dcaf0;
+		color: #0dcaf0 !important;
+		background-color: transparent;
+		
+		i {
+			color: #0dcaf0 !important;
+		}
+		
+		&:hover {
+			background-color: #0dcaf0;
+			border-color: #0dcaf0;
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 2px 6px rgba(13, 202, 240, 0.3);
+			
+			i {
+				color: white !important;
+			}
+		}
+	}
+	
+	// Botón Seguro con estado registrado (success)
+	.vehicle-card .btn-outline-success {
+		border-color: #198754;
+		color: #198754 !important;
+		background-color: transparent;
+		
+		i {
+			color: #198754 !important;
+		}
+		
+		&:hover {
+			background-color: #198754;
+			border-color: #198754;
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 2px 6px rgba(25, 135, 84, 0.3);
+			
+			i {
+				color: white !important;
+			}
+		}
 	}
 }
 
