@@ -20,6 +20,7 @@ import { AnalisisComponent } from './analisis/analisis.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { EditarSeguroComponent } from './editar-seguro/editar-seguro.component';
 import { EditarSoapComponent } from './editar-soap/editar-soap.component';
+import { VehicleDocumentsComponent } from './vehicle-documents/vehicle-documents.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -35,9 +36,10 @@ export const routes: Routes = [
   { path: 'registrar-seguro/:id', component: RegistrarSeguroVehicularComponent },
   { path: 'editar-seguro/:id', component: EditarSeguroComponent },
   { path: 'editar-soap/:id', component: EditarSoapComponent },
-  { path: 'vehiculos', component: VehiculosComponent },
-  { path: 'vehiculo/:id', component: VerVehiculoComponent },
-  { path: 'combustible/:id', component: CombustibleComponent },
+  { path: 'vehiculos', component: VehiculosComponent },
+  { path: 'vehiculo/:id', component: VerVehiculoComponent },
+  { path: 'vehiculo/:id/documentos', component: VehicleDocumentsComponent },
+  { path: 'combustible/:id', component: CombustibleComponent },
   { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
   { path: 'mantenimiento', component: MantenimientoComponent },
   { path: 'calculadoras', component: CalculadorasComponent },
