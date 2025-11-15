@@ -1,17 +1,19 @@
 .nav-vehiculo-container {
-  background: #fff;
   border-bottom: 1px solid rgba(7, 59, 76, 0.08);
   margin-bottom: 1rem;
+  
+  .container-fluid {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
 }
 
 .nav-vehiculo {
   display: flex;
-  gap: 0;
+  gap: 0.5rem;
   padding: 0;
   margin: 0;
   list-style: none;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   justify-content: center;
 }
 
@@ -24,7 +26,7 @@
   padding: 0.875rem 1.5rem;
   background: transparent;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #6c757d;
@@ -47,12 +49,12 @@
   }
 
   &.active {
-    color: #073b4c;
-    border-bottom-color: #073b4c;
+    color: var(--primary-color);
+    background: rgba(17, 138, 178, 0.1);
     font-weight: 600;
 
     i {
-      color: #073b4c;
+      color: var(--primary-color);
     }
   }
 }

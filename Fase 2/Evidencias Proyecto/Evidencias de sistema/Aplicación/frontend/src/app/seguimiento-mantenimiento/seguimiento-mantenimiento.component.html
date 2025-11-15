@@ -83,8 +83,13 @@
 
               <!-- Kilometraje -->
               <div class="form-group">
-                <label for="kilometraje">Kilometraje *</label>
-                <input id="kilometraje" formControlName="mileage" type="number" class="form-control" placeholder="0" min="0"
+                <label for="kilometraje">
+                  Kilometraje * 
+                  <span *ngIf="getCurrentKm() !== null" class="text-muted" style="font-weight: normal;">
+                    (Actual: {{ getCurrentKm() | number }} km)
+                  </span>
+                </label>
+                <input id="kilometraje" formControlName="mileage" type="text" inputmode="numeric" class="form-control" placeholder="0" appNumberFormat
                        [class.is-invalid]="maintenanceForm.get('mileage')?.invalid && maintenanceForm.get('mileage')?.touched" />
                 <div *ngIf="maintenanceForm.get('mileage')?.invalid && maintenanceForm.get('mileage')?.touched" class="invalid-feedback d-block">
                   Ingresa el kilometraje
@@ -100,7 +105,7 @@
               <!-- Costo -->
               <div class="form-group">
                 <label for="costo">Costo (CLP)</label>
-                <input id="costo" formControlName="cost" type="number" class="form-control" placeholder="0" min="0" />
+                <input id="costo" formControlName="cost" type="text" inputmode="numeric" class="form-control" placeholder="0" appNumberFormat />
               </div>
             </div>
 
