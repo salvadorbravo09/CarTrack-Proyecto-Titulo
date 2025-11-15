@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importante para *ngIf, *ngFor, etc.
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'; // Para leer la URL y navegar
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // Para el formulario
-import { SegurosService, InsuranceData, InsuranceResponse } from '../services/seguros.service'; // Tu servicio de seguros
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'; // Para el formulario
+import { SegurosService, InsuranceData } from '../services/seguros.service'; // Tu servicio de seguros
 
 // Importar componentes de layout
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
-import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-editar-seguro',
@@ -19,13 +23,11 @@ import { FooterComponent } from '../footer/footer.component';
     ReactiveFormsModule, // Módulo para formularios reactivos
     MainHeaderComponent,
     MainNavComponent,
-    FooterComponent
   ],
   templateUrl: './editar-seguro.component.html',
-  styleUrl: './editar-seguro.component.scss'
+  styleUrl: './editar-seguro.component.scss',
 })
 export class EditarSeguroComponent implements OnInit {
-
   // --- MODIFICACIÓN 1: Añadir esta variable ---
   minDate: string;
 
@@ -56,7 +58,7 @@ export class EditarSeguroComponent implements OnInit {
       costo: [0, [Validators.required, Validators.min(1)]],
       deducible: [0, [Validators.required, Validators.min(0)]],
       fechaInicio: ['', [Validators.required]],
-      fechaFin: ['', [Validators.required]]
+      fechaFin: ['', [Validators.required]],
     });
   }
 
@@ -91,17 +93,18 @@ export class EditarSeguroComponent implements OnInit {
             costo: this.insurance.costo,
             deducible: this.insurance.deducible,
             fechaInicio: this.formatDateForInput(this.insurance.fechaInicio),
-            fechaFin: this.formatDateForInput(this.insurance.fechaFin)
+            fechaFin: this.formatDateForInput(this.insurance.fechaFin),
           });
         } else {
-          this.errorMessage = response.message || 'No se pudieron cargar los datos del seguro.';
+          this.errorMessage =
+            response.message || 'No se pudieron cargar los datos del seguro.';
         }
         this.isLoading = false;
       },
       error: (error) => {
         this.errorMessage = error;
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -136,7 +139,7 @@ export class EditarSeguroComponent implements OnInit {
       error: (error) => {
         this.errorMessage = error;
         this.isLoading = false;
-      }
+      },
     });
   }
 
