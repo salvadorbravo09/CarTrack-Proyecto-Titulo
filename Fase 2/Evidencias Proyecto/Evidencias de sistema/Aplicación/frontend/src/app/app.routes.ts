@@ -9,6 +9,8 @@ import { RegistrarSoapComponent } from './registrar-soap/registrar-soap.componen
 import { RegistrarSeguroVehicularComponent } from './registrar-seguro-vehicular/registrar-seguro-vehicular.component';
 import { VehiculosComponent } from './vehiculos/vehiculos.component';
 import { VerVehiculoComponent } from './ver-vehiculo/ver-vehiculo.component';
+import { TransferirVehiculoComponent } from './transferir-vehiculo/transferir-vehiculo.component';
+import { TransferenciasComponent } from './transferencias/transferencias.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { MantenimientoComponent } from './mantenimiento/mantenimiento.component';
 import { CombustibleComponent } from './combustible/combustible.component';
@@ -46,7 +48,9 @@ export const routes: Routes = [
   { path: 'editar-seguro/:id', component: EditarSeguroComponent },
   { path: 'editar-soap/:id', component: EditarSoapComponent },
   { path: 'vehiculos', component: VehiculosComponent },
+  { path: 'transferencias', component: TransferenciasComponent },
   { path: 'vehiculo/:id', component: VerVehiculoComponent },
+  { path: 'vehiculo/:id/transferir', component: TransferirVehiculoComponent },
   { path: 'vehiculo/:id/documentos', component: VehicleDocumentsComponent },
   { path: 'combustible/:id', component: CombustibleComponent },
   { path: 'agregar-combustible/:id', component: AgregarCombustibleComponent },
