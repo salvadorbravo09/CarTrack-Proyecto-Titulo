@@ -130,4 +130,9 @@ export class VerVehiculoComponent implements OnInit {
     }
     // Si es 'resumen', no hacemos nada porque ya estamos en ver-vehiculo
   }
+
+  onTransfer(): void {
+    if (!this.vehicle?.id) return;
+    this.router.navigate(['/vehiculo', this.vehicle.id, 'transferir']);
+  }
 }
