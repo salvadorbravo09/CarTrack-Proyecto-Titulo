@@ -7,6 +7,7 @@ import insuranceRoutes from './insuranceRoutes.js';
 import userRoutes from './userRoutes.js';
 import soapRoutes from './soapRoutes.js';
 import vehicleDocumentRoutes from './vehicleDocumentRoutes.js';
+import transferRoutes from './transferRoutes.js';
 
 const router = Router();
 
@@ -30,6 +31,9 @@ router.use('/soap', soapRoutes);
 
 // Rutas de documentos de vehículos
 router.use('/documents', vehicleDocumentRoutes);
+
+// Rutas de transferencias de vehículos
+router.use('/transfers', transferRoutes);
 
 // Rutas de gestión de usuarios (solo admin)
 router.use('/users', userRoutes);
