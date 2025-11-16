@@ -1,0 +1,174 @@
+<app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
+<app-main-nav [activeTab]="'transferencias'"></app-main-nav>
+
+<div class="container-fluid px-4 py-4">
+  <h3 class="fw-bold text-primary mb-4">Transferencias de Vehículos</h3>
+
+  <div *ngIf="message" class="alert alert-info mb-4">
+    {{ message }}
+  </div>
+
+  <!-- Tabs para cambiar entre Recibidas y Enviadas -->
+  <ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+      <button 
+        class="nav-link" 
+        [class.active]="activeView === 'recibidas'"
+        (click)="switchView('recibidas')">
+        <i class="fas fa-inbox me-2"></i>Recibidas
+        <span *ngIf="receivedTransfers.length > 0" class="badge bg-danger ms-2">{{ receivedTransfers.length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button 
+        class="nav-link" 
+        [class.active]="activeView === 'enviadas'"
+        (click)="switchView('enviadas')">
+        <i class="fas fa-paper-plane me-2"></i>Enviadas
+        <span *ngIf="sentTransfers.length > 0" class="badge bg-primary ms-2">{{ sentTransfers.length }}</span>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Vista de Transferencias Recibidas -->
+  <div *ngIf="activeView === 'recibidas'">
+    <div *ngIf="loading" class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && receivedTransfers.length === 0" class="alert alert-info">
+      <i class="fas fa-info-circle me-2"></i>No tienes transferencias recibidas pendientes.
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4" *ngFor="let transfer of receivedTransfers">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5 class="card-title mb-0">
+                {{ transfer.vehicle?.brand }} {{ transfer.vehicle?.model }}
+              </h5>
+              <span [class]="getStatusBadgeClass(transfer.status)">
+                {{ getStatusText(transfer.status) }}
+              </span>
+            </div>
+            
+            <p class="text-muted small mb-2">
+              <i class="fas fa-hashtag me-1"></i>{{ transfer.vehicle?.licensePlate }}
+            </p>
+            
+            <p class="text-muted small mb-2">
+              <i class="fas fa-calendar me-1"></i>{{ transfer.vehicle?.year }}
+            </p>
+
+            <hr>
+
+            <p class="small mb-2">
+              <strong>De:</strong> {{ transfer.originUser?.firstName }} {{ transfer.originUser?.lastName }}
+              <br>
+              <span class="text-muted">{{ transfer.originUser?.email }}</span>
+            </p>
+
+            <p class="small mb-2" *ngIf="transfer.message">
+              <strong>Mensaje:</strong><br>
+              <span class="text-muted">{{ transfer.message }}</span>
+            </p>
+
+            <p class="small mb-2">
+              <strong>Código:</strong> <code>{{ transfer.transferCode }}</code>
+            </p>
+
+            <p class="small text-muted mb-3">
+              Vence: {{ transfer.expiresAt | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+
+            <div class="d-flex gap-2" *ngIf="transfer.status === 'pending'">
+              <button 
+                class="btn btn-success btn-sm flex-fill" 
+                (click)="acceptTransfer(transfer)"
+                [disabled]="loading">
+                <i class="fas fa-check me-1"></i>Aceptar
+              </button>
+              <button 
+                class="btn btn-danger btn-sm flex-fill" 
+                (click)="rejectTransfer(transfer)"
+                [disabled]="loading">
+                <i class="fas fa-times me-1"></i>Rechazar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista de Transferencias Enviadas -->
+  <div *ngIf="activeView === 'enviadas'">
+    <div *ngIf="loading" class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && sentTransfers.length === 0" class="alert alert-info">
+      <i class="fas fa-info-circle me-2"></i>No has enviado transferencias.
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4" *ngFor="let transfer of sentTransfers">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5 class="card-title mb-0">
+                {{ transfer.vehicle?.brand }} {{ transfer.vehicle?.model }}
+              </h5>
+              <span [class]="getStatusBadgeClass(transfer.status)">
+                {{ getStatusText(transfer.status) }}
+              </span>
+            </div>
+            
+            <p class="text-muted small mb-2">
+              <i class="fas fa-hashtag me-1"></i>{{ transfer.vehicle?.licensePlate }}
+            </p>
+            
+            <p class="text-muted small mb-2">
+              <i class="fas fa-calendar me-1"></i>{{ transfer.vehicle?.year }}
+            </p>
+
+            <hr>
+
+            <p class="small mb-2">
+              <strong>Para:</strong> {{ transfer.destinationUser?.firstName }} {{ transfer.destinationUser?.lastName }}
+              <br>
+              <span class="text-muted">{{ transfer.destinationUser?.email }}</span>
+            </p>
+
+            <p class="small mb-2" *ngIf="transfer.message">
+              <strong>Mensaje:</strong><br>
+              <span class="text-muted">{{ transfer.message }}</span>
+            </p>
+
+            <p class="small mb-2">
+              <strong>Código:</strong> <code>{{ transfer.transferCode }}</code>
+            </p>
+
+            <p class="small text-muted mb-3">
+              Enviada: {{ transfer.createdAt | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+
+            <div *ngIf="transfer.status === 'pending'">
+              <button 
+                class="btn btn-outline-danger btn-sm w-100" 
+                (click)="cancelTransfer(transfer)"
+                [disabled]="loading">
+                <i class="fas fa-ban me-1"></i>Cancelar transferencia
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
