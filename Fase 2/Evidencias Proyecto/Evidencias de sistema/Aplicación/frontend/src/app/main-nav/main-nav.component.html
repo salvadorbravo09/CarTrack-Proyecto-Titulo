@@ -23,6 +23,15 @@
       <li class="nav-item">
         <button
           class="nav-link"
+          [class.active]="isActive('transferencias')"
+          (click)="navigateTo('transferencias')">
+          <i class="fas fa-exchange-alt me-2"></i>
+          Transferencias
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
           [class.active]="isActive('mantenimiento')"
           (click)="navigateTo('mantenimiento')">
           <i class="fas fa-wrench me-2"></i>
