@@ -15,6 +15,17 @@ class FuelService {
       throw new Error('Vehículo no encontrado o no pertenece al usuario');
     }
 
+    // Obtener el registro más reciente de combustible para este vehículo
+    const mostRecentFuel = await prisma.fuelRefill.findFirst({
+      where: {
+        vehicleId: data.vehicleId,
+        deletedAt: null
+      },
+      orderBy: {
+        date: 'desc'
+      }
+    });
+
     // Crear la recarga de combustible
     const fuelRefill = await prisma.fuelRefill.create({
       data: {
@@ -33,11 +44,26 @@ class FuelService {
             id: true,
             brand: true,
             model: true,
-            licensePlate: true
+            licensePlate: true,
+            currentKm: true
           }
         }
       }
     });
+
+    // Actualizar el kilometraje del vehículo solo si:
+    // 1. El nuevo kilometraje es mayor al actual Y
+    // 2. La fecha del nuevo registro es mayor o igual a la fecha del registro más reciente (o no hay registros previos)
+    const newDate = new Date(data.date);
+    const shouldUpdateKm = data.currentKm > vehicle.currentKm && 
+                           (!mostRecentFuel || newDate >= mostRecentFuel.date);
+
+    if (shouldUpdateKm) {
+      await prisma.vehicle.update({
+        where: { id: data.vehicleId },
+        data: { currentKm: data.currentKm }
+      });
+    }
 
     return fuelRefill;
   }
