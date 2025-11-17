@@ -32,6 +32,7 @@
             id="fecha"
             class="form-control"
             formControlName="fecha"
+            [max]="maxDate"
             [class.is-invalid]="isFieldInvalid('fecha')"
           />
           <div class="invalid-feedback" *ngIf="isFieldInvalid('fecha')">

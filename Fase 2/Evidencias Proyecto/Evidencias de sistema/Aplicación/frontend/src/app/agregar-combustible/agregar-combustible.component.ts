@@ -21,6 +21,7 @@ export class AgregarCombustibleComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
+  maxDate: string = '';
 
   // Opciones de formulario
   tiposCombustible = [
@@ -48,6 +49,7 @@ export class AgregarCombustibleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.maxDate = new Date().toISOString().split('T')[0];
     this.authService.currentUser$.subscribe(u => this.currentUser = u);
 
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -128,9 +130,23 @@ export class AgregarCombustibleComponent implements OnInit {
       return;
     }
 
+    const formData = this.fuelForm.value;
+    const newKm = parseInt(formData.kilometraje);
+    const currentVehicleKm = this.vehicle?.currentKm || 0;
+
+    // Mostrar alerta si el kilometraje será actualizado
+    if (newKm > currentVehicleKm) {
+      const confirmUpdate = confirm(
+        `Al guardar esta recarga, el kilometraje del vehículo se actualizará de ${currentVehicleKm.toLocaleString('es-CL')} km a ${newKm.toLocaleString('es-CL')} km. ¿Deseas continuar?`
+      );
+      
+      if (!confirmUpdate) {
+        return;
+      }
+    }
+
     this.isSubmitting = true;
 
-    const formData = this.fuelForm.value;
     const newRecord = {
       vehicleId: this.vehicleId,
       date: formData.fecha,
@@ -138,7 +154,7 @@ export class AgregarCombustibleComponent implements OnInit {
       liters: this.litrosCalculados,
       totalCost: parseFloat(formData.costoTotal),
       pricePerLiter: parseFloat(formData.precioPorLitro),
-      currentKm: parseInt(formData.kilometraje),
+      currentKm: newKm,
       notes: formData.tipoCombustible // Guardar tipo de combustible en notas
     };
 
