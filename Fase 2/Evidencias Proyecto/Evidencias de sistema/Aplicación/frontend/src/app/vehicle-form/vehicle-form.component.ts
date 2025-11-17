@@ -4,11 +4,15 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, CreateVehicleData, UpdateVehicleData } from '../services/vehicle.service';
+import { MainHeaderComponent } from '../main-header/main-header.component';
+import { MainNavComponent } from '../main-nav/main-nav.component';
+import { FooterComponent } from '../footer/footer.component';
+import { NumberFormatDirective } from '../directives/number-format.directive';
 
 @Component({
   selector: 'app-vehicle-form',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, MainHeaderComponent, MainNavComponent, FooterComponent, NumberFormatDirective],
   templateUrl: './vehicle-form.component.html',
   styleUrls: ['./vehicle-form.component.scss'],
 })
@@ -20,6 +24,7 @@ export class VehicleFormComponent implements OnInit {
   successMessage: string = '';
   isEditMode = false;
   vehicleId: number | null = null;
+  maxDate: string;
 
   constructor(
     private authService: AuthService,
@@ -27,7 +32,11 @@ export class VehicleFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder
-  ) {}
+  ) {
+    // Establecer la fecha máxima como hoy
+    const today = new Date();
+    this.maxDate = today.toISOString().split('T')[0];
+  }
 
   ngOnInit(): void {
     // Obtener el usuario actual del servicio
