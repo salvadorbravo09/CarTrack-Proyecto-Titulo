@@ -24,6 +24,7 @@ export class SeguimientoMantenimientoComponent implements OnInit {
   maintenanceId?: number;
   errorMessage = '';
   successMessage = '';
+  maxDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +47,7 @@ export class SeguimientoMantenimientoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.maxDate = new Date().toISOString().split('T')[0];
     this.loadVehicles();
     this.loadMaintenanceTypes();
 
@@ -129,18 +131,32 @@ export class SeguimientoMantenimientoComponent implements OnInit {
       return;
     }
 
+    const formData = this.maintenanceForm.value;
+    const newKm = parseInt(formData.mileage, 10);
+    const selectedVehicle = this.vehicles.find(v => v.id === parseInt(formData.vehicleId, 10));
+    const currentVehicleKm = selectedVehicle?.currentKm || 0;
+
+    // Mostrar alerta si el kilometraje será actualizado (solo en modo creación)
+    if (!this.isEditMode && newKm > currentVehicleKm) {
+      const confirmUpdate = confirm(
+        `Al guardar este mantenimiento, el kilometraje del vehículo se actualizará de ${currentVehicleKm.toLocaleString('es-CL')} km a ${newKm.toLocaleString('es-CL')} km. ¿Deseas continuar?`
+      );
+      
+      if (!confirmUpdate) {
+        return;
+      }
+    }
+
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-
-    const formData = this.maintenanceForm.value;
     
     // Convertir valores numéricos (vienen como strings del formulario)
     const maintenanceData = {
       ...formData,
       vehicleId: parseInt(formData.vehicleId, 10),
       maintenanceTypeId: parseInt(formData.maintenanceTypeId, 10),
-      mileage: parseInt(formData.mileage, 10),
+      mileage: newKm,
       cost: formData.cost ? parseFloat(formData.cost) : undefined
     };
 

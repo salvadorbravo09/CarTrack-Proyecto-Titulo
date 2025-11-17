@@ -74,7 +74,7 @@
               <!-- Fecha -->
               <div class="form-group">
                 <label for="fecha">Fecha *</label>
-                <input id="fecha" formControlName="date" type="date" class="form-control"
+                <input id="fecha" formControlName="date" type="date" class="form-control" [max]="maxDate"
                        [class.is-invalid]="maintenanceForm.get('date')?.invalid && maintenanceForm.get('date')?.touched" />
                 <div *ngIf="maintenanceForm.get('date')?.invalid && maintenanceForm.get('date')?.touched" class="invalid-feedback d-block">
                   Ingresa una fecha válida
