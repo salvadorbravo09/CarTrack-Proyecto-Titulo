@@ -6,9 +6,9 @@
   <app-main-nav [activeTab]="activeTab"></app-main-nav>
 
   <div class="main-content">
-    <div class="container-fluid px-4 py-4">
+    <div class="container-fluid py-4">
       
-      <div class="row g-3 mb-4">
+      <div class="row g-3 mb-4 mx-0">
         <!-- Total Vehículos -->
         <div class="col-lg-2 col-md-4 col-sm-6">
           <div class="stat-card">
@@ -75,9 +75,9 @@
       </div>
 
       <!-- Content Sections -->
-      <div class="row g-4">
+      <div class="row g-4 mx-0">
         <!-- Vehículos Registrados -->
-<div class="col-lg-6">
+<div class="col-12">
   <div class="content-card">
     <div class="content-card-header">
       <div>
@@ -98,7 +98,8 @@
         </button>
       </div>
 
-      <div *ngFor="let vehicle of vehicles" class="vehicle-item">
+      <div class="vehicles-grid">
+        <div *ngFor="let vehicle of vehicles" class="vehicle-item">
         <div class="vehicle-info">
           <h6 class="mb-1">{{ vehicle.brand }} {{ vehicle.model }}</h6>
           <small class="text-muted">{{ vehicle.year }} • {{ vehicle.licensePlate }}</small>
@@ -132,10 +133,51 @@
 
             </div>
         </div>
-      </div>
+        </div>
       </div>
   </div>
 </div>
+      </div>
+
+      <!-- Row for Recargas and Mantenimientos -->
+      <div class="row g-4 mt-0 mx-0">
+        <!-- Recargas de Combustible Recientes -->
+        <div class="col-lg-6">
+          <div class="content-card">
+            <div class="content-card-header">
+              <div>
+                <h5 class="mb-1">Recargas Recientes</h5>
+                <p class="text-muted small mb-0">Últimas cargas de combustible</p>
+              </div>
+              <button class="btn btn-primary btn-sm" routerLink="/analisis">
+                Ver todas
+              </button>
+            </div>
+            <div class="content-card-body">
+              <!-- Estado vacío -->
+              <div *ngIf="fuelRefills.length === 0" class="empty-state">
+                <i class="fas fa-gas-pump fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No hay recargas registradas</p>
+              </div>
+
+              <!-- Lista de recargas -->
+              <div *ngIf="fuelRefills.length > 0">
+                <div *ngFor="let refill of fuelRefills" class="maintenance-item">
+                  <div class="maintenance-info">
+                    <h6 class="mb-1">{{ getVehicleName(refill.vehicleId) }}</h6>
+                    <small class="text-muted">{{ refill.station }} • {{ refill.liters | number:'1.1-1' }}L</small>
+                  </div>
+                  <div class="maintenance-details">
+                    <div class="text-end">
+                      <div class="fw-bold">{{ refill.totalCost | currency:'$':'symbol':'1.0-0' }}</div>
+                      <small class="text-muted">{{ formatDate(refill.date) }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Mantenimientos Recientes -->
         <div class="col-lg-6">
@@ -180,6 +222,67 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sitios de Interés -->
+      <div class="row g-4 mt-0 mx-0">
+        <div class="col-12">
+          <div class="content-card">
+            <div class="content-card-header">
+              <div>
+                <h5 class="mb-1">Sitios de Interés</h5>
+                <p class="text-muted small mb-0">Enlaces útiles para tu vehículo</p>
+              </div>
+            </div>
+            <div class="content-card-body">
+              <div class="link-list">
+                <a href="https://www.bencinaenlinea.cl/" target="_blank" rel="noopener noreferrer" class="link-item">
+                  <div class="link-icon">
+                    <i class="fas fa-gas-pump"></i>
+                  </div>
+                  <div class="link-content">
+                    <h6 class="mb-0">Bencina en Línea</h6>
+                    <small class="text-muted">Consulta precios de combustibles</small>
+                  </div>
+                  <i class="fas fa-external-link-alt text-muted"></i>
+                </a>
+
+                <a href="https://www.prt.cl/Paginas/RevisionTecnica.aspx" target="_blank" rel="noopener noreferrer" class="link-item">
+                  <div class="link-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                  </div>
+                  <div class="link-content">
+                    <h6 class="mb-0">Revisión Técnica</h6>
+                    <small class="text-muted">Información sobre la PRT</small>
+                  </div>
+                  <i class="fas fa-external-link-alt text-muted"></i>
+                </a>
+
+                <a href="https://consultamultas.srcei.cl/ConsultaMultas/consultaMultasExterna.do" target="_blank" rel="noopener noreferrer" class="link-item">
+                  <div class="link-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </div>
+                  <div class="link-content">
+                    <h6 class="mb-0">Consulta de Multas</h6>
+                    <small class="text-muted">Revisa tus infracciones de tránsito</small>
+                  </div>
+                  <i class="fas fa-external-link-alt text-muted"></i>
+                </a>
+
+                <a href="https://www4.sii.cl/vehiculospubui/#/searchtasacion" target="_blank" rel="noopener noreferrer" class="link-item">
+                  <div class="link-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                  </div>
+                  <div class="link-content">
+                    <h6 class="mb-0">Tasación de Vehículos</h6>
+                    <small class="text-muted">Consulta el valor fiscal de tu vehículo</small>
+                  </div>
+                  <i class="fas fa-external-link-alt text-muted"></i>
+                </a>
               </div>
             </div>
           </div>

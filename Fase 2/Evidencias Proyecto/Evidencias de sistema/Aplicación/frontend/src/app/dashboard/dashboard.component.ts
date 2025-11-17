@@ -7,6 +7,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../services/auth.service';
 import { VehicleService, Vehicle } from '../services/vehicle.service';
 import { MaintenanceService, Maintenance } from '../services/maintenance.service';
+import { FuelService } from '../services/fuel.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,10 +39,14 @@ export class DashboardComponent implements OnInit {
   // Mantenimientos desde backend
   maintenances: Maintenance[] = [];
 
+  // Recargas de combustible
+  fuelRefills: any[] = [];
+
   constructor(
     private authService: AuthService,
     private vehicleService: VehicleService,
     private maintenanceService: MaintenanceService,
+    private fuelService: FuelService,
     private router: Router
   ) {}
 
@@ -77,6 +82,7 @@ export class DashboardComponent implements OnInit {
     this.loadVehicles();
     this.loadVehicleStats();
     this.loadMaintenances();
+    this.loadFuelRefills();
   }
 
   /**
@@ -131,27 +137,19 @@ export class DashboardComponent implements OnInit {
     this.maintenanceService.getAllMaintenances().subscribe({
       next: (response) => {
         if (response.success) {
-          // Obtener solo los 3 más recientes
+          // Obtener solo los 2 más recientes
           this.maintenances = response.data
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-            .slice(0, 3);
+            .slice(0, 2);
           
           // Actualizar estadísticas de mantenimientos
           this.stats.mantenimientos = response.data.length;
           this.stats.gastoMantenimiento = response.data.reduce((sum, m) => sum + (Number(m.cost) || 0), 0);
           
-          // Calcular gasto total (mantenimiento + combustible)
-          // Por ahora solo tenemos mantenimiento, combustible será 0
-          this.stats.gastoCombustible = 0; // TODO: Implementar cuando tengamos registros de combustible
-          this.stats.gastoTotal = this.stats.gastoMantenimiento + this.stats.gastoCombustible;
-          
-          // Calcular promedio por vehículo
-          if (this.stats.totalVehiculos > 0) {
-            this.stats.promedioVehiculo = this.stats.gastoTotal / this.stats.totalVehiculos;
-          }
+          // Calcular gasto total y promedio
+          this.updateTotalStats();
           
           console.log('Mantenimientos cargados:', this.maintenances);
-          console.log('Estadísticas actualizadas:', this.stats);
         }
         this.isLoadingMaintenances = false;
       },
@@ -161,6 +159,49 @@ export class DashboardComponent implements OnInit {
         this.isLoadingMaintenances = false;
       }
     });
+  }
+
+  /**
+   * Cargar recargas de combustible recientes
+   */
+  private loadFuelRefills(): void {
+    this.fuelService.getAllFuelRefills().subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Obtener todas las recargas para estadísticas
+          const allRefills = response.data || [];
+          
+          // Calcular gasto en combustible
+          this.stats.gastoCombustible = allRefills.reduce((sum, f) => sum + (Number(f.totalCost) || 0), 0);
+          
+          // Obtener solo las 2 más recientes para mostrar
+          this.fuelRefills = allRefills
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 2);
+          
+          // Actualizar gasto total y promedio
+          this.updateTotalStats();
+          
+          console.log('Recargas cargadas:', this.fuelRefills);
+          console.log('Estadísticas actualizadas:', this.stats);
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar recargas:', error);
+        this.fuelRefills = [];
+      }
+    });
+  }
+
+  /**
+   * Actualizar estadísticas totales
+   */
+  private updateTotalStats(): void {
+    this.stats.gastoTotal = this.stats.gastoMantenimiento + this.stats.gastoCombustible;
+    
+    if (this.stats.totalVehiculos > 0) {
+      this.stats.promedioVehiculo = this.stats.gastoTotal / this.stats.totalVehiculos;
+    }
   }
 
   /**
