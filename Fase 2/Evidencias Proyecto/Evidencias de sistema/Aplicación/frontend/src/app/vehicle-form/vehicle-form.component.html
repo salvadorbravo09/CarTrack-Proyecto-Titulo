@@ -1,27 +1,9 @@
 <div class="vehicle-form-container">
   <!-- Header -->
-  <div class="row">
-    <div class="col-12">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary-custom">
-        <div class="container">
-          <a class="navbar-brand d-flex align-items-center" href="#">
-            <i class="fas fa-car me-2"></i>
-            <span class="fw-bold">CarTrack</span>
-          </a>
+  <app-main-header [currentUser]="currentUser" (logout)="logout()"></app-main-header>
 
-          <div class="d-flex align-items-center">
-            <span class="navbar-text me-3" *ngIf="currentUser">
-              Bienvenido, {{ currentUser.firstName }}
-            </span>
-            <button class="btn btn-outline-light" (click)="logout()">
-              <i class="fas fa-sign-out-alt me-2"></i>
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </div>
+  <!-- Main navigation -->
+  <app-main-nav [activeTab]="'vehiculos'"></app-main-nav>
 
   <div class="vehicle-form-content">
     <section class="card card--padded">
@@ -188,6 +170,7 @@
                 formControlName="purchaseDate"
                 type="date"
                 class="form-control"
+                [max]="maxDate"
               />
             </div>
 
@@ -196,9 +179,11 @@
               <input
                 id="kilometraje"
                 formControlName="currentKm"
-                type="number"
+                type="text"
+                inputmode="numeric"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('currentKm')"
+                appNumberFormat
               />
               <small *ngIf="isFieldInvalid('currentKm')" class="text-danger">
                 {{ getFieldError("currentKm") }}
@@ -210,8 +195,10 @@
               <input
                 id="precio"
                 formControlName="purchasePrice"
-                type="number"
+                type="text"
+                inputmode="numeric"
                 class="form-control"
+                appNumberFormat
               />
             </div>
           </div>
@@ -256,3 +243,6 @@
     </section>
   </div>
 </div>
+
+<!-- Footer -->
+<app-footer></app-footer>
