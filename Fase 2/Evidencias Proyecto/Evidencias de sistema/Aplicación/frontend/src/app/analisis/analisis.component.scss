@@ -18,11 +18,16 @@
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, transform 0.2s ease-in-out;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   height: 100%;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 
   .stat-content {
     flex: 1;
@@ -85,6 +90,88 @@
   .content-card-body {
     padding: 1.5rem;
     flex: 1;
+  }
+}
+
+// Insight Cards
+.insight-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &.insight-warning {
+    border-left: 4px solid #ffd166;
+  }
+
+  &.insight-success {
+    border-left: 4px solid #28a745;
+  }
+
+  &.insight-danger {
+    border-left: 4px solid #ef476f;
+  }
+
+  .insight-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+
+    &.bg-success {
+      background-color: #28a745;
+    }
+
+    &.bg-danger {
+      background-color: #ef476f;
+    }
+  }
+
+  .insight-content {
+    flex: 1;
+    min-width: 0;
+
+    .insight-label {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    .insight-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .insight-subtitle {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+
+      &:has(.fa-exclamation-triangle) {
+        color: #ffd166;
+        font-weight: 500;
+      }
+    }
   }
 }
 

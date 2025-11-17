@@ -153,6 +153,99 @@
     </div>
   </div>
 
+  <!-- Nuevas métricas de análisis -->
+  <div class="row g-3 mb-4">
+    <!-- Gasolinera Preferida -->
+    <div class="col-lg-4 col-md-6">
+      <div class="insight-card">
+        <div class="insight-icon">
+          <i class="fas fa-gas-pump"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Gasolinera Preferida</div>
+          <div class="insight-value">{{ gasolineraPreferida }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consumo Promedio -->
+    <div class="col-lg-4 col-md-6">
+      <div class="insight-card">
+        <div class="insight-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Consumo Promedio</div>
+          <div class="insight-value">
+            {{ consumoPromedio > 0 ? (consumoPromedio | number:'1.1-1') + ' km/L' : '-' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehículo Más Económico -->
+    <div class="col-lg-4 col-md-6" *ngIf="vehiculoMasEconomico">
+      <div class="insight-card">
+        <div class="insight-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Vehículo Más Económico</div>
+          <div class="insight-value">
+            {{ vehiculoMasEconomico.vehicle.brand }} {{ vehiculoMasEconomico.vehicle.model }} (${{ vehiculoMasEconomico.costoPorKm | number:'1.0-0' }}/km)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Días desde último mantenimiento -->
+    <div class="col-lg-4 col-md-6" *ngIf="diasDesdeUltimoMantenimiento > 0">
+      <div class="insight-card" [class.insight-warning]="diasDesdeUltimoMantenimiento > 90">
+        <div class="insight-icon">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Último Mantenimiento</div>
+          <div class="insight-value">Hace {{ diasDesdeUltimoMantenimiento }} días</div>
+          <div class="insight-subtitle" *ngIf="diasDesdeUltimoMantenimiento > 90">
+            <i class="fas fa-exclamation-triangle me-1"></i>Considera revisar tu vehículo
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tendencia de Gasto -->
+    <div class="col-lg-4 col-md-6" *ngIf="tendenciaGasto.tipo !== 'igual'">
+      <div class="insight-card" [class.insight-success]="tendenciaGasto.tipo === 'disminucion'" [class.insight-danger]="tendenciaGasto.tipo === 'aumento'">
+        <div class="insight-icon" [class.bg-success]="tendenciaGasto.tipo === 'disminucion'" [class.bg-danger]="tendenciaGasto.tipo === 'aumento'">
+          <i class="fas" [ngClass]="tendenciaGasto.tipo === 'aumento' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Tendencia vs Mes Anterior</div>
+          <div class="insight-value">
+            {{ tendenciaGasto.tipo === 'aumento' ? '+' : '-' }}{{ tendenciaGasto.porcentaje | number:'1.0-0' }}%
+          </div>
+          <div class="insight-subtitle">
+            {{ tendenciaGasto.tipo === 'aumento' ? 'Aumento en gastos' : 'Reducción en gastos' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kilómetros Recorridos Este Mes -->
+    <div class="col-lg-4 col-md-6" *ngIf="kmRecorridosMes > 0">
+      <div class="insight-card">
+        <div class="insight-icon">
+          <i class="fas fa-road"></i>
+        </div>
+        <div class="insight-content">
+          <div class="insight-label">Km Recorridos Este Mes</div>
+          <div class="insight-value">{{ kmRecorridosMes | number:'1.0-0' }} km ({{ (kmRecorridosMes / currentDay) | number:'1.0-0' }} km/día)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Ranking de Vehículos -->
   <div class="row g-4 mb-4">
     <div class="col-12">
