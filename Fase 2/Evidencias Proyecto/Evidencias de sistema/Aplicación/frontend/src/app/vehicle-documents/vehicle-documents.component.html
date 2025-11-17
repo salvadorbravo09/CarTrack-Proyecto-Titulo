@@ -8,7 +8,8 @@
   <!-- Main navigation -->
   <app-main-nav [activeTab]="'vehiculos'"></app-main-nav>
 
-  <div class="vehicle-documents-page container-fluid px-4 py-4">
+  <div class="vehicle-documents-page">
+    <div class="container-fluid px-4 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h3 class="fw-bold text-primary mb-1">Documentos del Vehículo</h3>
@@ -50,7 +51,7 @@
 
     <!-- Upload Form -->
     <div class="card mb-4">
-      <div class="card-header bg-primary text-white">
+      <div class="card-header card-header-upload text-white">
         <h5 class="mb-0">
           <i class="fas fa-cloud-upload-alt me-2"></i>Subir Documento
         </h5>
@@ -144,7 +145,7 @@
             <div class="col-12">
               <button
                 type="submit"
-                class="btn btn-primary"
+                class="btn btn-upload"
                 [disabled]="uploading || !selectedFile"
               >
                 <i class="fas fa-upload me-2"></i>
@@ -235,6 +236,7 @@
           </table>
         </div>
       </div>
+    </div>
     </div>
   </div>
 
