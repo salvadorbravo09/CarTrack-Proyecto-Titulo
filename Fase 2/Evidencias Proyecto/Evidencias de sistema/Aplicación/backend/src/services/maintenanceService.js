@@ -14,6 +14,17 @@ class MaintenanceService {
       throw new Error('Vehículo no encontrado o no pertenece al usuario');
     }
 
+    // Obtener el registro más reciente de mantenimiento para este vehículo
+    const mostRecentMaintenance = await prisma.maintenance.findFirst({
+      where: {
+        vehicleId: data.vehicleId,
+        deletedAt: null
+      },
+      orderBy: {
+        date: 'desc'
+      }
+    });
+
     // Crear el mantenimiento
     const maintenance = await prisma.maintenance.create({
       data: {
@@ -34,11 +45,26 @@ class MaintenanceService {
             id: true,
             brand: true,
             model: true,
-            licensePlate: true
+            licensePlate: true,
+            currentKm: true
           }
         }
       }
     });
+
+    // Actualizar el kilometraje del vehículo solo si:
+    // 1. El nuevo kilometraje es mayor al actual Y
+    // 2. La fecha del nuevo registro es mayor o igual a la fecha del registro más reciente (o no hay registros previos)
+    const newDate = new Date(data.date);
+    const shouldUpdateKm = data.mileage > vehicle.currentKm && 
+                           (!mostRecentMaintenance || newDate >= mostRecentMaintenance.date);
+
+    if (shouldUpdateKm) {
+      await prisma.vehicle.update({
+        where: { id: data.vehicleId },
+        data: { currentKm: data.mileage }
+      });
+    }
 
     return maintenance;
   }
