@@ -61,6 +61,9 @@ npx prisma generate
 # Ejecutar migraciones
 npx prisma migrate dev
 
+# Ejecutar deploy (En caso de error con "npx prisma migrate dev")
+npx prisma migrate deploy
+
 # (Opcional) Ver la base de datos en Prisma Studio
 npx prisma studio
 ```
