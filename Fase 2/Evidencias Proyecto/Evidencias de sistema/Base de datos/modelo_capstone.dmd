@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="modelo_capstone" id="82C7E7F4-1184-0469-D1FB-8D754E23DB99" version="3.5">
+<createdBy>salva</createdBy>
+<createdTime>2025-11-15 16:30:43 UTC</createdTime>
+<ownerDesignName>modelo_capstone</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>82C7E7F4-1184-0469-D1FB-8D754E23DB99</designId>
+</OSDM_Design>
